@@ -1,18 +1,18 @@
 #include <RenderSystem.h>
+
 class GameManager
 {
     private:
         bool _running;
-        GameManager(bool running):  _running(running), _renderSystem(&RenderSystem::getRenderSystem()){};
+        GameManager(bool running);
         ~GameManager();
-        
-
     public:
     void runGameLoop();
     void SceneInit();
     void GameLoop();
     bool Running();
-    RenderSystem* _renderSystem;
+    RenderSystem *_renderSystem;
+    ResourceManager *_resourceManager;
     static GameManager& getGameManager();
     static void destroyGameManager();
 };

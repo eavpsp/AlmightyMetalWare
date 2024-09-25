@@ -1,7 +1,7 @@
 #include <ShaderInterface.h>
 
 
-char *ShaderInterface::loadTextFromFile(char *file)
+char *ShaderInterface::loadTextFromFile(const char *file)
 {
     FILE *currentFile = fopen(file, "rt");
     fseek(currentFile, 0, SEEK_END);
@@ -17,7 +17,7 @@ char *ShaderInterface::loadTextFromFile(char *file)
 
 GLuint ShaderInterface::getProgramHandle()
 {
-    return GLuint();
+    return shader->getProgramHandle();
 }
 
 GLint ShaderInterface::get_aPositionVertex()
@@ -30,14 +30,12 @@ GLint ShaderInterface::get_uColor()
     return _uColor;
 }
 
-ShaderInterface::ShaderInterface(char *VS, char *FS)
+ShaderInterface::ShaderInterface(const char *VS, const char *FS)
 {
     _vertexShaderString = loadTextFromFile(VS);
     _fragmentShaderString = loadTextFromFile(FS);
     shader = new ShaderLoader(_vertexShaderString, _fragmentShaderString);//gives an ID and if var doesnt exist returns -1
-    _aPositionVertex = glGetAttribLocation(shader ->getProgramHandle(), "aPositionVertex");
-    _uColor = glGetUniformLocation(shader ->getProgramHandle(), "uColor");
-}
+  }
 
 ShaderInterface::~ShaderInterface()
 {

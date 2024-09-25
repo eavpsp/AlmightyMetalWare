@@ -54,7 +54,8 @@ extern "C" void userAppExit()
 
 int main(int argc, char* argv[])
 {
-  
+    romfsInit();
+   
     //init GM
     GameManager *gameManager = &GameManager::getGameManager();
 
@@ -69,17 +70,21 @@ int main(int argc, char* argv[])
 
   
     // Main game loop
-   
+    //while(appletMainLoop())
     while (gameManager->Running())
     {
         //Run
-        gameManager->runGameLoop();
+       gameManager->runGameLoop();
         // Get and process input
         padUpdate(&pad);
         u32 kDown = padGetButtonsDown(&pad);
         if (kDown & HidNpadButton_Plus)
             break;
+        
     }
+    romfsExit();
+    
+
     gameManager->destroyGameManager();
     return EXIT_SUCCESS;
 }

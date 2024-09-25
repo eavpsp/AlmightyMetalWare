@@ -1,13 +1,11 @@
 #include<RenderSystem.h>
 void RenderSystem::render(VertexBuffer *vertexBuffer)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-
-    vertexBuffer->configureVertexAttributes(0);
+    glClearColor(0x68/255.0f, 0xB0/255.0f, 0xD8/255.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(s_program);
     vertexBuffer->renderVertexBuffer();
 	eglSwapBuffers(s_display, s_surface);
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 }
 
@@ -18,10 +16,7 @@ RenderSystem& RenderSystem::getRenderSystem() {
 	{
 		renderSystem = new RenderSystem();
 	}
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    auto projMtx = glm::perspective(40.0f*TAU/360.0f, 1280.0f/720.0f, 0.01f, 1000.0f);
-    glViewport(0, 0, 1280, 720);
-    
+
 	return *renderSystem;
 }
 
@@ -32,11 +27,9 @@ void RenderSystem::destroyRenderSystem() {
 	delete &renderSystem;
 }
 
-RenderSystem::RenderSystem()
+void RenderSystem::initRenderSystem()
 {
-    shaderArray = new std::vector<ShaderInterface *>;
-    ShaderInterface *shader = new ShaderInterface("ColorShader.vs", "FragmentShader.fs");
-    shaderArray->push_back(shader);
+    //s_program = shader->getProgramHandle();
 }
 
 /**
@@ -50,8 +43,7 @@ RenderSystem::RenderSystem()
  */
 RenderSystem::~RenderSystem()
 {
-    delete shaderArray->at(0);
-    delete shaderArray;
+
 }
 
 bool RenderSystem::initEgl(NWindow *win)
@@ -120,7 +112,6 @@ bool RenderSystem::initEgl(NWindow *win)
 
     // Connect the context to the surface
     eglMakeCurrent(s_display, s_surface, s_surface, s_context);
-
     return true;
 
 _fail2:
@@ -154,7 +145,7 @@ void RenderSystem::deinitEgl()
 }
 void RenderSystem::sceneExit()
 {
-    glDeleteBuffers(1, &s_vbo);
-    glDeleteVertexArrays(1, &s_vao);
+    //glDeleteBuffers(1, &s_vbo);
+    //glDeleteVertexArrays(1, &s_vao);
     glDeleteProgram(s_program);
 }

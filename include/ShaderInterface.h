@@ -13,14 +13,14 @@ class ShaderInterface
     ShaderLoader *shader;
     char *_vertexShaderString;
     char *_fragmentShaderString;
-    char *loadTextFromFile(char *file);
+    char *loadTextFromFile(const char *file);
     public:
     GLuint getProgramHandle();
     GLint get_aPositionVertex();
     GLint get_uColor();
 
 
-    ShaderInterface(char *VS, char *FS);
+    ShaderInterface(const char *VS, const char *FS);
     ~ShaderInterface();
 
 };

@@ -4,12 +4,16 @@
 #include <switch.h>
 
 #include <glad/glad.h>  // glad library (OpenGL loader)
-
+struct Vertex
+{
+	float position[3];
+	float color[3];
+};
 
 class VertexBuffer
 {
 	private:
-		GLuint _vertexBufferID;
+		GLuint _vertexBufferID, vao;
 		GLsizei _count; //verts per mesh
 		GLsizei _stride;
 		GLenum _mode;
@@ -17,7 +21,6 @@ class VertexBuffer
 		void renderVertexBuffer();
 		void configureVertexAttributes(GLint vertexPosition);
 		GLuint getVertexBufferID();
-		VertexBuffer(const GLvoid *data, GLsizeiptr size, GLenum mode, GLsizei count, GLsizei stride)
-		;
+		VertexBuffer(const Vertex *data, GLsizeiptr size, GLenum mode, GLsizei count, GLsizei stride);
 		~VertexBuffer();
 };

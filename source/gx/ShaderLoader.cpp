@@ -1,10 +1,18 @@
 #include "ShaderLoader.h"
 
 GLuint ShaderLoader::compileShader(GLenum targetShader, const char *source)
-{
+{   GLint success;
     GLuint shaderHandle = glCreateShader(targetShader); //get the shader handle from the target
     glShaderSource(shaderHandle, 1, &source, NULL);
     glCompileShader(shaderHandle);
+    glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &success);
+
+    if (!success)
+    {
+      
+        glDeleteShader(shaderHandle);
+        return 0;
+    }
     return shaderHandle;
 }
 
@@ -25,7 +33,13 @@ ShaderLoader::ShaderLoader(const char *sourceVs, const char *sourceFS)
     glAttachShader(_programHandle, fragmentShader);
 
     glLinkProgram(_programHandle);
-
+    GLint success;
+    glGetProgramiv(_programHandle, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        char buf[512];
+        glGetProgramInfoLog(_programHandle, sizeof(buf), nullptr, buf);
+    }
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 }

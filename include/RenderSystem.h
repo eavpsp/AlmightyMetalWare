@@ -13,9 +13,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <VertexBuffer.h>
-#include <vector>
-#include<ShaderInterface.h>
+#include <ResourceManager.h>
 class RenderSystem
 {
 	private:
@@ -29,14 +27,11 @@ class RenderSystem
 		void deinitEgl();
 		void sceneExit();
 		GLuint s_program;
-		GLuint s_vao, s_vbo;
 
-		GLint loc_mdlvMtx, loc_projMtx;
-		GLint loc_lightPos, loc_ambient, loc_diffuse, loc_specular;
-		std::vector<ShaderInterface *> *shaderArray;
-		RenderSystem();
+		RenderSystem(){};
 		~RenderSystem();
 	public:
+		void initRenderSystem();
 		bool initEgl(NWindow* win);
 		void render(VertexBuffer *vertexBuffer);
 		static RenderSystem& getRenderSystem();
