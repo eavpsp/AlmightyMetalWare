@@ -51,7 +51,7 @@ bool RenderSystem::initEgl(NWindow *win)
     s_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (!s_display)
     {
-        TRACE("Could not connect to display! error: %d", eglGetError());
+        
         goto _fail0;
     }
 
@@ -61,7 +61,7 @@ bool RenderSystem::initEgl(NWindow *win)
     // Select OpenGL (Core) as the desired graphics API
     if (eglBindAPI(EGL_OPENGL_API) == EGL_FALSE)
     {
-        TRACE("Could not set API! error: %d", eglGetError());
+        
         goto _fail1;
     }
 
@@ -82,7 +82,7 @@ bool RenderSystem::initEgl(NWindow *win)
     eglChooseConfig(s_display, framebufferAttributeList, &config, 1, &numConfigs);
     if (numConfigs == 0)
     {
-        TRACE("No config found! error: %d", eglGetError());
+        
         goto _fail1;
     }
 
@@ -90,7 +90,7 @@ bool RenderSystem::initEgl(NWindow *win)
     s_surface = eglCreateWindowSurface(s_display, config, win, nullptr);
     if (!s_surface)
     {
-        TRACE("Surface creation failed! error: %d", eglGetError());
+       
         goto _fail1;
     }
 
@@ -105,7 +105,7 @@ bool RenderSystem::initEgl(NWindow *win)
     s_context = eglCreateContext(s_display, config, EGL_NO_CONTEXT, contextAttributeList);
     if (!s_context)
     {
-        TRACE("Context creation failed! error: %d", eglGetError());
+        
         goto _fail2;
     }
 

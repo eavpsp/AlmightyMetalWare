@@ -1,6 +1,7 @@
 
 #include<VertexBuffer.h>
 #include <vector>
+#include <lenny.h>
 class ResourceManager
 {
     private:

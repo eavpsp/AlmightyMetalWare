@@ -38,9 +38,5 @@ class RenderSystem
 		void destroyRenderSystem();
 
 };
-constexpr auto TAU = glm::two_pi<float>();
-
-#define TRACE(fmt,...) printf("%s: " fmt "\n", __PRETTY_FUNCTION__, ## __VA_ARGS__)
-
 
 
