@@ -8,12 +8,12 @@ void VertexBuffer::renderVertexBuffer()
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void VertexBuffer::configureVertexAttributes(GLint vertexPosition)
+void VertexBuffer::configureVertexAttributes()
 {
-    if(vertexPosition != -1)
+    if(shader->get_aPositionVertex() != -1)
     {
-        glVertexAttribPointer(vertexPosition, 3, GL_FLOAT, GL_FALSE, _stride, NULL);//explain the type of data
-        glEnableVertexAttribArray(vertexPosition);//Enable the pointer
+        glVertexAttribPointer(shader->get_aPositionVertex(), 3, GL_FLOAT, GL_FALSE, _stride, NULL);//explain the type of data
+        glEnableVertexAttribArray(shader->get_aPositionVertex());//Enable the pointer
         // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -28,7 +28,12 @@ GLuint VertexBuffer::getVertexBufferID()
     return _vertexBufferID;
 }
 
-VertexBuffer::VertexBuffer(const Vertex *data, GLsizeiptr size, GLenum mode, GLsizei count, GLsizei stride) :
+ShaderInterface *VertexBuffer::getShader()
+{
+    return shader;
+}
+
+VertexBuffer::VertexBuffer(const Vertex *data, GLsizeiptr size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader) : shader(shader),
 _mode(mode),_count(count), _stride(stride)
 {
    

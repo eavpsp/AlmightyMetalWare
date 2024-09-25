@@ -20,14 +20,14 @@ ResourceManager::~ResourceManager()
         { {  0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
     };
 
-ResourceManager::ResourceManager()
+void ResourceManager::initResourceManager()
 {
 
     shaderArray = new std::vector<ShaderInterface *>;
     ShaderInterface *shader = new ShaderInterface("romfs:/shaders/ColorShader.vs", "romfs:/shaders/FragmentShader.fs");
     shaderArray->push_back(shader);
     vertexBufferArray = new std::vector<VertexBuffer *>;
-    VertexBuffer *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices), GL_TRIANGLES, 3, sizeof(GLfloat)*3);
+    VertexBuffer *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices), GL_TRIANGLES, 3, sizeof(GLfloat)*3, shader);  
     vertexBufferArray->push_back(vertexBuffer);
 }
 

@@ -3,7 +3,7 @@ void RenderSystem::render(VertexBuffer *vertexBuffer)
 {
     glClearColor(0x68/255.0f, 0xB0/255.0f, 0xD8/255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(s_program);
+    glUseProgram(vertexBuffer->getShader()->getProgramHandle());
     vertexBuffer->renderVertexBuffer();
 	eglSwapBuffers(s_display, s_surface);
 
@@ -29,9 +29,8 @@ void RenderSystem::destroyRenderSystem() {
 
 void RenderSystem::initRenderSystem()
 {
-    //s_program = shader->getProgramHandle();
+    s_program = ResourceManager::getResourceManager().getShaderArray()->at(0)->getProgramHandle();
 }
-
 /**
  * Destructor for RenderSystem
  *

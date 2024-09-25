@@ -19,6 +19,7 @@ GameManager& GameManager::getGameManager()
            printf("\x1b[16;25HError Creating Window!");
        }
         gladLoadGL();
+        gameManager->_resourceManager->initResourceManager();
         gameManager->_renderSystem->initRenderSystem();
              printf("\x1b[16;25HMade GameManager!");
     }
