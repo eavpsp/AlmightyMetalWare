@@ -20,58 +20,6 @@ ResourceManager::~ResourceManager()
         { {  0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
         { {  0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
     };   
-    
-    static const Vertex cube[] = 
-    {
-    // Define the vertices for the cube
-    {{-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}}, // vertex 0
-    {{1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}}, // vertex 1
-    {{1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}}, // vertex 2
-    {{-1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}}, // vertex 3
-    {{-1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}, // vertex 4
-    {{1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}, // vertex 5
-    {{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}, // vertex 6
-    {{-1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}}, // vertex 7
-
-    // Define the normals for each face
-    // Front face
-    {{-1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}},
-    {{1.0f, -1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}},
-    {{1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}},
-    {{-1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, -1.0f}},
-
-    // Back face
-    {{-1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-    {{1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-    {{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-    {{-1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
-
-    // Left face
-    {{-1.0f, -1.0f, -1.0f}, {-1.0f, 0.0f, 0.0f}},
-    {{-1.0f, -1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
-    {{-1.0f, 1.0f, 1.0f}, {-1.0f, 0.0f, 0.0f}},
-    {{-1.0f, 1.0f, -1.0f}, {-1.0f, 0.0f, 0.0f}},
-
-    // Right face
-    {{1.0f, -1.0f, -1.0f}, {1.0f, 0.0f, 0.0f}},
-    {{1.0f, -1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
-    {{1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f}},
-    {{1.0f, 1.0f, -1.0f}, {1.0f, 0.0f, 0.0f}},
-
-    // Top face
-    {{-1.0f, 1.0f, -1.0f}, {0.0f, 1.0f, 0.0f}},
-    {{1.0f, 1.0f, -1.0f}, {0.0f, 1.0f, 0.0f}},
-    {{1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
-    {{-1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 0.0f}},
-
-    // Bottom face
-    {{-1.0f, -1.0f, -1.0f}, {0.0f, -1.0f, 0.0f}},
-    {{1.0f, -1.0f, -1.0f}, {0.0f, -1.0f, 0.0f}},
-    {{1.0f, -1.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
-    {{-1.0f, -1.0f, 1.0f}, {0.0f, -1.0f, 0.0f}},
-};
-
-
 
 void ResourceManager::initResourceManager()
 {
@@ -83,7 +31,7 @@ void ResourceManager::initResourceManager()
     shaderArray->push_back(light_shader);
     vertexBufferArray = new std::vector<VertexBuffer *>;
     VertexBuffer *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices), GL_TRIANGLES, 3, sizeof(Vertex), shader, (void*)offsetof(Vertex, position) ,(void*)offsetof(Vertex, normal));  
-    VertexBuffer *vertexBuffer_light = new VertexBuffer(cube, sizeof(cube), GL_TRIANGLES, sizeof(cube)/sizeof(Vertex), sizeof(Vertex), light_shader, (void*)offsetof(Vertex, position) ,(void*)offsetof(Vertex, normal));         
+    VertexBuffer *vertexBuffer_light = new VertexBuffer(lennyVertices, sizeof(lennyVertices), GL_TRIANGLES, lennyVerticesCount, sizeof(lennyVertex), light_shader, (void*)offsetof(lennyVertex, x) ,(void*)offsetof(lennyVertex, nx));         
     vertexBufferArray->push_back(vertexBuffer);
     vertexBufferArray->push_back(vertexBuffer_light);
 }

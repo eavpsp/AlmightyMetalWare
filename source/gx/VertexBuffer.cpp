@@ -1,4 +1,5 @@
 #include "VertexBuffer.h"
+#include "../debug/debug.h"
 
 
 
@@ -6,23 +7,8 @@ void VertexBuffer::renderVertexBuffer()
 {
  
     glBindVertexArray(vao);
-
+    //update to draw elements
     glDrawArrays(GL_TRIANGLES, 0, _count);
-}
-
-void VertexBuffer::configureVertexAttributes()
-{
-    if(shader->get_aPositionVertex() != -1)
-    {
-        glVertexAttribPointer(shader->get_aPositionVertex(), 3, GL_FLOAT, GL_FALSE, _stride, NULL);//explain the type of data
-        glEnableVertexAttribArray(shader->get_aPositionVertex());//Enable the pointer
-        // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-        // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-        glBindVertexArray(0);
-    }
 }
 
 GLuint VertexBuffer::getVertexBufferID()
@@ -80,8 +66,8 @@ VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsize
     glUniform4f(loc_specular, 0.5f, 0.5f, 0.5f, 20.0f);
     glm::mat4 mdlvMtx{1.0};
     mdlvMtx = glm::translate(mdlvMtx, glm::vec3{0.0f, 0.0f, -10.0f});
-    mdlvMtx = glm::scale(mdlvMtx, glm::vec3{1.0f});
-    mdlvMtx = glm::rotate(mdlvMtx, 15.0f, glm::vec3{0.0f, 10.0f, 0.0f});
+    mdlvMtx = glm::scale(mdlvMtx, glm::vec3{0.5f});
+    mdlvMtx = glm::rotate(mdlvMtx, 0.0f, glm::vec3{0.0f, 180.0f, 0.0f});
 
     glUniformMatrix4fv(loc_mdlvMtx, 1, GL_FALSE, glm::value_ptr(mdlvMtx));
 }

@@ -1,4 +1,5 @@
 #include "ShaderLoader.h"
+#include "../debug/debug.h"
 
 GLuint ShaderLoader::compileShader(GLenum targetShader, const char *source)
 {   GLint success;
@@ -9,10 +10,11 @@ GLuint ShaderLoader::compileShader(GLenum targetShader, const char *source)
 
     if (!success)
     {
-      
+        debugLog("Shader compilation failed");
         glDeleteShader(shaderHandle);
         return 0;
     }
+    debugLog("Shader compiled %u", shaderHandle);
     return shaderHandle;
 }
 
@@ -39,7 +41,9 @@ ShaderLoader::ShaderLoader(const char *sourceVs, const char *sourceFS)
     {
         char buf[512];
         glGetProgramInfoLog(_programHandle, sizeof(buf), nullptr, buf);
+        debugLog("Link error: %s", buf);
     }
+    debugLog("Shader program created");
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 }

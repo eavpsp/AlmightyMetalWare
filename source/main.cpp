@@ -5,7 +5,8 @@
 #include <GameManager.h>
 
 
-
+///
+//Create Debug Logger
 //-----------------------------------------------------------------------------
 // nxlink support
 //-----------------------------------------------------------------------------
@@ -83,8 +84,6 @@ int main(int argc, char* argv[])
         
     }
     romfsExit();
-    
-
     gameManager->destroyGameManager();
     return EXIT_SUCCESS;
 }

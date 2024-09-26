@@ -69,7 +69,8 @@
             "includePath": [
                 "C:/devkitpro/libnx/include/**",
                 "C:/devkitpro/portlibs/switch/include/**",
-                "${workspaceFolder}/include/**"
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/source/**"
             ],
             "defines": [
                 "\"__SWITCH__\"",

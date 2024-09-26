@@ -12,7 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <ShaderInterface.h>
-struct Vertex
+struct Vertex//Add more layout structs
 {
 	float position[3];
 	float normal[3];
@@ -31,7 +31,7 @@ class VertexBuffer
 
 	public:
 		void renderVertexBuffer();
-		void configureVertexAttributes();
+		//void configureVertexAttributes();
 		ShaderInterface *getShader();
 		GLuint getVertexBufferID();
 
