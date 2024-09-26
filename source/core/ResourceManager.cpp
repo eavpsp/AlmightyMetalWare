@@ -14,12 +14,12 @@ ResourceManager::~ResourceManager()
     }
     delete vertexBufferArray;
 }
-    static const Vertex vertices[] =
-    {
-        { { -0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
-        { {  0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
-        { {  0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
-    };   
+static const Vertex vertices[] =
+{
+    { { -0.5f, -0.5f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
+    { {  0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
+    { {  0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
+};   
 
 void ResourceManager::initResourceManager()
 {
@@ -30,8 +30,8 @@ void ResourceManager::initResourceManager()
     shaderArray->push_back(shader);
     shaderArray->push_back(light_shader);
     vertexBufferArray = new std::vector<VertexBuffer *>;
-    VertexBuffer *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices), GL_TRIANGLES, 3, sizeof(Vertex), shader, (void*)offsetof(Vertex, position) ,(void*)offsetof(Vertex, normal));  
-    VertexBuffer *vertexBuffer_light = new VertexBuffer(lennyVertices, sizeof(lennyVertices), GL_TRIANGLES, lennyVerticesCount, sizeof(lennyVertex), light_shader, (void*)offsetof(lennyVertex, x) ,(void*)offsetof(lennyVertex, nx));         
+    VertexBuffer *vertexBuffer = new VertexBuffer(vertices, sizeof(vertices), GL_TRIANGLES, 3, sizeof(Vertex), shader, (void*)offsetof(Vertex, position) ,(void*)offsetof(Vertex, normal), nullptr);  
+    VertexBuffer *vertexBuffer_light = new VertexBuffer(lennyVertices, sizeof(lennyVertices), GL_TRIANGLES, lennyVerticesCount, sizeof(lennyVertex), light_shader, (void*)offsetof(lennyVertex, x) ,(void*)offsetof(lennyVertex, nx), nullptr);         
     vertexBufferArray->push_back(vertexBuffer);
     vertexBufferArray->push_back(vertexBuffer_light);
 }

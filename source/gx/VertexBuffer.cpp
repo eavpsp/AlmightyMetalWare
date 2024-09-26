@@ -1,14 +1,22 @@
 #include "VertexBuffer.h"
 #include "../debug/debug.h"
 
-
-
 void VertexBuffer::renderVertexBuffer()
 {
  
     glBindVertexArray(vao);
     //update to draw elements
-    glDrawArrays(GL_TRIANGLES, 0, _count);
+    //glDrawArrays(GL_TRIANGLES, 0, _count);
+    if(indicies != (void*)0x0)
+    {
+        glDrawElements(GL_TRIANGLES, _count, GL_UNSIGNED_INT, indicies);
+
+    }
+    else
+    {
+        glDrawArrays(GL_TRIANGLES, 0, _count);
+        
+    }
 }
 
 GLuint VertexBuffer::getVertexBufferID()
@@ -22,9 +30,10 @@ ShaderInterface *VertexBuffer::getShader()
 }
 
 
-VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal) 
+VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal, void *indicies_) 
 : shader(shader),_mode(mode),_count(count), _stride(stride)
 {
+    indicies = indicies_;
     GLint s_program = shader->getProgramHandle();
     loc_mdlvMtx = glGetUniformLocation(s_program, "mdlvMtx");
     loc_projMtx = glGetUniformLocation(s_program, "projMtx");

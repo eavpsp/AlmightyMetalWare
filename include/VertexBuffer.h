@@ -14,9 +14,12 @@
 #include <ShaderInterface.h>
 struct Vertex//Add more layout structs
 {
-	float position[3];
-	float normal[3];
+	float position[3];//Postion Vector
+	float normal[3];//Normal Vector
 };
+
+
+//Add Binding and Unbinding
 
 class VertexBuffer
 {
@@ -25,6 +28,7 @@ class VertexBuffer
 		GLsizei _count; //verts per mesh
 		GLsizei _stride;
 		GLenum _mode;
+		GLvoid *indicies;
 		ShaderInterface *shader;
 		GLint loc_mdlvMtx, loc_projMtx;
 		GLint loc_lightPos, loc_ambient, loc_diffuse, loc_specular;
@@ -35,7 +39,7 @@ class VertexBuffer
 		ShaderInterface *getShader();
 		GLuint getVertexBufferID();
 
-		VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal);
+		VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal, void* indicies_);
 		~VertexBuffer();
 };
 constexpr auto TAU = glm::two_pi<float>();
