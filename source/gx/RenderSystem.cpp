@@ -9,7 +9,7 @@ void RenderSystem::render()//send in program and vao id array
     glUseProgram(ResourceManager::getResourceManager().getShaderArray()->at(0)->getProgramHandle());
     glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
  
-    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 	eglSwapBuffers(s_display, s_surface);
 

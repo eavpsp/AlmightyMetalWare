@@ -19,35 +19,11 @@ static const ColorVertex vertices[] =
     { {  0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
     { {  0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
 };   
-static const float indices[] =
+static const unsigned int indices[] =
 {
-   0.0f, 1.0f, 2.0f,
+   0, 1, 2,
 
 };
-
-/*void ResourceManager::initResourceManager()
-{
-    //Shader -> VAO -> VBO -> Render
-    shaderArray = new std::vector<ShaderInterface *>;
-    //ShaderInterface *light_shader = new ShaderInterface("romfs:/shaders/SimpleLightShader.vs", "romfs:/shaders/SimpleLightShader.fs");
-    ShaderInterface *color_shader = new ShaderInterface("romfs:/shaders/ColorShader.vs", "romfs:/shaders/FragmentShader.fs");
-    shaderArray->push_back(color_shader);
-   // shaderArray->push_back(light_shader);
-    VertexArray va;
-    VertexBuffer vb;
-    va.Bind();
-    vb.initVertexBuffer(vertices, sizeof(vertices));
-    VertexBufferLayout layout;
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);//adds elment here
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);//adds elment here
-    debugLog("Elements Complete");
-    va.AddBuffer(vb,layout);
-    vertexArrays = new std::vector<VertexArray *>;       
-    vertexArrays->push_back(&va);
-    vb.UnBind();
-    va.UnBind();
-    
-}*/
 
 void ResourceManager::initResourceManager()
 {
@@ -58,23 +34,18 @@ void ResourceManager::initResourceManager()
     glGenVertexArrays(1, &s_vao);
     VertexBuffer vb;
     //bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(s_vao);//issue is here
+    glBindVertexArray(s_vao);
     vb.initVertexBuffer(vertices, sizeof(vertices));
     VertexBufferLayout layout;
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);//adds elment here
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);//adds elment here
+    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
+    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
     debugLog("Elements Complete");
     va.AddBuffer(vb,layout);
-    IndexBuffer ib(indices, sizeof(indices) / sizeof(float));
-    ib.Bind();
-    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    vb.UnBind();
+    va.UnBind();
     vertexArrays = new std::vector<VertexArray *>;       
     vertexArrays->push_back(&va);
-    //va.SetRenderID(s_vao);
-
-    
+ 
 }
 
 std::vector<ShaderInterface *> *ResourceManager::getShaderArray()
