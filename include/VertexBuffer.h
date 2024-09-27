@@ -1,45 +1,34 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <switch.h>
 
 #include <glad/glad.h>  // glad library (OpenGL loader)
-// GLM headers
-#define GLM_FORCE_PURE
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <ShaderInterface.h>
+
+#include "IndexBuffer.h"
+#include "VertexBufferLayout.h"
+
 struct Vertex//Add more layout structs
 {
 	float position[3];//Postion Vector
 	float normal[3];//Normal Vector
 };
-
-
-//Add Binding and Unbinding
-
+struct ColorVertex
+{
+	GLfloat position[3];
+	GLfloat color[3];
+};
 class VertexBuffer
 {
 	private:
-		GLuint _vertexBufferID, vao;
-		GLsizei _count; //verts per mesh
-		GLsizei _stride;
-		GLenum _mode;
-		GLvoid *indicies;
-		ShaderInterface *shader;
-		GLint loc_mdlvMtx, loc_projMtx;
-		GLint loc_lightPos, loc_ambient, loc_diffuse, loc_specular;
-
+		GLuint _vertexBufferID;
+		GLsizei size; //verts per mesh
+	
+		IndexBuffer *indexBuffer;
 	public:
 		void renderVertexBuffer();
 		//void configureVertexAttributes();
-		ShaderInterface *getShader();
 		GLuint getVertexBufferID();
-
-		VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal, void* indicies_);
+		void Bind() const;
+		void UnBind() const;
+		void initVertexBuffer(const GLvoid *data, GLsizei size);
+		VertexBuffer();
+		//VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal, IndexBuffer* indicies_);
 		~VertexBuffer();
 };
-constexpr auto TAU = glm::two_pi<float>();

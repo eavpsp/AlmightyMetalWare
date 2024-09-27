@@ -5,8 +5,16 @@
 #include <GameManager.h>
 
 
+
+/*
+///TODO
+Create Debug Logger (Done)
+Use DrawElement (Done)
+Test DrawElement
+Batch Rendering
+Create Mesh System using blender + unity or just blender
 ///
-//Create Debug Logger
+*/
 //-----------------------------------------------------------------------------
 // nxlink support
 //-----------------------------------------------------------------------------

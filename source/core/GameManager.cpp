@@ -43,8 +43,8 @@ void GameManager::destroyGameManager()
 
 void GameManager::runGameLoop()
 {
-    //_renderSystem->render(_resourceManager->getVertexBufferArray()->at(0));
-    _renderSystem->render(_resourceManager->getVertexBufferArray()->at(1));
+    _renderSystem->render();
+    
 }
 
 bool GameManager::Running(){

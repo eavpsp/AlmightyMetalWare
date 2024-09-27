@@ -1,19 +1,20 @@
 
-#include<VertexBuffer.h>
+#include "VertexArray.h"
 #include <vector>
 #include <lenny.h>
+#include <ShaderInterface.h>
 class ResourceManager
 {
     private:
     std::vector<ShaderInterface *> *shaderArray;
-    std::vector<VertexBuffer *> *vertexBufferArray;
+    std::vector<VertexArray *> *vertexArrays;
     ResourceManager(){};
     ~ResourceManager();
-    VertexBuffer *_vertexBuffer;
     public:
+    GLuint s_vao, s_vbo;
     void initResourceManager();
     std::vector<ShaderInterface *> *getShaderArray();
-    std::vector<VertexBuffer *> *getVertexBufferArray();
+    std::vector<VertexArray *> *getVertexArray();
     static ResourceManager &getResourceManager();
     static void destroyResourceManager();
 };

@@ -33,9 +33,11 @@ class RenderSystem
 	public:
 		void initRenderSystem();
 		bool initEgl(NWindow* win);
-		void render(VertexBuffer *vertexBuffer);
+		void render();
+		//void render(VertexArray *vertexArray);
 		static RenderSystem& getRenderSystem();
 		void destroyRenderSystem();
+		
 
 };
 

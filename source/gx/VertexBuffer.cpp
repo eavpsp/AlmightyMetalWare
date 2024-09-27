@@ -1,20 +1,25 @@
 #include "VertexBuffer.h"
 #include "../debug/debug.h"
-
+// GLM headers
+#define GLM_FORCE_PURE
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glad/glad.h>
 void VertexBuffer::renderVertexBuffer()
 {
  
-    glBindVertexArray(vao);
-    //update to draw elements
-    //glDrawArrays(GL_TRIANGLES, 0, _count);
-    if(indicies != (void*)0x0)
+    Bind();
+    if(indexBuffer != (void*)0x0)
     {
-        glDrawElements(GL_TRIANGLES, _count, GL_UNSIGNED_INT, indicies);
+      //  glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, (void *)indexBuffer());
 
     }
     else
     {
-        glDrawArrays(GL_TRIANGLES, 0, _count);
+        glDrawArrays(GL_TRIANGLES, 0, size);
         
     }
 }
@@ -24,16 +29,34 @@ GLuint VertexBuffer::getVertexBufferID()
     return _vertexBufferID;
 }
 
-ShaderInterface *VertexBuffer::getShader()
+
+VertexBuffer::VertexBuffer() 
 {
-    return shader;
+    glGenBuffers(1, &_vertexBufferID);
+
 }
 
+void VertexBuffer::initVertexBuffer(const GLvoid *data, GLsizei size)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+}
+void VertexBuffer::Bind() const
+{
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
+    
+}
+void VertexBuffer::UnBind() const
+{
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal, void *indicies_) 
+}
+
+/*
+VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsizei count, GLsizei stride, ShaderInterface *shader, void *offsetPositon, void *offsetNormal, IndexBuffer *indicies_) 
 : shader(shader),_mode(mode),_count(count), _stride(stride)
 {
-    indicies = indicies_;
+    indexBuffer = indicies_;
     GLint s_program = shader->getProgramHandle();
     loc_mdlvMtx = glGetUniformLocation(s_program, "mdlvMtx");
     loc_projMtx = glGetUniformLocation(s_program, "projMtx");
@@ -42,8 +65,7 @@ VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsize
     loc_diffuse = glGetUniformLocation(s_program, "diffuse");
     loc_specular = glGetUniformLocation(s_program, "specular");
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+  
 
 
     glGenVertexArrays(1, &vao);
@@ -53,6 +75,15 @@ VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsize
 
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    //do check for index buffer
+    if(indexBuffer != (void*)0x0)
+    {
+        unsigned int ibo;
+        glGenBuffers(1, &ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        //indexBuffer->size * sizeof(GLuint) gets array count then multiplies it times the value size in the array
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->size * sizeof(GLuint), indexBuffer->indicies, GL_STATIC_DRAW);
+    }
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, count, offsetPositon);
     glEnableVertexAttribArray(0);
@@ -81,10 +112,10 @@ VertexBuffer::VertexBuffer(const GLvoid *data, GLsizei size, GLenum mode, GLsize
     glUniformMatrix4fv(loc_mdlvMtx, 1, GL_FALSE, glm::value_ptr(mdlvMtx));
 }
 
-
+*/
 VertexBuffer::~VertexBuffer()
 {
-    glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &_vertexBufferID);
     _vertexBufferID = 0;
 }
+

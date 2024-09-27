@@ -1,10 +1,16 @@
 #include<RenderSystem.h>
-void RenderSystem::render(VertexBuffer *vertexBuffer)
+
+
+//void RenderSystem::render(VertexArray *vertexArray)
+void RenderSystem::render()//send in program and vao id array
 {
-    glClearColor(0x68/255.0f, 0xB0/255.0f, 0xD8/255.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(vertexBuffer->getShader()->getProgramHandle());
-    vertexBuffer->renderVertexBuffer();
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(ResourceManager::getResourceManager().getShaderArray()->at(0)->getProgramHandle());
+    glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+ 
+    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 	eglSwapBuffers(s_display, s_surface);
 
 }
@@ -29,17 +35,12 @@ void RenderSystem::destroyRenderSystem() {
 
 void RenderSystem::initRenderSystem()
 {
-    s_program = ResourceManager::getResourceManager().getShaderArray()->at(0)->getProgramHandle();
+   
+    //glEnable(GL_DEPTH_TEST);
+   // glDepthFunc(GL_LESS);
+
 }
-/**
- * Destructor for RenderSystem
- *
- * Deletes the shaderArray, which is a vector of ShaderInterface pointers, and the
- * ShaderInterface object itself.
- *
- * @see ~ShaderInterface()
- * @see std::vector::~vector()
- */
+
 RenderSystem::~RenderSystem()
 {
 
