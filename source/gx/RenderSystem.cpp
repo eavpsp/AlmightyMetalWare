@@ -8,8 +8,6 @@ void RenderSystem::render()//send in program and vao id array
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(ResourceManager::getResourceManager().getShaderArray()->at(0)->getProgramHandle());
     glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
- 
-    //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 	eglSwapBuffers(s_display, s_surface);
 
@@ -34,17 +32,10 @@ void RenderSystem::destroyRenderSystem() {
 }
 
 void RenderSystem::initRenderSystem()
-{
-   
-    //glEnable(GL_DEPTH_TEST);
-   // glDepthFunc(GL_LESS);
-
-}
+{}
 
 RenderSystem::~RenderSystem()
-{
-
-}
+{}
 
 bool RenderSystem::initEgl(NWindow *win)
 {
@@ -145,7 +136,5 @@ void RenderSystem::deinitEgl()
 }
 void RenderSystem::sceneExit()
 {
-    //glDeleteBuffers(1, &s_vbo);
-    //glDeleteVertexArrays(1, &s_vao);
     glDeleteProgram(s_program);
 }

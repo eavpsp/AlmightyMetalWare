@@ -52,6 +52,14 @@ void ShaderInterface::SetUniform4F(const std::string &name, float v0, float v1, 
     }
     return location;
 }
+void ShaderInterface::SetUniform1f(const std::string &name, float value)
+{
+    glUniform1f(GetUniformLocation(name), value);
+}
+void ShaderInterface::SetUniform1i(const std::string &name, int value)
+{
+    glUniform1i(GetUniformLocation(name), value);
+}
 ShaderInterface::ShaderInterface(const char *VS, const char *FS)
 {
     _vertexShaderString = loadTextFromFile(VS);

@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 #include "../debug/debug.h"
+#include "Texture.h"
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
