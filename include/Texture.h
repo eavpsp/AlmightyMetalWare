@@ -1,3 +1,5 @@
+#ifndef TEXTURE_H
+#define TEXTURE_H
 #include <stdlib.h>
 #include <glad/glad.h>
 #include <string>
@@ -21,3 +23,4 @@ class Texture
         inline int GetWidth() { return _width; }
         inline int GetHeight() { return _height; }
 };
+#endif

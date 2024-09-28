@@ -1,3 +1,5 @@
+#ifndef SHADERLOADER_H
+#define SHADERLOADER_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,3 +18,4 @@ class ShaderLoader
         ShaderLoader(const char *sourceVs, const char *sourceFS);//get shader program vertex and fragment
         ~ShaderLoader();
 };
+#endif

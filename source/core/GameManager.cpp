@@ -14,14 +14,14 @@ GameManager& GameManager::getGameManager()
     if(gameManager == nullptr)
     {
         gameManager = new GameManager(true);
-       if (!gameManager->_renderSystem->initEgl(nwindowGetDefault()))
-       {
-           debugLog("\x1b[16;25HError Creating Window!");
-       }
+        if (!gameManager->_renderSystem->initEgl(nwindowGetDefault()))
+        {
+            debugLog("\x1b[16;25HError Creating Window!");
+        }
         gladLoadGL();
         gameManager->_resourceManager->initResourceManager();
-        gameManager->_renderSystem->initRenderSystem();
-             debugLog("Made GameManager!");
+        //gameManager->_renderSystem->initRenderSystem();
+        debugLog("Made GameManager!");
     }
     return *gameManager;
 }
@@ -40,7 +40,7 @@ void GameManager::destroyGameManager()
 
 void GameManager::runGameLoop()
 {
-    _renderSystem->render();
+    _renderSystem->render(_resourceManager->getVertexArray()->at(0));
     
 }
 

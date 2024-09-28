@@ -1,4 +1,5 @@
-#include <stdio.h>
+#ifndef SHADERINTERFACE_H
+#define SHADERINTERFACE_H
 #include <stdlib.h>
 #include <switch.h>
 #include <ShaderLoader.h>
@@ -8,26 +9,18 @@
 class ShaderInterface
 {
     private:
-    GLint _aPositionVertex;
-    GLint _uColor;
-    ShaderLoader *shader;
-    char *_vertexShaderString;
-    char *_fragmentShaderString;
-    char *loadTextFromFile(const char *file);
+        ShaderLoader *shader;
+        char *_vertexShaderString;
+        char *_fragmentShaderString;
+        char *loadTextFromFile(const char *file);
     public:
-    GLuint getProgramHandle();
-    //uniform types
-    GLint get_aPositionVertex();
-    GLint get_uColor();
-
-    void Bind() const;
-    void UnBind() const;
-    //set uniforms
-    void SetUniform4F(const std::string &name, float v0, float v1, float v2, float v3);
-    int GetUniformLocation(const std::string &name);
-    void SetUniform1f(const std::string &name, float value);
-    void SetUniform1i(const std::string &name, int value);
-    ShaderInterface(const char *VS, const char *FS);
-    ~ShaderInterface();
+        GLuint getProgramHandle();
+        //uniform types
+        void Bind() const;
+        void UnBind() const;
+        
+        ShaderInterface(const char *VS, const char *FS);
+        ~ShaderInterface();
 
 };
+#endif

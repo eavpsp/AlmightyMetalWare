@@ -21,15 +21,7 @@ GLuint ShaderInterface::getProgramHandle()
 }
 
 
-GLint ShaderInterface::get_aPositionVertex()
-{
-    return _aPositionVertex;
-}
 
-GLint ShaderInterface::get_uColor()
-{
-    return _uColor;
-}
 
 void ShaderInterface::Bind() const
 {
@@ -39,27 +31,7 @@ void ShaderInterface::UnBind() const
 {
     glUseProgram(0);
 }
-void ShaderInterface::SetUniform4F(const std::string &name, float v0, float v1, float v2, float v3)
-{
-    glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
-}
- int ShaderInterface::GetUniformLocation(const std::string &name)
-{
-    int location = glGetUniformLocation(shader->getProgramHandle(), name.c_str());
-    if (location == -1)
-    {
-        debugLog("Uniform %s not found", name.c_str());
-    }
-    return location;
-}
-void ShaderInterface::SetUniform1f(const std::string &name, float value)
-{
-    glUniform1f(GetUniformLocation(name), value);
-}
-void ShaderInterface::SetUniform1i(const std::string &name, int value)
-{
-    glUniform1i(GetUniformLocation(name), value);
-}
+
 ShaderInterface::ShaderInterface(const char *VS, const char *FS)
 {
     _vertexShaderString = loadTextFromFile(VS);

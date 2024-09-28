@@ -1,3 +1,6 @@
+#ifndef RENDER_SYSTEM_H
+#define RENDER_SYSTEM_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,12 +36,14 @@ class RenderSystem
 	public:
 		void initRenderSystem();
 		bool initEgl(NWindow* win);
-		void render();
-		//void render(VertexArray *vertexArray);
+		void render(VertexBuffer *vertexBuffer);
 		static RenderSystem& getRenderSystem();
 		void destroyRenderSystem();
+		void RenderUnlit(GLuint _count);
+		void RenderLit(GLuint _count);
 		
 
 };
 
 
+#endif

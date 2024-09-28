@@ -1,4 +1,5 @@
-
+#ifndef INDEXBUFFER_H
+#define INDEXBUFFER_H
 #include <glad/glad.h>  // glad library (OpenGL loader)
 
 
@@ -16,3 +17,4 @@ class IndexBuffer
 		IndexBuffer(const GLvoid *data, GLsizei count);
 		~IndexBuffer();
 };
+#endif

@@ -1,3 +1,5 @@
+#ifndef VERTEX_ARRAY_H
+#define VERTEX_ARRAY_H
 #include <vector>
 
 #include "VertexBuffer.h"
@@ -16,3 +18,4 @@ public:
 private:
     GLuint _rendererID;
 };
+#endif

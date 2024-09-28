@@ -1,14 +1,11 @@
 #include<RenderSystem.h>
-
-
-//void RenderSystem::render(VertexArray *vertexArray)
-void RenderSystem::render()//send in program and vao id array
+#include<GameManager.h>
+void RenderSystem::render(VertexBuffer *vertexBuffer)//send in program and vao id array
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(ResourceManager::getResourceManager().getShaderArray()->at(0)->getProgramHandle());
-    glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    //vertexBuffer->renderVertexBuffer(this);
+    RenderUnlit(vertexBuffer->getCount());
 	eglSwapBuffers(s_display, s_surface);
 
 }
@@ -29,6 +26,20 @@ void RenderSystem::destroyRenderSystem() {
     this->deinitEgl();
     this->sceneExit();
 	delete &renderSystem;
+}
+
+void RenderSystem::RenderUnlit(GLuint _count)
+{
+        glUseProgram(ResourceManager::getResourceManager()._engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
+        glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        glDrawArrays(GL_TRIANGLES, 0, _count);
+}
+
+void RenderSystem::RenderLit(GLuint _count)
+{
+        glUseProgram(ResourceManager::getResourceManager()._engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
+        glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        glDrawArrays(GL_TRIANGLES, 0, _count);
 }
 
 void RenderSystem::initRenderSystem()

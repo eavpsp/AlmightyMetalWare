@@ -1,4 +1,7 @@
+#ifndef GAME_MANAGER_H
+#define GAME_MANAGER_H
 #include <RenderSystem.h>
+
 
 class GameManager
 {
@@ -17,3 +20,4 @@ class GameManager
     static void destroyGameManager();
 };
 
+#endif

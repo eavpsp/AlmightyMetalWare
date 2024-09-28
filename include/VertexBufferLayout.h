@@ -1,4 +1,5 @@
-#pragma once
+#ifndef VERTEXBUFFERLAYOUT_H
+#define VERTEXBUFFERLAYOUT_H
 #include <vector>
 #include <glad/glad.h>
 
@@ -44,3 +45,4 @@ class VertexBufferLayout
         inline unsigned int GetStride() { return _stride; }
 };
 
+#endif

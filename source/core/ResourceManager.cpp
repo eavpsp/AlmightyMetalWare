@@ -1,6 +1,7 @@
 #include "ResourceManager.h"
 #include "../debug/debug.h"
 #include "Texture.h"
+
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
@@ -8,7 +9,7 @@ ResourceManager::~ResourceManager()
         delete *it;
     }
     delete shaderArray;
-    for(std::vector<VertexArray *>::iterator it = vertexArrays->begin(); it != vertexArrays->end(); it++)    
+    for(std::vector<VertexBuffer *>::iterator it = vertexArrays->begin(); it != vertexArrays->end(); it++)    
     {
         delete *it;
     }
@@ -20,32 +21,29 @@ static const ColorVertex vertices[] =
     { {  0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
     { {  0.0f,  0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
 };   
-static const unsigned int indices[] =
-{
-   0, 1, 2,
 
-};
 
 void ResourceManager::initResourceManager()
 {
-    shaderArray = new std::vector<ShaderInterface *>;
-    ShaderInterface *color_shader = new ShaderInterface("romfs:/shaders/ColorShader.vs", "romfs:/shaders/FragmentShader.fs");
-    shaderArray->push_back(color_shader);
+    //set up materials
+    _engineMaterials = EngineMaterials::getEngineMaterialsClass();
+    _engineMaterials.initEngineMaterials();
     VertexArray va;
     glGenVertexArrays(1, &s_vao);
     VertexBuffer vb;
     //bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(s_vao);
-    vb.initVertexBuffer(vertices, sizeof(vertices));
+    vb.initVertexBuffer(vertices, sizeof(vertices), ShaderType::UNLIT, sizeof(vertices) / sizeof(vertices[0]));
     VertexBufferLayout layout;
     layout.AddElement(GL_FLOAT, 3, GL_FALSE);
     layout.AddElement(GL_FLOAT, 3, GL_FALSE);
-    debugLog("Elements Complete");
     va.AddBuffer(vb,layout);
     vb.UnBind();
     va.UnBind();
-    vertexArrays = new std::vector<VertexArray *>;       
-    vertexArrays->push_back(&va);
+    vertexArrays = new std::vector<VertexBuffer *>;       
+    vertexArrays->push_back(&vb);
+    debugLog("vertex array object: %d", vertexArrays->size());
+    debugLog("init resource manager complete");
  
 }
 
@@ -54,7 +52,7 @@ std::vector<ShaderInterface *> *ResourceManager::getShaderArray()
     return shaderArray;
 }
 
-std::vector<VertexArray *> *ResourceManager::getVertexArray()
+std::vector<VertexBuffer *> *ResourceManager::getVertexArray()
 {
     return vertexArrays;
 }
