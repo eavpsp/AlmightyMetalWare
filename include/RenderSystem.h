@@ -17,6 +17,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <ResourceManager.h>
+// nintendo switch screen width and height
+const float SCREEN_WIDTH = 1280.0f;
+const float SCREEN_HEIGHT = 720.0f;
+enum RenderProjectionMode{ORTHOGRAPHIC, PERSPECTIVE};
 class RenderSystem
 {
 	private:
@@ -30,7 +34,8 @@ class RenderSystem
 		void deinitEgl();
 		void sceneExit();
 		GLuint s_program;
-
+		glm::mat4 ortho_projection, perspective_projection;
+		RenderProjectionMode projectionMode;
 		RenderSystem(){};
 		~RenderSystem();
 	public:

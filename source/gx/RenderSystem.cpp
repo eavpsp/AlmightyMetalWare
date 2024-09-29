@@ -1,7 +1,9 @@
 #include<RenderSystem.h>
 #include<GameManager.h>
+#include <ViewCamera.h>
 void RenderSystem::render(VertexBuffer *vertexBuffer)//send in program and vao id array
 {
+    //only works when i direct call lit or unlit, may have two seperate renderers for lit and unlit or every shader lmao
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     //vertexBuffer->renderVertexBuffer(this);
@@ -30,6 +32,13 @@ void RenderSystem::destroyRenderSystem() {
 
 void RenderSystem::RenderUnlit(GLuint _count)
 {
+        ortho_projection = glm::ortho(0.0f, SCREEN_HEIGHT, 0.0f,SCREEN_WIDTH, -1.0f, 1.0f);//left, right, bottom, top, near, far
+        ViewCamera camera;
+        camera.position = glm::vec3(-100.0f, 0.0f, 0.0f);
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), camera.position);
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
+        glm::mat4 mdlvMtx = ortho_projection * view * model; //camera * model postition * projections = normalized device coordinates
+        ResourceManager::getResourceManager()._engineMaterials.getColorMaterial()->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
         glUseProgram(ResourceManager::getResourceManager()._engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
         glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, _count);
@@ -42,8 +51,11 @@ void RenderSystem::RenderLit(GLuint _count)
         glDrawArrays(GL_TRIANGLES, 0, _count);
 }
 
-void RenderSystem::initRenderSystem()
-{}
+void RenderSystem::initRenderSystem()//later take in projection mode
+{
+    //set up projection
+
+}
 
 RenderSystem::~RenderSystem()
 {}

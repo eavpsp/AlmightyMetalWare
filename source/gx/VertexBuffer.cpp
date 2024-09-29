@@ -18,7 +18,7 @@ GLuint VertexBuffer::getVertexBufferID()
 }
 
 
-void VertexBuffer::renderVertexBuffer(void *_renderSystem)
+void VertexBuffer::renderVertexBuffer(void *_renderSystem) //this just doesnt work and i have no idea why, unless i use debuglog to output each frame lol
 {
  
     if(*shaderType == ShaderType::UNLIT)
@@ -44,9 +44,7 @@ void VertexBuffer::initVertexBuffer(const GLvoid *data, GLsizei size, ShaderType
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     shaderType = &shader;
-    debugLog("Shader type is %i", *shaderType);
     _count = count;
-    debugLog("Count is %i", _count);
 }
 
 void VertexBuffer::Bind() const

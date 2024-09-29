@@ -25,6 +25,10 @@ void ShaderMaterialInterface::SetUniform4F(const std::string &name, float v0, fl
     }
     return location;
 }
+void ShaderMaterialInterface::SetUniformMat4F(const std::string &name, glm::mat4 &matrix)
+{
+    glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE,&matrix[0][0]);
+}
 void ShaderMaterialInterface::SetUniform1f(const std::string &name, float value)
 {
     glUniform1f(GetUniformLocation(name), value);
