@@ -37,7 +37,7 @@ GameModel::GameModel(const char* FILENAME)
 	data = getData();
 
 	// Traverse all nodes
-	traverseNode(1);
+	traverseNode(0);
 	debugLog("Loaded %s", FILENAME);
 	
 }
@@ -72,7 +72,9 @@ void GameModel::loadMesh(unsigned int indMesh)
 	std::vector<MW_Texture> textures = getTextures();
 	debugLog("Got Mesh %d", indMesh);
 	// Combine the vertices, indices, and textures into a mesh
-	//meshes.push_back(MeshData(vertices.data(), indices, textures, ShaderType::LIT));<-- causes crashes
+	MeshData mesh;
+	mesh.initMeshLitTexture(vertices, indices, textures);
+	meshes.push_back(mesh);
 	debugLog("Mesh %d Loaded", indMesh);
 }
 
@@ -296,6 +298,7 @@ std::vector<MW_Texture> GameModel::getTextures()
 		{
 			if (loadedTexName[j] == texPath)
 			{
+				debugLog("Texture %s already loaded", texPath.c_str());
 				textures.push_back(loadedTex[j]);
 				skip = true;
 				break;
@@ -312,6 +315,7 @@ std::vector<MW_Texture> GameModel::getTextures()
 				textures.push_back(diffuse);
 				loadedTex.push_back(diffuse);
 				loadedTexName.push_back(texPath);
+				debugLog("Texture %s loaded", texPath.c_str());
 			}
 			// Load specular texture
 			else if (texPath.find("metallicRoughness") != std::string::npos)
@@ -320,6 +324,7 @@ std::vector<MW_Texture> GameModel::getTextures()
 				textures.push_back(specular);
 				loadedTex.push_back(specular);
 				loadedTexName.push_back(texPath);
+				debugLog("Texture %s loaded", texPath.c_str());
 			}
 		}
 	}
@@ -347,6 +352,7 @@ std::vector<VertexLit> GameModel::assembleVertices
 			}
 		);
 	}
+	debugLog("Assembled Vertices");
 	return vertices;
 }
 

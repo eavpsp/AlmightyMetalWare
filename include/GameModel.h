@@ -9,7 +9,7 @@
 #include <Texture.h>
 using json = nlohmann::json;
 
-class GameModel
+class GameModel 
 {
     private:
         const char* file;

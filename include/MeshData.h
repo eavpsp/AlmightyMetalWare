@@ -11,12 +11,11 @@ public:
 	std::vector <VertexLit> vertices;
 	std::vector <GLuint> indices;
 	std::vector <MW_Texture> textures;
-    VertexBuffer *vertexBuffer;
+    //VertexBuffer *vertexBuffer;
 	// Initializes the mesh
 	void initMeshLitTexture(std::vector <VertexLit>& vertices, std::vector <GLuint>& indices, std::vector <MW_Texture>& textures);
 
-    MeshData(GLvoid* vertices, std::vector <GLuint>& indices, std::vector <MW_Texture>& textures, ShaderType shaderType);
-    MeshData(){};
+    MeshData();
     ~MeshData(){};
 };
 
