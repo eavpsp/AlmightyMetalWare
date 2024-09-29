@@ -29,7 +29,8 @@ void ResourceManager::initResourceManager()
     //set up materials
     _engineMaterials = EngineMaterials::getEngineMaterialsClass();
     _engineMaterials.initEngineMaterials();
-
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     MW_Texture tex("romfs:/tex.bmp");
     tex.Bind(0);
     _engineMaterials.getColorMaterial()->SetUniform4F("u_Texture", 1.0f, 0.5f, 0.5f, 1.0f);
