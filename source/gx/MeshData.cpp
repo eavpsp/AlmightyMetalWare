@@ -8,7 +8,7 @@ void MeshData::initMeshLitTexture(std::vector <VertexLit>& vertices, std::vector
     //create vb and export it
     MeshData::vertexBuffer = new VertexBuffer();
     MeshData::vertexBuffer->initVertexBuffer(vertices.data(), sizeof(vertices), ShaderType::LIT, sizeof(vertices) / sizeof(MeshData::vertices[0]));
-
+    //must add to VAO with VB Layout
 }
 
 MeshData::MeshData(GLvoid* vertices, std::vector<GLuint> &indices, std::vector<MW_Texture> &textures, ShaderType shaderType)

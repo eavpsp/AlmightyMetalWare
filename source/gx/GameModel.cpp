@@ -1,45 +1,63 @@
 #include "GameModel.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
-
+#include "../debug/debug.h"
 std::string get_file_contents(const char* filename)
 {
-	std::ifstream in(filename, std::ios::binary);
-	if (in)
-	{
-		std::string contents;
-		in.seekg(0, std::ios::end);
-		contents.resize(in.tellg());
-		in.seekg(0, std::ios::beg);
-		in.read(&contents[0], contents.size());
-		in.close();
-		return(contents);
-	}
-	throw(errno);
+    debugLog("GameModel.cpp: Loading %s", filename);
+    std::ifstream in(filename, std::ios::binary);
+    if (!in.is_open())
+    {
+        debugLog("GameModel.cpp: Failed to open %c", filename);
+        return "";
+    }
+
+    std::string contents;
+    in.seekg(0, std::ios::end);
+    contents.resize(in.tellg());
+    in.seekg(0, std::ios::beg);
+    in.read(&contents[0], contents.size());
+    in.close();
+    debugLog("GameModel.cpp: Get File Contents Read Complete");
+
+    return contents;
 }
 
 GameModel::GameModel(const char* FILENAME)
 {
+	debugLog("Loading %s", FILENAME);
 	// Make a JSON object
-	std::string text = get_file_contents(file);
+	std::string text = get_file_contents(FILENAME);
+	debugLog("Text Loaded");	
 	JSON = json::parse(text);
+	debugLog("Json Parsed");	
 
 	// Get the binary data
 	GameModel::file = file;
 	data = getData();
 
 	// Traverse all nodes
-	traverseNode(0);
+	traverseNode(1);
+	debugLog("Loaded %s", FILENAME);
+	
+}
+
+GameModel::GameModel(std::vector<MeshData> meshes, std::vector<MW_Texture> loadedTex)
+{
+    this->meshes = meshes;
+    this->loadedTex = loadedTex;    
+
 }
 
 void GameModel::loadMesh(unsigned int indMesh)
 {
+	debugLog("Loading Mesh %d", indMesh);
 	// Get all accessor indices
 	unsigned int posAccInd = JSON["meshes"][indMesh]["primitives"][0]["attributes"]["POSITION"];
 	unsigned int normalAccInd = JSON["meshes"][indMesh]["primitives"][0]["attributes"]["NORMAL"];
 	unsigned int texAccInd = JSON["meshes"][indMesh]["primitives"][0]["attributes"]["TEXCOORD_0"];
 	unsigned int indAccInd = JSON["meshes"][indMesh]["primitives"][0]["indices"];
-
+	debugLog("Got Accessors");
 	// Use accessor indices to get all vertices components
 	std::vector<float> posVec = getFloats(JSON["accessors"][posAccInd]);
 	std::vector<glm::vec3> positions = groupFloatsVec3(posVec);
@@ -47,21 +65,22 @@ void GameModel::loadMesh(unsigned int indMesh)
 	std::vector<glm::vec3> normals = groupFloatsVec3(normalVec);
 	std::vector<float> texVec = getFloats(JSON["accessors"][texAccInd]);
 	std::vector<glm::vec2> texUVs = groupFloatsVec2(texVec);
-
+	debugLog("Got Vertices");
 	// Combine all the vertex components and also get the indices and textures
 	std::vector<VertexLit> vertices = assembleVertices(positions, normals, texUVs);
 	std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
 	std::vector<MW_Texture> textures = getTextures();
-
+	debugLog("Got Mesh %d", indMesh);
 	// Combine the vertices, indices, and textures into a mesh
-	meshes.push_back(MeshData(vertices.data(), indices, textures, ShaderType::LIT));
+	//meshes.push_back(MeshData(vertices.data(), indices, textures, ShaderType::LIT));<-- causes crashes
+	debugLog("Mesh %d Loaded", indMesh);
 }
 
 void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 {
 	// Current node
 	json node = JSON["nodes"][nextNode];
-
+	debugLog("Current Node: %s", node["name"].get<std::string>().c_str());
 	// Get translation if it exists
 	glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
 	if (node.find("translation") != node.end())
@@ -70,6 +89,9 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 		for (unsigned int i = 0; i < node["translation"].size(); i++)
 			transValues[i] = (node["translation"][i]);
 		translation = glm::make_vec3(transValues);
+	}
+	else{
+		debugLog("Node: %s has no translation", node["name"].get<std::string>().c_str());
 	}
 	// Get quaternion if it exists
 	glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
@@ -84,6 +106,9 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 		};
 		rotation = glm::make_quat(rotValues);
 	}
+	else{
+		debugLog("Node: %s has no rotation", node["name"].get<std::string>().c_str());
+	}
 	// Get scale if it exists
 	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	if (node.find("scale") != node.end())
@@ -92,6 +117,9 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 		for (unsigned int i = 0; i < node["scale"].size(); i++)
 			scaleValues[i] = (node["scale"][i]);
 		scale = glm::make_vec3(scaleValues);
+	}//
+	else{
+		debugLog("Node: %s has no scale", node["name"].get<std::string>().c_str());
 	}
 	// Get matrix if it exists
 	glm::mat4 matNode = glm::mat4(1.0f);
@@ -101,6 +129,10 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 		for (unsigned int i = 0; i < node["matrix"].size(); i++)
 			matValues[i] = (node["matrix"][i]);
 		matNode = glm::make_mat4(matValues);
+	}
+	else
+	{
+		debugLog("Node: %s has no matrix", node["name"].get<std::string>().c_str());
 	}
 
 	// Initialize matrices
@@ -119,6 +151,7 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 	// Check if the node contains a mesh and if it does load it
 	if (node.find("mesh") != node.end())
 	{
+		debugLog("Node: %s has mesh", node["name"].get<std::string>().c_str());
 		translationsMeshes.push_back(translation);
 		rotationsMeshes.push_back(rotation);
 		scalesMeshes.push_back(scale);
@@ -126,13 +159,19 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
 		loadMesh(node["mesh"]);
 	}
+	else
+		debugLog("Node: %s has no mesh", node["name"].get<std::string>().c_str());
 
 	// Check if the node has children, and if it does, apply this function to them with the matNextNode
-	if (node.find("children") != node.end())
+	if (node.find("children") != node.end() )
 	{
 		for (unsigned int i = 0; i < node["children"].size(); i++)
 			traverseNode(node["children"][i], matNextNode);
 	}
+	else{
+		debugLog("Node: %s has no children", node["name"].get<std::string>().c_str());
+	}
+	debugLog("Node: %s done", node["name"].get<std::string>().c_str());
 }
 
 std::vector<unsigned char> GameModel::getData()
@@ -144,10 +183,11 @@ std::vector<unsigned char> GameModel::getData()
 	// Store raw text data into bytesText
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
-	bytesText = get_file_contents((fileDirectory + uri).c_str());
+	bytesText = get_file_contents(("romfs:/" + fileDirectory + uri).c_str());
 
 	// Transform the raw text data into bytes and put them in a vector
 	std::vector<unsigned char> data(bytesText.begin(), bytesText.end());
+	debugLog("Data Loaded");
 	return data;
 }
 
@@ -171,7 +211,7 @@ std::vector<float> GameModel::getFloats(json accessor)
 	else if (type == "VEC2") numPerVert = 2;
 	else if (type == "VEC3") numPerVert = 3;
 	else if (type == "VEC4") numPerVert = 4;
-	else throw std::invalid_argument("Type is invalid (not SCALAR, VEC2, VEC3, or VEC4)");
+	else (debugLog("Error: %s is not a valid accessor type", type.c_str()));
 
 	// Go over all the bytes in the data at the correct place using the properties from above
 	unsigned int beginningOfData = byteOffset + accByteOffset;
@@ -303,7 +343,6 @@ std::vector<VertexLit> GameModel::assembleVertices
 			{
 				positions[i],
 				normals[i],
-				glm::vec3(1.0f, 1.0f, 1.0f),
 				texUVs[i]
 			}
 		);

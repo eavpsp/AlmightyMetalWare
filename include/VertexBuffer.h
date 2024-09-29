@@ -5,14 +5,27 @@
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "ShaderInterface.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/quaternion.hpp"
+
+
 
 //set up vb layouts to the structs to store the layout data
 struct VertexLit//Add more layout structs tex coords
 {
 	glm::vec3 position;
 	glm::vec3 normal;
-	glm::vec3 color;
 	glm::vec2 texUV;
+	VertexLit(){}
+	VertexLit(glm::vec3 position, glm::vec3 normal, glm::vec2 texUV) 
+	{
+    this->position = position;
+    this->normal = normal;
+    this->texUV = texUV;
+	}
+	~VertexLit(){}
 
 };
 struct ColorVertex

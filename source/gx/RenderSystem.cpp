@@ -69,11 +69,13 @@ void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later tak
 
     //test objs
     ShaderMaterialInterface *testBitmapMaterial = _resourceManager->_engineMaterials.getColorMaterial();
+    MW_Texture tex("romfs:/tex.bmp");
     testBitmapMaterial->SetUniform4F("u_Texture", 1.0f, 0.5f, 0.5f, 1.0f);
-    obj1 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 200.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-    obj2 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 500.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    obj1 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 200.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), GameModel());
+    obj2 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 500.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), GameModel());
 
 }
+
 
 RenderSystem::~RenderSystem()
 {}

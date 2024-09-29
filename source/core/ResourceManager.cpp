@@ -32,7 +32,9 @@ void ResourceManager::initResourceManager()
     _engineMaterials.initEngineMaterials();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //Pipeline: Materials -> Models -> Textures -> Draw
     MW_Texture tex("romfs:/tex.bmp");
+    //GameModel modelTest("romfs:/test.gltf"); fix mesh data class
     tex.Bind(0);
     VertexArray va;
     glGenVertexArrays(1, &s_vao);

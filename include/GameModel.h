@@ -53,8 +53,10 @@ class GameModel
 	std::vector<glm::vec3> groupFloatsVec3(std::vector<float> floatVec);
 	std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
     public:
-        GameModel(const char* FILENAME);
-        ~GameModel();
+        GameModel(const char* filename);
+        GameModel(){};
+        GameModel(std::vector<MeshData> meshes, std::vector<MW_Texture> loadedTex);
+        ~GameModel(){};
 };
 
 
