@@ -3,6 +3,7 @@
     in vec4 vtxColor;
     in vec4 vtxNormalQuat;
     in vec3 vtxView;
+    in vec2 v_TexCoord;
 
     out vec4 fragColor;
 
@@ -10,6 +11,7 @@
     uniform vec3 ambient;
     uniform vec3 diffuse;
     uniform vec4 specular; // w component is shininess
+    uniform sampler2D u_Texture;
 
     // Rotate the vector v by the quaternion q
     vec3 quatrotate(vec4 q, vec3 v)
@@ -35,6 +37,6 @@
         float specularFactor = pow(max(dot(normal, halfVec), 0.0), specular.w);
 
         vec3 fragLightColor = ambient + diffuseFactor*diffuse + specularFactor*specular.xyz;
-
-        fragColor = vec4(min(fragLightColor, 1.0), 1.0);
+        vec4 texColor = texture(u_Texture, v_TexCoord);
+        fragColor = texColor * vec4(min(fragLightColor, 1.0), 1.0);
     }

@@ -3,6 +3,8 @@
 #include "VertexArray.h"
 #include <vector>
 #include <EngineMaterials.h>    
+#include "GameObject.h"
+
 class ResourceManager
 {
     private:
@@ -16,6 +18,8 @@ class ResourceManager
     void initResourceManager();
     std::vector<ShaderInterface *> *getShaderArray();
     std::vector<VertexBuffer *> *getVertexArray();
+    std::vector<GameObject *> *gameObjects;
+
     static ResourceManager &getResourceManager();
     static void destroyResourceManager();
 };

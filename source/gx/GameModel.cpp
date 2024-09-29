@@ -42,11 +42,10 @@ GameModel::GameModel(const char* FILENAME)
 	
 }
 
-GameModel::GameModel(std::vector<MeshData> meshes, std::vector<MW_Texture> loadedTex)
+GameModel::GameModel(std::vector<MeshData> meshes)
 {
     this->meshes = meshes;
-    this->loadedTex = loadedTex;    
-
+   
 }
 
 void GameModel::loadMesh(unsigned int indMesh)
@@ -281,16 +280,18 @@ std::vector<GLuint> GameModel::getIndices(json accessor)
 
 std::vector<MW_Texture> GameModel::getTextures()
 {
+	debugLog("Loading Textures");
 	std::vector<MW_Texture> textures;
 
 	std::string fileStr = std::string(file);
-	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
+	std::string fileDirectory = "romfs:/";
 
 	// Go over all images
 	for (unsigned int i = 0; i < JSON["images"].size(); i++)
 	{
 		// uri of current texture
 		std::string texPath = JSON["images"][i]["uri"];
+	
 
 		// Check if the texture has already been loaded
 		bool skip = false;
@@ -329,6 +330,7 @@ std::vector<MW_Texture> GameModel::getTextures()
 		}
 	}
 
+	debugLog("Loaded Textures");
 	return textures;
 }
 

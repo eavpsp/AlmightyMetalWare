@@ -1,13 +1,15 @@
 #include<RenderSystem.h>
 #include<GameManager.h>
 #include <ViewCamera.h>
+#include "../debug/debug.h"
 void RenderSystem::render(VertexBuffer *vertexBuffer)//send in program and vao id array
 {
     //only works when i direct call lit or unlit, may have two seperate renderers for lit and unlit or every shader lmao
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     //vertexBuffer->renderVertexBuffer(this);
-    RenderUnlit(vertexBuffer->getCount());
+    //RenderUnlit(vertexBuffer->getCount());
+    RenderLit(vertexBuffer->getCount());
 	eglSwapBuffers(s_display, s_surface);
 
 }
@@ -32,10 +34,10 @@ void RenderSystem::destroyRenderSystem() {
 
 void RenderSystem::RenderUnlit(GLuint _count)
 {
+        
         ortho_projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f,SCREEN_HEIGHT, -1.0f, 1.0f);//left, right, bottom, top, near, far
         ViewCamera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        camera.transform = glm::translate(glm::mat4(1.0f), camera.position);
-        //Object A Position, Shader 
+        camera.transform = glm::translate(glm::mat4(1.0f), camera.position);  //Object A Position, Shader 
         {
             obj1->transform = glm::translate(glm::mat4(1.0f),obj1->position);
             glm::mat4 mdlvMtx = ortho_projection * camera.transform * obj1->transform ; //camera * model postition * projections = normalized device coordinates
@@ -44,7 +46,6 @@ void RenderSystem::RenderUnlit(GLuint _count)
             glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
             glDrawArrays(GL_TRIANGLES, 0, _count);
         }
-        //Object B
         {
             obj2->transform = glm::translate(glm::mat4(1.0f),obj2->position);
             glm::mat4 mdlvMtx = ortho_projection * camera.transform * obj2->transform;
@@ -57,10 +58,23 @@ void RenderSystem::RenderUnlit(GLuint _count)
 
 void RenderSystem::RenderLit(GLuint _count)
 {
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+        ortho_projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f,SCREEN_HEIGHT, -1.0f, 1.0f);//left, right, bottom, top, near, far
+        ViewCamera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+        camera.transform = glm::translate(glm::mat4(1.0f), camera.position);
+         _resourceManager->gameObjects->at(0)->transform = glm::translate(glm::mat4(1.0f),_resourceManager->gameObjects->at(0)->position);
+        glm::mat4 mdlvMtx = ortho_projection * camera.transform * _resourceManager->gameObjects->at(0)->transform ; //camera * model postition * projections = normalized device coordinates
+         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniformMat4F("mdlvMtx", mdlvMtx);
+         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform4F("lightPos", 0.0f, 0.0f, -0.5f, 1.0f);
+        _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform3F("ambient", 0.1f, 0.1f, 0.1f);
+         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform3F("diffuse",  0.4f, 0.4f, 0.4f);
+         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform4F("specular",   0.5f, 0.5f, 0.5f, 20.0f);
         glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
         glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, _count);
 }
+
 
 void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later take in projection mode
 {
@@ -68,13 +82,10 @@ void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later tak
     _resourceManager = &resourceManager;
 
     //test objs
-    ShaderMaterialInterface *testBitmapMaterial = _resourceManager->_engineMaterials.getColorMaterial();
-    MW_Texture tex("romfs:/tex.bmp");
-    testBitmapMaterial->SetUniform4F("u_Texture", 1.0f, 0.5f, 0.5f, 1.0f);
-    obj1 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 200.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), GameModel());
-    obj2 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 500.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), GameModel());
-    GameModel modelTest("romfs:/cube.gltf");
 
+    obj1 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 200.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), new GameModel());
+    obj2 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 500.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), new GameModel());
+    debugLog("init render system");
 }
 
 

@@ -29,6 +29,7 @@ struct ShaderMaterialInterface
         void SetUniform1f(const std::string &name, float value);
         void SetUniform1i(const std::string &name, int value);
         void SetUniformMat4F(const std::string &name, glm::mat4& matrix);
+        void SetUniform3F(const std::string &name, float v0, float v1, float v2);
         int GetUniformLocation(const std::string &name);
         ShaderMaterialInterface(){};
         ~ShaderMaterialInterface();

@@ -2,10 +2,12 @@
 
     layout (location = 0) in vec3 inPos;
     layout (location = 1) in vec3 inNormal;
+    layout (location = 2) in vec2 aTexCoord;
 
     out vec4 vtxColor;
     out vec4 vtxNormalQuat;
     out vec3 vtxView;
+    out vec2 v_TexCoord;
 
     uniform mat4 mdlvMtx;
     uniform mat4 projMtx;
@@ -29,4 +31,5 @@
 
         // Calculate color
         vtxColor = vec4(1.0);
+        v_TexCoord = aTexCoord;
     }

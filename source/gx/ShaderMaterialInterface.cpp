@@ -16,6 +16,10 @@ void ShaderMaterialInterface::SetUniform4F(const std::string &name, float v0, fl
 {
     glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
 }
+void ShaderMaterialInterface::SetUniform3F(const std::string &name, float v0, float v1, float v2)
+{
+    glUniform3f(GetUniformLocation(name), v0, v1, v2);
+}
  int ShaderMaterialInterface::GetUniformLocation(const std::string &name)
 {
     int location = glGetUniformLocation(_shaderInterface->getProgramHandle(), name.c_str());

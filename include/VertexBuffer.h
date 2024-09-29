@@ -21,10 +21,10 @@ struct VertexLit//Add more layout structs tex coords
 	VertexLit(){}
 	VertexLit(glm::vec3 position, glm::vec3 normal, glm::vec2 texUV) 
 	{
-    this->position = position;
-    this->normal = normal;
-    this->texUV = texUV;
-	}
+		this->position = position;
+		this->normal = normal;
+		this->texUV = texUV;
+		}
 	~VertexLit(){}
 
 };
@@ -59,6 +59,7 @@ class VertexBuffer
 		void UnBind() const;
 		GLuint getCount();
 		void initVertexBuffer(const GLvoid *data, GLsizei size, ShaderType shader, GLuint count);
+		void initVertexBuffer(std::vector <VertexLit>& vertices, GLsizei size, ShaderType shader, GLuint count);
 		VertexBuffer();
 		~VertexBuffer();
 };

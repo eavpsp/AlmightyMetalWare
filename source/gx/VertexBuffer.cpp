@@ -46,7 +46,13 @@ void VertexBuffer::initVertexBuffer(const GLvoid *data, GLsizei size, ShaderType
     shaderType = &shader;
     _count = count;
 }
-
+void VertexBuffer::initVertexBuffer(std::vector <VertexLit>& vertices, GLsizei size, ShaderType shader, GLuint count)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices.data(), GL_STATIC_DRAW);
+    shaderType = &shader;
+    _count = count;
+}
 void VertexBuffer::Bind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);

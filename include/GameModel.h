@@ -13,19 +13,12 @@ class GameModel
 {
     private:
         const char* file;
-	std::vector<unsigned char> data;
-	json JSON;
+		std::vector<unsigned char> data;
+		json JSON;
 
-	// All the meshes and transformations
-	std::vector<MeshData> meshes;
-	std::vector<glm::vec3> translationsMeshes;
-	std::vector<glm::quat> rotationsMeshes;
-	std::vector<glm::vec3> scalesMeshes;
-	std::vector<glm::mat4> matricesMeshes;
-
-	// Prevents textures from being loaded twice
-	std::vector<std::string> loadedTexName;
-	std::vector<MW_Texture> loadedTex;
+		// Prevents textures from being loaded twice
+		std::vector<std::string> loadedTexName;
+		std::vector<MW_Texture> loadedTex;
 
 	// Loads a single mesh by its index
 	void loadMesh(unsigned int indMesh);
@@ -53,9 +46,15 @@ class GameModel
 	std::vector<glm::vec3> groupFloatsVec3(std::vector<float> floatVec);
 	std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
     public:
+	// All the meshes and transformations
+		std::vector<MeshData> meshes;
+		std::vector<glm::vec3> translationsMeshes;
+		std::vector<glm::quat> rotationsMeshes;
+		std::vector<glm::vec3> scalesMeshes;
+		std::vector<glm::mat4> matricesMeshes;
         GameModel(const char* filename);
         GameModel(){};
-        GameModel(std::vector<MeshData> meshes, std::vector<MW_Texture> loadedTex);
+        GameModel(std::vector<MeshData> meshes);
         ~GameModel(){};
 };
 

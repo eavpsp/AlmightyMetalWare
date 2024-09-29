@@ -38,7 +38,7 @@ class RenderSystem
 		GLuint s_program;
 		glm::mat4 ortho_projection, perspective_projection;
 		RenderProjectionMode projectionMode;
-		ResourceManager *_resourceManager;
+ 		ResourceManager* _resourceManager;
 		RenderSystem(){};
 		~RenderSystem();
 	public:
@@ -49,6 +49,13 @@ class RenderSystem
 		void destroyRenderSystem();
 		void RenderUnlit(GLuint _count);
 		void RenderLit(GLuint _count);
+		static ResourceManager* GetResourceManager()
+		{
+			static ResourceManager *s_resourceManager = nullptr;
+			s_resourceManager = getRenderSystem()._resourceManager;
+			return s_resourceManager;
+		}
+
 		//test
 		GameObject *obj1, *obj2;
 		

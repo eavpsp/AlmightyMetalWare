@@ -19,8 +19,8 @@ GameManager& GameManager::getGameManager()
             debugLog("\x1b[16;25HError Creating Window!");
         }
         gladLoadGL();
-        gameManager->_resourceManager->initResourceManager();
         gameManager->_renderSystem->initRenderSystem(*(gameManager->_resourceManager));//pass in resource manager
+        gameManager->_resourceManager->initResourceManager();
         debugLog("Made GameManager!");
     }
     return *gameManager;

@@ -11,8 +11,8 @@ class GameObject : public EngineObject
     public:
         //base model data
         ShaderMaterialInterface *_shaderInterface;
-        GameModel objectModel;
-        GameObject(ShaderMaterialInterface *i_shaderInterface, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, GameModel gameModel);
+        GameModel *objectModel;
+        GameObject(ShaderMaterialInterface *i_shaderInterface, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, GameModel* gameModel);
         ~GameObject();
     };
 
