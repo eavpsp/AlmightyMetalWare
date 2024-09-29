@@ -20,7 +20,7 @@ GameManager& GameManager::getGameManager()
         }
         gladLoadGL();
         gameManager->_resourceManager->initResourceManager();
-        gameManager->_renderSystem->initRenderSystem();
+        gameManager->_renderSystem->initRenderSystem(*(gameManager->_resourceManager));//pass in resource manager
         debugLog("Made GameManager!");
     }
     return *gameManager;

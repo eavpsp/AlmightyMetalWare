@@ -1,6 +1,7 @@
 #include "ResourceManager.h"
 #include "../debug/debug.h"
 #include "Texture.h"
+#include "GameObject.h"
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
@@ -17,12 +18,12 @@ ResourceManager::~ResourceManager()
 
 static const TexturedUnlit vertices[] =
 {
-    { { 100.0f, 100.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } , { 0.0f, 0.0f } },//bottom left
-    { { 200.0f, 100.0f, 0.0f }, { 0.0f, 1.0f, 0.0f } , { 1.0f, 0.0f } },//bottom right
-    { { 200.0f, 200.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } , { 1.0f, 1.0f } },//top right
-    { { 100.0f, 100.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } , { 0.0f, 0.0f } },//bottom left
-    { { 100.0f, 200.0f, 0.0f }, { 1.0f, 1.0f, 0.0f } , { 0.0f, 1.0f } },//top left
-    { { 200.0f, 200.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } , { 1.0f, 1.0f } },//top right
+    { { -50.0f, -50.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } , { 0.0f, 0.0f } },//bottom left
+    { { 50.0f, -50.0f, 0.0f }, { 0.0f, 1.0f, 0.0f } , { 1.0f, 0.0f } },//bottom right
+    { { 50.0f, 50.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } , { 1.0f, 1.0f } },//top right
+    { { -50.0f, -50.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } , { 0.0f, 0.0f } },//bottom left
+    { { -50.0f, 50.0f, 0.0f }, { 1.0f, 1.0f, 0.0f } , { 0.0f, 1.0f } },//top left
+    { { 50.0f, 50.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } , { 1.0f, 1.0f } },//top right
 };
 void ResourceManager::initResourceManager()
 {
@@ -33,7 +34,6 @@ void ResourceManager::initResourceManager()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     MW_Texture tex("romfs:/tex.bmp");
     tex.Bind(0);
-    _engineMaterials.getColorMaterial()->SetUniform4F("u_Texture", 1.0f, 0.5f, 0.5f, 1.0f);
     VertexArray va;
     glGenVertexArrays(1, &s_vao);
     VertexBuffer vb;

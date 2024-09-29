@@ -1,20 +1,13 @@
 #ifndef VIEW_CAMERA_H
 #define VIEW_CAMERA_H
-#define GLM_FORCE_PURE
-
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <EngineObject.h>
 //Add camera functions for view frustrum and movement
-class ViewCamera
+class ViewCamera : public EngineObject
 {
     private:
 
     public:
-        glm::vec3 position;
-        ViewCamera(){};
+        ViewCamera(glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale);
         ~ViewCamera(){};
 };
 

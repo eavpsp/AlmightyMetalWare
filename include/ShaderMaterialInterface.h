@@ -14,7 +14,7 @@
 //create a custom list struct that finds, stores, and returns data
 
 //create constructor that stores the shader uniforms into the material it creates
-class ShaderMaterialInterface
+struct ShaderMaterialInterface
 {
     private:
        
@@ -35,7 +35,7 @@ class ShaderMaterialInterface
     
 };
 
-class LightMaterial : public ShaderMaterialInterface
+struct LightMaterial : public ShaderMaterialInterface
 {
     public:
         GLint loc_mdlvMtx, loc_projMtx;
@@ -44,7 +44,7 @@ class LightMaterial : public ShaderMaterialInterface
         ~LightMaterial(){};
 };
 
-class ColorMaterial : public ShaderMaterialInterface
+struct ColorMaterial : public ShaderMaterialInterface
 {
     public:
         GLint aColor, aVertexPosition;

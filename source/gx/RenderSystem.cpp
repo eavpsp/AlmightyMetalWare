@@ -32,28 +32,44 @@ void RenderSystem::destroyRenderSystem() {
 
 void RenderSystem::RenderUnlit(GLuint _count)
 {
-        ortho_projection = glm::ortho(0.0f, SCREEN_HEIGHT, 0.0f,SCREEN_WIDTH, -1.0f, 1.0f);//left, right, bottom, top, near, far
-        ViewCamera camera;
-        camera.position = glm::vec3(-100.0f, 0.0f, 0.0f);
+        ortho_projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f,SCREEN_HEIGHT, -1.0f, 1.0f);//left, right, bottom, top, near, far
+        ViewCamera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 view = glm::translate(glm::mat4(1.0f), camera.position);
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
-        glm::mat4 mdlvMtx = ortho_projection * view * model; //camera * model postition * projections = normalized device coordinates
-        ResourceManager::getResourceManager()._engineMaterials.getColorMaterial()->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
-        glUseProgram(ResourceManager::getResourceManager()._engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
-        glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glDrawArrays(GL_TRIANGLES, 0, _count);
+        //Object A Position, Shader 
+        {
+            obj1->transform = glm::translate(glm::mat4(1.0f),obj1->position);
+            glm::mat4 mdlvMtx = ortho_projection * view * obj1->transform ; //camera * model postition * projections = normalized device coordinates
+            _resourceManager->_engineMaterials.getColorMaterial()->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
+            glUseProgram(obj1->_shaderInterface->getShaderInterface()->getProgramHandle());
+            glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+            glDrawArrays(GL_TRIANGLES, 0, _count);
+        }
+        //Object B
+        {
+            obj2->transform = glm::translate(glm::mat4(1.0f),obj2->position);
+            glm::mat4 mdlvMtx = ortho_projection * view * obj2->transform;
+            _resourceManager->_engineMaterials.getColorMaterial()->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
+            glUseProgram(obj2->_shaderInterface->getShaderInterface()->getProgramHandle());
+            glBindVertexArray(_resourceManager->s_vao); 
+            glDrawArrays(GL_TRIANGLES, 0, _count);
+        }
 }
 
 void RenderSystem::RenderLit(GLuint _count)
 {
-        glUseProgram(ResourceManager::getResourceManager()._engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
-        glBindVertexArray(ResourceManager::getResourceManager().s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
+        glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         glDrawArrays(GL_TRIANGLES, 0, _count);
 }
 
-void RenderSystem::initRenderSystem()//later take in projection mode
+
+void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later take in projection mode
 {
     //set up projection
+    _resourceManager = &resourceManager;
+    _resourceManager->_engineMaterials.getColorMaterial()->SetUniform4F("u_Texture", 1.0f, 0.5f, 0.5f, 1.0f);
+    obj1 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 200.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    obj2 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 500.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 }
 
