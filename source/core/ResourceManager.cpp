@@ -39,6 +39,7 @@ void ResourceManager::initResourceManager()
     VertexBuffer vb;
     //bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(s_vao);
+    //create a batching system to store staic verts and draw them all at once
     vb.initVertexBuffer(vertices, sizeof(vertices), ShaderType::UNLIT, sizeof(vertices) / sizeof(vertices[0]));
     VertexBufferLayout layout;
     layout.AddElement(GL_FLOAT, 3, GL_FALSE);

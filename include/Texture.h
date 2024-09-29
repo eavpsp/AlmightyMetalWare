@@ -15,7 +15,7 @@ class MW_Texture
         int _bpp;
 
     public:
-        MW_Texture(char* path);
+        MW_Texture(const char* path);
         ~MW_Texture();
 
         void Bind(unsigned int slot);

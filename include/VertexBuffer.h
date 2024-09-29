@@ -6,21 +6,25 @@
 #include "VertexBufferLayout.h"
 #include "ShaderInterface.h"
 
-struct Vertex//Add more layout structs tex coords
+//set up vb layouts to the structs to store the layout data
+struct VertexLit//Add more layout structs tex coords
 {
-	float position[3];//Postion Vector
-	float normal[3];//Normal Vector
+	glm::vec3 position;
+	glm::vec3 normal;
+	glm::vec3 color;
+	glm::vec2 texUV;
+
 };
 struct ColorVertex
 {
-	GLfloat position[3];
-	GLfloat color[3];
+	glm::vec3 position;
+	glm::vec4 color;
 };
 struct TexturedUnlit
 {
-	GLfloat position[3];
-	GLfloat color[3];
-	GLfloat texcoord[2];
+	glm::vec3 position;
+	glm::vec3 color;
+	glm::vec2 texUV;
 };
 enum ShaderType
 {

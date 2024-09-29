@@ -17,7 +17,7 @@
  *          sample. If you need multisampled textures, you should use
  *          glTexImage2DMultisample() function.
  */
-MW_Texture::MW_Texture(char* path) : filePath(path),  _textureID(0), _width(0), _height(0), _bpp(0)
+MW_Texture::MW_Texture(const char* path) : filePath(path),  _textureID(0), _width(0), _height(0), _bpp(0)
 {
 
     stbi_set_flip_vertically_on_load(true);
@@ -46,7 +46,7 @@ void MW_Texture::Bind(unsigned int slot)
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindBuffer(GL_TEXTURE_2D, _textureID);
-
+    
 }
 
 

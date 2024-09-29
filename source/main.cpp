@@ -4,7 +4,7 @@
 #include <switch.h>
 #include <GameManager.h>
 #include "debug/debug.h"
-
+#include <json.hpp>  
 
 /*
 ///TODO
@@ -13,6 +13,11 @@ Batch Rendering
 Create Mesh System using blender + unity or just blender
 Add nullptr checks to all funcs
 //setup threads for game , physics, audio, input, and render
+//metadata for materials and other game objects ofc
+//font system
+//texture atlas
+//shaders to manage batching
+//set max buffer size
 */
 //
 int main(int argc, char* argv[])
