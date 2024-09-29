@@ -16,6 +16,6 @@ public:
 
     GLuint GetRendererID();
 private:
-    GLuint _rendererID;
+    GLuint _rendererID = 0;
 };
 #endif

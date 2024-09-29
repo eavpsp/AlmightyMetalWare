@@ -12,6 +12,15 @@ VertexArray::~VertexArray()
     glDeleteVertexArrays(1, &_rendererID);
 }
 
+/**
+ * @brief Add a VertexBuffer to the VertexArray, applying the layout to it
+ *
+ * @param[in] vb The VertexBuffer to add
+ * @param[in] layout The VertexBufferLayout to apply to the VertexBuffer
+ *
+ * This function applies the VertexBufferLayout to the VertexBuffer, and then
+ * binds the VertexBuffer to the VertexArray.
+ */
 void VertexArray::AddBuffer(const VertexBuffer &vb, VertexBufferLayout &layout)
 {
     const auto& elements = layout.GetElements();

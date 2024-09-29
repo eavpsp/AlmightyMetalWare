@@ -1,12 +1,27 @@
 #include "Texture.h"
-#include "stb_image.h"
+
 
  
-Texture::Texture(std::string& path) : filePath(path),  _textureID(0), _width(0), _height(0), _bpp(0)
+/**
+ * \brief Texture constructor
+ * \param path Path to the image file
+ *
+ * Reads image data from file located at \p path and creates a texture
+ * object from it. The texture object is created with linear filtering
+ * and clamping to edge for both S and T coordinates.
+ *
+ * \warning The texture object is created with a single mipmap level.
+ *          If you need multiple mipmap levels, you should use
+ *          glGenerateMipmap() function after binding the texture.
+ *          Additionally, the texture object is created with a single
+ *          sample. If you need multisampled textures, you should use
+ *          glTexImage2DMultisample() function.
+ */
+MW_Texture::MW_Texture(char* path) : filePath(path),  _textureID(0), _width(0), _height(0), _bpp(0)
 {
 
     stbi_set_flip_vertically_on_load(true);
-    _localBuffer = stbi_load(path.c_str(), &_width, &_height, &_bpp, 4);
+    _localBuffer = stbi_load(path, &_width, &_height, &_bpp, 4);
     glGenTextures(1, &_textureID);
     glBindBuffer(GL_TEXTURE_2D, _textureID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -22,12 +37,12 @@ Texture::Texture(std::string& path) : filePath(path),  _textureID(0), _width(0),
     
 }
 
-Texture::~Texture()
+MW_Texture::~MW_Texture()
 {
     glDeleteTextures(1, &_textureID);
 }
 
-void Texture::Bind(unsigned int slot)
+void MW_Texture::Bind(unsigned int slot)
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindBuffer(GL_TEXTURE_2D, _textureID);
@@ -35,7 +50,7 @@ void Texture::Bind(unsigned int slot)
 }
 
 
-void Texture::UnBind()
+void MW_Texture::UnBind()
 {
     glBindBuffer(GL_TEXTURE_2D, 0);
 

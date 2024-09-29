@@ -2,7 +2,6 @@
 #define RESOURCEMANAGER_H
 #include "VertexArray.h"
 #include <vector>
-#include <lenny.h>
 #include <EngineMaterials.h>    
 class ResourceManager
 {

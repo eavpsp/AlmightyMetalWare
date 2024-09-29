@@ -16,10 +16,18 @@ struct ColorVertex
 	GLfloat position[3];
 	GLfloat color[3];
 };
+struct TexturedUnlit
+{
+	GLfloat position[3];
+	GLfloat color[3];
+	GLfloat texcoord[2];
+};
 enum ShaderType
 {
 	UNLIT,
-	LIT	
+	LIT,
+	TEX_UNLIT,
+	TEX_LIT
 };
 class VertexBuffer
 {

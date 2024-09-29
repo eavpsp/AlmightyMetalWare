@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <glad/glad.h>
 #include <string>
-class Texture
+#include "stb_image.h"
+class MW_Texture
 {
     private:
         GLuint _textureID;
@@ -14,8 +15,8 @@ class Texture
         int _bpp;
 
     public:
-        Texture(std::string& path);
-        ~Texture();
+        MW_Texture(char* path);
+        ~MW_Texture();
 
         void Bind(unsigned int slot);
         void UnBind();
