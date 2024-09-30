@@ -64,6 +64,18 @@ void GameModel::loadMesh(unsigned int indMesh)
 	std::vector<glm::vec3> normals = groupFloatsVec3(normalVec);
 	std::vector<float> texVec = getFloats(JSON["accessors"][texAccInd]);
 	std::vector<glm::vec2> texUVs = groupFloatsVec2(texVec);
+	if(texVec.size() == 0)
+	{
+		debugLog("No Texture Coords Found");
+	}
+	if(normalVec.size() == 0)
+	{
+		debugLog("No Normals Found");
+	}
+	if(positions.size() == 0)
+	{
+		debugLog("No Vertices Found");
+	}
 	debugLog("Got Vertices");
 	// Combine all the vertex components and also get the indices and textures
 	std::vector<VertexLit> vertices = assembleVertices(positions, normals, texUVs);
@@ -71,9 +83,9 @@ void GameModel::loadMesh(unsigned int indMesh)
 	std::vector<MW_Texture> textures = getTextures();
 	debugLog("Got Mesh %d", indMesh);
 	// Combine the vertices, indices, and textures into a mesh
-	MeshData mesh;
-	mesh.initMeshLitTexture(vertices, indices, textures);
-	meshes.push_back(mesh);
+	MeshData *mesh = new MeshData();
+	mesh->initMeshLitTexture(vertices, indices, textures);
+	meshes.push_back(*mesh);
 	debugLog("Mesh %d Loaded", indMesh);
 }
 
@@ -177,6 +189,7 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
 std::vector<unsigned char> GameModel::getData()
 {
+	debugLog("Loading Data");
 	// Create a place to store the raw text, and get the uri of the .bin file
 	std::string bytesText;
 	std::string uri = JSON["buffers"][0]["uri"];
@@ -184,6 +197,7 @@ std::vector<unsigned char> GameModel::getData()
 	// Store raw text data into bytesText
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
+	debugLog("File Directory: romfs:/%s", fileDirectory.c_str());
 	bytesText = get_file_contents(("romfs:/" + fileDirectory + uri).c_str());
 
 	// Transform the raw text data into bytes and put them in a vector
@@ -350,7 +364,7 @@ std::vector<VertexLit> GameModel::assembleVertices
 			{
 				positions[i],
 				normals[i],
-				texUVs[i]
+				texUVs[i],
 			}
 		);
 	}

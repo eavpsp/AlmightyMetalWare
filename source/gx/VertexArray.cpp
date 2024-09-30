@@ -9,7 +9,7 @@ VertexArray::VertexArray()
 
 VertexArray::~VertexArray()
 {
-    glDeleteVertexArrays(1, &_rendererID);
+   // glDeleteVertexArrays(1, &_rendererID);
 }
 
 /**
@@ -38,13 +38,13 @@ void VertexArray::AddBuffer(const VertexBuffer &vb, VertexBufferLayout &layout)
 
 void VertexArray::Bind() 
 {
-    glBindVertexArray(_rendererID);
+  //  glBindVertexArray(_rendererID);
     debugLog("Bound VertexArray %u", _rendererID);
 }
 
 void VertexArray::SetRenderID(GLuint id)
 {
-    _rendererID = id;
+   // _rendererID = id;
 }
 
 void VertexArray::UnBind() 

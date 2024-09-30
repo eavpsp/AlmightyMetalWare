@@ -21,16 +21,7 @@ GLuint VertexBuffer::getVertexBufferID()
 void VertexBuffer::renderVertexBuffer(void *_renderSystem) //this just doesnt work and i have no idea why, unless i use debuglog to output each frame lol
 {
  
-    if(*shaderType == ShaderType::UNLIT)
-    {
-        ((RenderSystem *)_renderSystem)->RenderUnlit(_count);
-       
-    }
-    else if(*shaderType == ShaderType::LIT)
-    {
-         ((RenderSystem*)_renderSystem)->RenderLit(_count);
-       
-    }
+   
 }
 
 VertexBuffer::VertexBuffer() 

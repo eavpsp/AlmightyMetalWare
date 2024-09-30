@@ -1,17 +1,42 @@
 #include<RenderSystem.h>
 #include<GameManager.h>
-#include <ViewCamera.h>
+
 #include "../debug/debug.h"
-void RenderSystem::render(VertexBuffer *vertexBuffer)//send in program and vao id array
+ResourceManager gameResourceManager;
+
+void RenderSystem::render(GameObject *gameObject)//send in program and vao id array
 {
-    //only works when i direct call lit or unlit, may have two seperate renderers for lit and unlit or every shader lmao
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    //vertexBuffer->renderVertexBuffer(this);
-    //RenderUnlit(vertexBuffer->getCount());
-    RenderLit(vertexBuffer->getCount());
+    RenderLit(gameObject);
 	eglSwapBuffers(s_display, s_surface);
 
+}
+
+void RenderSystem::render(VertexBuffer *vertexBuffer)
+{
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ortho_projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f,SCREEN_HEIGHT, -1.0f, 1.0f);//left, right, bottom, top, near, far
+        mainCamera->transform = glm::translate(glm::mat4(1.0f), mainCamera->position);  //Object A Position, Shader 
+        {
+
+            glm::mat4 mdlvMtx = ortho_projection * mainCamera->transform * glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f)); //mainCamera * model postition * projections = normalized device coordinates
+            _resourceManager->_engineMaterials.getColorMaterial()->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
+            glUseProgram( _resourceManager->_engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
+            glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+            glDrawElements(GL_TRIANGLES, vertexBuffer->ib->getCount(), GL_UNSIGNED_INT, 0);
+
+        }
+        {
+            glm::mat4 mdlvMtx = ortho_projection * mainCamera->transform * glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 100.0f, 0.0f));
+             _resourceManager->_engineMaterials.getColorMaterial()->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
+            glUseProgram( _resourceManager->_engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
+            glBindVertexArray(_resourceManager->s_vao); 
+            glDrawElements(GL_TRIANGLES, vertexBuffer->ib->getCount(), GL_UNSIGNED_INT, 0);
+            
+        }
+        eglSwapBuffers(s_display, s_surface);
 }
 
 RenderSystem& RenderSystem::getRenderSystem() {
@@ -32,59 +57,71 @@ void RenderSystem::destroyRenderSystem() {
 	delete &renderSystem;
 }
 
-void RenderSystem::RenderUnlit(GLuint _count)
+void RenderSystem::RenderUnlit(GameObject *gameObject)
 {
         
         ortho_projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f,SCREEN_HEIGHT, -1.0f, 1.0f);//left, right, bottom, top, near, far
-        ViewCamera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        camera.transform = glm::translate(glm::mat4(1.0f), camera.position);  //Object A Position, Shader 
+        mainCamera->transform = glm::translate(glm::mat4(1.0f), mainCamera->position);  //Object A Position, Shader 
         {
-            obj1->transform = glm::translate(glm::mat4(1.0f),obj1->position);
-            glm::mat4 mdlvMtx = ortho_projection * camera.transform * obj1->transform ; //camera * model postition * projections = normalized device coordinates
-            obj1->_shaderInterface->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
-            glUseProgram(obj1->_shaderInterface->getShaderInterface()->getProgramHandle());
+             _resourceManager->gameObjects->at(0)->transform = glm::translate(glm::mat4(1.0f), _resourceManager->gameObjects->at(0)->position);
+            glm::mat4 mdlvMtx = ortho_projection * mainCamera->transform *  _resourceManager->gameObjects->at(0)->transform ; //mainCamera * model postition * projections = normalized device coordinates
+             _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
+            glUseProgram( _resourceManager->_engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
             glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-            glDrawArrays(GL_TRIANGLES, 0, _count);
+            glDrawArrays(GL_TRIANGLES, 0, gameObject->objectModel->meshes[0].vertexBuffer.getCount());
         }
         {
-            obj2->transform = glm::translate(glm::mat4(1.0f),obj2->position);
-            glm::mat4 mdlvMtx = ortho_projection * camera.transform * obj2->transform;
-            obj2->_shaderInterface->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
-            glUseProgram(obj2->_shaderInterface->getShaderInterface()->getProgramHandle());
+             _resourceManager->gameObjects->at(0)->transform = glm::translate(glm::mat4(1.0f), _resourceManager->gameObjects->at(0)->position);
+            glm::mat4 mdlvMtx = ortho_projection * mainCamera->transform *  _resourceManager->gameObjects->at(0)->transform;
+             _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
+            glUseProgram( _resourceManager->_engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
             glBindVertexArray(_resourceManager->s_vao); 
-            glDrawArrays(GL_TRIANGLES, 0, _count);
+            glDrawArrays(GL_TRIANGLES, 0, gameObject->objectModel->meshes[0].vertexBuffer.getCount());
         }
 }
 
-void RenderSystem::RenderLit(GLuint _count)
+/**
+ * @brief Renders a lit mesh using the light material.
+ * @param meshData The mesh data to be rendered.
+ */
+void RenderSystem::RenderLit(GameObject *gameObject)
 {
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-        ortho_projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f,SCREEN_HEIGHT, -1.0f, 1.0f);//left, right, bottom, top, near, far
-        ViewCamera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        camera.transform = glm::translate(glm::mat4(1.0f), camera.position);
-         _resourceManager->gameObjects->at(0)->transform = glm::translate(glm::mat4(1.0f),_resourceManager->gameObjects->at(0)->position);
-        glm::mat4 mdlvMtx = ortho_projection * camera.transform * _resourceManager->gameObjects->at(0)->transform ; //camera * model postition * projections = normalized device coordinates
-         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniformMat4F("mdlvMtx", mdlvMtx);
-         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform4F("lightPos", 0.0f, 0.0f, -0.5f, 1.0f);
-        _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform3F("ambient", 0.1f, 0.1f, 0.1f);
-         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform3F("diffuse",  0.4f, 0.4f, 0.4f);
-         _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform4F("specular",   0.5f, 0.5f, 0.5f, 20.0f);
-        glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
-        glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        glDrawArrays(GL_TRIANGLES, 0, _count);
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    auto projMtx = glm::perspective(45.0f, 1280.0f / 720.0f, 0.01f, 1000.0f);
+    mainCamera->transform = glm::translate(glm::mat4(1.0f), mainCamera->position);
+
+    glm::mat4 mdlvMtx = glm::translate(glm::mat4(1.0f), _resourceManager->gameObjects->at(0)->position);
+    mdlvMtx = glm::scale(mdlvMtx, gameObject->objectModel->scalesMeshes[0]);
+    mdlvMtx = projMtx * mainCamera->transform * mdlvMtx;
+
+    _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniformMat4F("mdlvMtx", mdlvMtx);
+    _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniformMat4F("projMtx", projMtx);
+    _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform4F("lightPos", 0.0f, 0.0f, -0.5f, 1.0f);
+    _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform3F("ambient", 0.1f, 0.1f, 0.1f);
+    _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform3F("diffuse", 0.4f, 0.4f, 0.4f);
+    _resourceManager->gameObjects->at(0)->_shaderInterface->SetUniform4F("specular", 0.5f, 0.5f, 0.5f, 20.0f);
+
+    glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
+    glBindVertexArray(_resourceManager->s_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, gameObject->objectModel->meshes[0].vertexBuffer.getVertexBufferID());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gameObject->objectModel->meshes[0].vertexBuffer.ib->getBufferID());
+
+    glDrawElements(GL_TRIANGLES, gameObject->objectModel->meshes[0].vertexBuffer.ib->getCount(), GL_UNSIGNED_INT, 0);
+    //debugLog("index buffer count %d", gameObject->objectModel->meshes[0].vertexBuffer.ib->getCount());
+        //glDrawArrays(GL_TRIANGLES, 0, gameObject->objectModel->meshes[0].vertexBuffer.getCount());
 }
 
 
 void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later take in projection mode
 {
-    //set up projection
+  
     _resourceManager = &resourceManager;
-
-    //test objs
-
-    obj1 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 200.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), new GameModel());
-    obj2 = new GameObject(_resourceManager->_engineMaterials.getColorMaterial(), glm::vec3(200.0f, 500.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), new GameModel());
+    gameResourceManager = resourceManager;
+    mainCamera = new ViewCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+   // mainCamera->transform = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     debugLog("init render system");
 }
 

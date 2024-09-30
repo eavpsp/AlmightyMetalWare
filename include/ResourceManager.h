@@ -10,9 +10,10 @@ class ResourceManager
     private:
     std::vector<ShaderInterface *> *shaderArray;
     std::vector<VertexBuffer *> *vertexArrays;
+    
+    public:
     ResourceManager(){};
     ~ResourceManager();
-    public:
     EngineMaterials _engineMaterials;
     GLuint s_vao, s_vbo;
     void initResourceManager();

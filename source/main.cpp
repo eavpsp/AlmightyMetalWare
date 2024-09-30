@@ -48,6 +48,22 @@ int main(int argc, char* argv[])
         u32 kDown = padGetButtonsDown(&pad);
         if (kDown & HidNpadButton_Plus)
             break;
+        if(kDown & HidNpadButton_Left)
+        {
+            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(10.0f,0.0f,0.0f);
+        }
+        if(kDown & HidNpadButton_Right)
+        {
+            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(-10.0f,0.0f,0.0f);
+        }
+        if(kDown & HidNpadButton_Up)
+        {
+            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(0.0f,10.0f,0.0f);
+        }
+        if(kDown & HidNpadButton_Down)
+        {
+            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(0.0f,-10.0f,0.0f);
+        }
         
     }
     romfsExit();

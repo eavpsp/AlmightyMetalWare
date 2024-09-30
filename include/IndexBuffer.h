@@ -11,10 +11,12 @@ class IndexBuffer
 		GLuint _indexexBufferID;
 		GLuint _count; //num of indices elements
 	public:
-		void Bind() const;
+		void Bind(const GLvoid *data) const;
 		void UnBind() const;
 		inline unsigned int getCount() { return _count; }
-		IndexBuffer(const GLvoid *data, GLsizei count);
+		inline GLuint getBufferID() { return _indexexBufferID; }
+		IndexBuffer(GLsizei count);
+		IndexBuffer(){};
 		~IndexBuffer();
 };
 #endif

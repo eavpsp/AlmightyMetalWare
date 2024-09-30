@@ -18,7 +18,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <ResourceManager.h>
 #include <GameObject.h>
-
+#include <ViewCamera.h>
 // nintendo switch screen width and height
 const float SCREEN_WIDTH = 1280.0f;
 const float SCREEN_HEIGHT = 720.0f;
@@ -44,23 +44,19 @@ class RenderSystem
 	public:
 		void initRenderSystem(ResourceManager &resourceManager);
 		bool initEgl(NWindow* win);
+		void render(GameObject *gameObject);
 		void render(VertexBuffer *vertexBuffer);
 		static RenderSystem& getRenderSystem();
 		void destroyRenderSystem();
-		void RenderUnlit(GLuint _count);
-		void RenderLit(GLuint _count);
-		static ResourceManager* GetResourceManager()
-		{
-			static ResourceManager *s_resourceManager = nullptr;
-			s_resourceManager = getRenderSystem()._resourceManager;
-			return s_resourceManager;
-		}
+		void RenderUnlit(GameObject *gameObject);
+		void RenderLit(GameObject *gameObject);
+		ViewCamera *mainCamera;
 
-		//test
-		GameObject *obj1, *obj2;
-		
+
 
 };
+extern ResourceManager gameResourceManager;
+constexpr auto TAU = glm::two_pi<float>();
 
 
 #endif
