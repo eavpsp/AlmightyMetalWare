@@ -1,7 +1,12 @@
 #include <GameManager.h>
 #include "../debug/debug.h"
+ResourceManager *gameResourceManager;
 
-GameManager::GameManager(bool running) : _running{running}, _renderSystem{&RenderSystem::getRenderSystem()}, _resourceManager{&ResourceManager::getResourceManager()} {}
+GameManager::GameManager(bool running) : _running{running}, _renderSystem{&RenderSystem::getRenderSystem()}, _resourceManager{&ResourceManager::getResourceManager()} 
+{
+    
+}
+
 GameManager::~GameManager()
 {
     _resourceManager->destroyResourceManager();
@@ -19,9 +24,10 @@ GameManager& GameManager::getGameManager()
             debugLog("\x1b[16;25HError Creating Window!");
         }
         gladLoadGL();
+        gameResourceManager = gameManager->_resourceManager;
         gameManager->_renderSystem->initRenderSystem(*(gameManager->_resourceManager));//pass in resource manager
         gameManager->_resourceManager->initResourceManager();
-        debugLog("Made GameManager!");
+        debugLog("Made Game Manager!");
     }
     return *gameManager;
 }
@@ -40,8 +46,8 @@ void GameManager::destroyGameManager()
 
 void GameManager::runGameLoop()
 {
-    _renderSystem->render(_resourceManager->gameObjects->at(0));
-   // _renderSystem->render(_resourceManager->getVertexArray()->at(0));
+    //_renderSystem->render(_resourceManager->gameObjects->at(0));
+    _renderSystem->RenderLit(_resourceManager->getVertexArray()->at(0));
 }
 
 bool GameManager::Running(){

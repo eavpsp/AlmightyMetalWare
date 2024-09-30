@@ -2,6 +2,7 @@
 #include "../debug/debug.h"
 #include "Texture.h"
 #include "GameShapes.h"
+
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
@@ -15,7 +16,7 @@ ResourceManager::~ResourceManager()
     }
     delete vertexArrays;
 }
-   static const TexturedUnlit Square[] =
+    VertexLit Square[] =
     {
         { { -50.0f, -50.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } , { 0.0f, 0.0f } },//bottom left
         { { 50.0f, -50.0f, 0.0f }, { 0.0f, 1.0f, 0.0f } , { 1.0f, 0.0f } },//bottom right
@@ -23,21 +24,65 @@ ResourceManager::~ResourceManager()
         { { -50.0f, 50.0f, 0.0f }, { 1.0f, 1.0f, 0.0f } , { 0.0f, 1.0f } },//top left
     };
 
-    const GLuint indices[] =
+     GLuint indices[] =
     {
         0, 1, 2,
         2, 3, 0
     };
+
+    VertexLit Pyramid[] =
+    { //     COORDINATES     /        COLORS      /   TexCoord  //
+        {{-0.5f, 0.0f,  0.5f},     {0.83f, 0.70f, 0.44f},	{0.0f, 0.0f}},
+        {{-0.5f, 0.0f, -0.5f},     {0.83f, 0.70f, 0.44f},	{5.0f, 0.0f}},
+        {{ 0.5f, 0.0f, -0.5f},     {0.83f, 0.70f, 0.44f},	{0.0f, 0.0f}},
+        {{ 0.5f, 0.0f,  0.5f},     {0.83f, 0.70f, 0.44f},	{5.0f, 0.0f}},
+        {{ 0.0f, 0.8f,  0.0f},     {0.92f, 0.86f, 0.76f},	{2.5f, 5.0f}}
+    };
+
+// Indices for vertices order
+GLuint s_indices[] =
+{
+	0, 1, 2,
+	0, 2, 3,
+	0, 1, 4,
+	1, 2, 4,
+	2, 3, 4,
+	3, 0, 4
+};
+
 void ResourceManager::initResourceManager()
 {
     //set up materials
     _engineMaterials = EngineMaterials::getEngineMaterialsClass();
     _engineMaterials.initEngineMaterials();
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //sglEnable(GL_BLEND);
+   // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_DEPTH_TEST);
+   // glDepthFunc(GL_LESS);
     //Pipeline: Materials -> Models -> Textures -> Draw
-
-
+    /*
+     MW_Texture tex("romfs:/tex.bmp");
+    tex.Bind(0);
+    glGenVertexArrays(1, &s_vao);
+    VertexBuffer *vb = new VertexBuffer();
+    glBindVertexArray(s_vao);
+    //create a batching system to store staic verts and draw them all at once
+    vb->initVertexBuffer(Pyramid, sizeof(Pyramid), ShaderType::LIT, sizeof(Pyramid) / sizeof(Pyramid[0]));
+    vb->ib = new IndexBuffer(sizeof(s_indices) / sizeof(s_indices[0]));
+    vb->ib->Bind(indices);
+    VertexBufferLayout layout;
+    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
+    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
+    layout.AddElement(GL_FLOAT, 2, GL_FALSE);
+    vb->AddBufferLayout(layout);
+    vb->UnBind();
+    glBindVertexArray(0);
+    vb->ib->UnBind();
+    debugLog("Index Buffer Count : %d", vb->ib->getCount());
+    vertexArrays = new std::vector<VertexBuffer *>;       
+    vertexArrays->push_back(vb);
+    debugLog("-------------Resources Loaded-------------");
+    */
     /*
     MW_Texture tex("romfs:/tex.bmp");
     tex.Bind(0);
@@ -61,20 +106,30 @@ void ResourceManager::initResourceManager()
     vertexArrays = new std::vector<VertexBuffer *>;       
     vertexArrays->push_back(vb);
     */
-  
+    
     MW_Texture tex("romfs:/robo_owl_color.png");
     tex.Bind(0);
-    GameModel* modelTest = new GameModel("romfs:/cube.gltf");
-    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(200.0f, 200.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), *modelTest);
+    
+       /* MeshData mesh;
+        mesh.indices.assign(s_indices, s_indices + sizeof(s_indices) / sizeof(GLuint));
+        mesh.vertices.assign(Pyramid, Pyramid + sizeof(Pyramid) / sizeof(VertexLit));
+        mesh.initMeshLitTexture(mesh.vertices, mesh.indices, mesh.textures);
+        GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
+        
+
+    
+    GameModel* modelTest = new GameModel("romfs:/test.gltf");
+    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), *modelTest);
     vertexArrays = new std::vector<VertexBuffer *>;       
-    vertexArrays->push_back(&obj1->objectModel->meshes[0].vertexBuffer);
+    vertexArrays->push_back(obj1->objectModel->meshes[0].vertexBuffer);
     gameObjects = new std::vector<GameObject *>;
     gameObjects->push_back(obj1);
+    debugLog("---------------init resource manager info:");
     debugLog("model test meshes: %d", gameObjects->at(0)->objectModel->meshes.size());
     debugLog("model test verts: %d", gameObjects->at(0)->objectModel->meshes[0].vertices.size());
     debugLog("model test indicies: %d", gameObjects->at(0)->objectModel->meshes[0].indices.size());
     debugLog("vertex array object: %d", vertexArrays->size());
-    debugLog("init resource manager complete");
+    debugLog("----------------init resource manager complete---------------");
     
  
 }

@@ -49,13 +49,12 @@ class RenderSystem
 		static RenderSystem& getRenderSystem();
 		void destroyRenderSystem();
 		void RenderUnlit(GameObject *gameObject);
-		void RenderLit(GameObject *gameObject);
+		void RenderLit(VertexBuffer *vertexBuffer);
 		ViewCamera *mainCamera;
 
 
 
 };
-extern ResourceManager gameResourceManager;
 constexpr auto TAU = glm::two_pi<float>();
 
 

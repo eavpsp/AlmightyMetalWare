@@ -20,4 +20,5 @@ class GameManager
     static void destroyGameManager();
 };
 
+
 #endif

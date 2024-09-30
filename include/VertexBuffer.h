@@ -35,9 +35,17 @@ struct ColorVertex
 };
 struct TexturedUnlit
 {
-	GLfloat position[3];
-	GLfloat color[3];
-	GLfloat texUV[2];
+	glm::vec3 position;
+	glm::vec3 color;
+	glm::vec2 texUV;
+	TexturedUnlit(){}
+	TexturedUnlit(glm::vec3 position, glm::vec3 color, glm::vec2 texUV) 
+	{
+		this->position = position;
+		this->color = color;
+		this->texUV = texUV;
+		}
+	~TexturedUnlit(){}
 };
 enum ShaderType
 {
@@ -52,6 +60,7 @@ class VertexBuffer
 		GLuint _vertexBufferID, _count;
 		GLsizei size; //verts per mesh
 	public:
+		void AddBufferLayout(VertexBufferLayout &layout);
 		GLuint getVertexBufferID();
 		void renderVertexBuffer(void *_renderSystem);
 		ShaderType *shaderType;

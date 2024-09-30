@@ -4,32 +4,16 @@
     layout (location = 1) in vec3 inNormal;
     layout (location = 2) in vec2 aTexCoord;
 
-    out vec4 vtxColor;
-    out vec4 vtxNormalQuat;
-    out vec3 vtxView;
     out vec2 v_TexCoord;
 
     uniform mat4 mdlvMtx;
     uniform mat4 projMtx;
-
+    uniform mat4 viewMtx;
+    
     void main()
     {
-        // Calculate position
+
         vec4 pos = mdlvMtx * vec4(inPos, 1.0);
-        vtxView = -pos.xyz;
-        gl_Position = projMtx * pos;
-
-        // Calculate normalquat
-        vec3 normal = normalize(mat3(mdlvMtx) * inNormal);
-        float z = (1.0 + normal.z) / 2.0;
-        vtxNormalQuat = vec4(1.0, 0.0, 0.0, 0.0);
-        if (z > 0.0)
-        {
-            vtxNormalQuat.z = sqrt(z);
-            vtxNormalQuat.xy = normal.xy / (2.0 * vtxNormalQuat.z);
-        }
-
-        // Calculate color
-        vtxColor = vec4(1.0);
+        gl_Position = projMtx * pos * viewMtx;
         v_TexCoord = aTexCoord;
     }
