@@ -107,8 +107,7 @@ void ResourceManager::initResourceManager()
     vertexArrays->push_back(vb);
     */
     
-   // MW_Texture tex("romfs:/tex.bmp");
-    //tex.Bind(0);
+    
     
         /*MeshData mesh;
         mesh.indices.assign(s_indices, s_indices + sizeof(s_indices) / sizeof(GLuint));
@@ -118,8 +117,8 @@ void ResourceManager::initResourceManager()
         
 
     
-    GameModel* modelTest = new GameModel("romfs:/sphere.gltf");
-    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    GameModel* modelTest = new GameModel("romfs:/test.gltf");
+    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     vertexArrays = new std::vector<VertexBuffer *>;       
     vertexArrays->push_back(obj1->objectModel->meshes[0].vertexBuffer);
     gameObjects = new std::vector<GameObject *>;

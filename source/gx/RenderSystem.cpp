@@ -63,34 +63,59 @@ void RenderSystem::RenderUnlit(GameObject *gameObject)
 
 void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
 {
+    if(!lightScene)
+    {
+        glEnable(GL_DEPTH_TEST);
+        glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::mat4 lightObject = glm::mat4(1.0f);
+        lightObject = glm::translate(lightObject, lightPos);
+
+
+        _resourceManager->gameObjects->at(0)->transform = glm::translate(_resourceManager->gameObjects->at(0)->transform, _resourceManager->gameObjects->at(0)->position);
+       //light object shader
+        glUseProgram(_resourceManager->_engineMaterials.getLightObjectMaterial()->getShaderInterface()->getProgramHandle());
+        _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniformMat4F("model", lightObject);
+       //light shader
+        glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
+        MW_Texture tex("romfs:/robo_owl_color.png");
+        tex.Bind(0);
+        _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("model", _resourceManager->gameObjects->at(0)->transform);
+        _resourceManager->_engineMaterials.getLightMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        _resourceManager->_engineMaterials.getLightMaterial()->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
+        mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
+        lightScene = true;
+    }
+    
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (vertexBuffer == nullptr)  {
         // Handle the case where the vector is empty/
         debugLog("gameObjects is empty");
         return;
     }
-    if(!lightScene)
-    {
-        glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
-        mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
-        lightScene = true;
-    }
-   
+  
+    _resourceManager->_engineMaterials.getLightMaterial()->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
     mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
-
    
     glBindVertexArray(_resourceManager->s_vao);
-   if (vertexBuffer->ib != nullptr) 
-   {
-   
+    if (vertexBuffer->ib != nullptr) 
+    {
+    
         glDrawElements(GL_TRIANGLES, vertexBuffer->ib->getCount(), GL_UNSIGNED_INT, 0);
-        
-    } else {
+            
+    } else 
+    {
         // Handle the case where the mesh does not have any indices
         debugLog("No indices found for mesh");
     }
-        eglSwapBuffers(s_display, s_surface);
+
+
+   
+    
+
+    eglSwapBuffers(s_display, s_surface);
 
 }
 

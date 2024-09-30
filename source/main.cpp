@@ -19,6 +19,7 @@ Add nullptr checks to all funcs
 //shaders to manage batching
 //set max buffer size
 //proper camera controls
+//multiple vao buffers
 */
 //
 int main(int argc, char* argv[])
@@ -51,6 +52,7 @@ int main(int argc, char* argv[])
         if (kDown & HidNpadButton_Plus)
             break;
             gameManager->_renderSystem->mainCamera->Inputs(kHeld);
+            gameManager->_renderSystem->mainCamera->updateMatrix(45.0f, 0.1f, 100.0f);
         
         }
     romfsExit();

@@ -9,9 +9,12 @@ class EngineMaterials
     private: 
       ColorMaterial _colorMaterial;
       LightMaterial _lightMaterial;
+      LightObjectMaterial _lightObjectMaterial;
     public:
         ShaderMaterialInterface *getLightMaterial();
         ShaderMaterialInterface *getColorMaterial();
+        ShaderMaterialInterface *getLightObjectMaterial();
+        
         void initEngineMaterials();
         static EngineMaterials &getEngineMaterialsClass();
         EngineMaterials() { }

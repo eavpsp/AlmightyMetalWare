@@ -39,16 +39,19 @@ struct ShaderMaterialInterface
 struct LightMaterial : public ShaderMaterialInterface
 {
     public:
-        GLint loc_mdlvMtx, loc_projMtx;
-        GLint loc_lightPos, loc_ambient, loc_diffuse, loc_specular;
         LightMaterial(){};
         ~LightMaterial(){};
 };
 
+struct LightObjectMaterial : public ShaderMaterialInterface
+{
+    public:
+        LightObjectMaterial(){};
+        ~LightObjectMaterial(){};
+};
 struct ColorMaterial : public ShaderMaterialInterface
 {
     public:
-        GLint aColor, aVertexPosition;
         ColorMaterial(){};
         ~ColorMaterial(){};
 };

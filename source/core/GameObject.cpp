@@ -7,6 +7,7 @@ GameObject::GameObject(ShaderMaterialInterface *i_shaderInterface, glm::vec3 _po
     rotation = _rotation;
     scale = _scale;
     objectModel = gameModel;
+    //should init transform as well
     
 }
 GameObject::~GameObject()
