@@ -28,11 +28,11 @@ void ViewCamera::Inputs(u32 currentInput)
     {
 		position += speed * orientaion;
 	}
-	if (currentInput  & HidNpadButton::HidNpadButton_Down)
+	if (currentInput  & HidNpadButton::HidNpadButton_Left)
 	{
 		position += speed * -glm::normalize(glm::cross(orientaion, upVector));
 	}
-	if (currentInput & HidNpadButton::HidNpadButton_Left)
+	if (currentInput & HidNpadButton::HidNpadButton_Down)
 	{
 		position += speed * -orientaion;
 	}
@@ -40,7 +40,7 @@ void ViewCamera::Inputs(u32 currentInput)
 	{
 		position += speed * glm::normalize(glm::cross(orientaion, upVector));
 	}
-	if (currentInput & HidNpadButton::HidNpadButton_B)
+	if (currentInput & HidNpadButton::HidNpadButton_R)
 	{
 		position += speed * upVector;
 	}

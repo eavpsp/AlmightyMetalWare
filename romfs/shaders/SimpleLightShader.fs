@@ -10,6 +10,6 @@
     void main()
     {
 
-      FragColor = texture(u_Texture, v_TexCoord);
+      FragColor = vec4(vec3(1.0, 1.0, 1.0) * texture(u_Texture, v_TexCoord);
 
     };

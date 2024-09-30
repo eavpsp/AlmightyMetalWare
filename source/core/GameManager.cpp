@@ -46,7 +46,7 @@ void GameManager::destroyGameManager()
 
 void GameManager::runGameLoop()
 {
-    //_renderSystem->render(_resourceManager->gameObjects->at(0));
+    //_renderSystem->render(_resourceManager->gameObjects->at(0));//
     _renderSystem->RenderLit(_resourceManager->getVertexArray()->at(0));
 }
 

@@ -107,8 +107,8 @@ void ResourceManager::initResourceManager()
     vertexArrays->push_back(vb);
     */
     
-    MW_Texture tex("romfs:/tex.bmp");
-    tex.Bind(0);
+   // MW_Texture tex("romfs:/tex.bmp");
+    //tex.Bind(0);
     
         /*MeshData mesh;
         mesh.indices.assign(s_indices, s_indices + sizeof(s_indices) / sizeof(GLuint));
