@@ -12,11 +12,12 @@ std::string get_file_contents(const char* filename)
         return "";
     }
 
-    std::string contents;
     in.seekg(0, std::ios::end);
-    contents.resize(in.tellg());
+    size_t size = in.tellg();
     in.seekg(0, std::ios::beg);
-    in.read(&contents[0], contents.size());
+
+    std::string contents(size, '\0');
+    in.read(&contents[0], size);
     in.close();
     debugLog("GameModel.cpp: Get File Contents Read Complete");
 
@@ -25,6 +26,11 @@ std::string get_file_contents(const char* filename)
 
 GameModel::GameModel(const char* FILENAME)
 {
+	meshes = std::vector<MeshData>();
+	translationsMeshes = std::vector<glm::vec3>();
+	rotationsMeshes = std::vector<glm::quat>();
+	scalesMeshes = std::vector<glm::vec3>();
+	matricesMeshes = std::vector<glm::mat4>();
 	debugLog("Loading %s", FILENAME);
 	// Make a JSON object
 	std::string text = get_file_contents(FILENAME);
@@ -51,6 +57,11 @@ GameModel::GameModel(std::vector<MeshData> meshes)
 void GameModel::loadMesh(unsigned int indMesh)
 {
 	debugLog("Loading Mesh %d", indMesh);
+	if(JSON["meshes"][indMesh] == nullptr)
+	{
+		debugLog("Error: Mesh %d does not exist", indMesh);
+		return;
+	}
 	// Get all accessor indices
 	unsigned int posAccInd = JSON["meshes"][indMesh]["primitives"][0]["attributes"]["POSITION"];
 	unsigned int normalAccInd = JSON["meshes"][indMesh]["primitives"][0]["attributes"]["NORMAL"];
@@ -80,7 +91,8 @@ void GameModel::loadMesh(unsigned int indMesh)
 	// Combine all the vertex components and also get the indices and textures
 	std::vector<VertexLit> vertices = assembleVertices(positions, normals, texUVs);
 	std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
-	std::vector<MW_Texture> textures = getTextures();
+	//std::vector<MW_Texture> textures = getTextures();
+	std::vector<MW_Texture> textures;
 	debugLog("Got Mesh %d", indMesh);
 	// Combine the vertices, indices, and textures into a mesh
 	MeshData *mesh = new MeshData();
@@ -93,6 +105,11 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 {
 	// Current node
 	json node = JSON["nodes"][nextNode];
+	if(node == NULL)
+	{
+		debugLog("Node: %s does not exist", node["name"].get<std::string>().c_str());
+		return;
+	}
 	debugLog("Current Node: %s", node["name"].get<std::string>().c_str());
 	// Get translation if it exists
 	glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -190,26 +207,43 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 std::vector<unsigned char> GameModel::getData()
 {
 	debugLog("Loading Data");
-	// Create a place to store the raw text, and get the uri of the .bin file
-	std::string bytesText;
+	// Get the uri of the .bin file
 	std::string uri = JSON["buffers"][0]["uri"];
-
-	// Store raw text data into bytesText
+	if(uri == "")	
+	{
+		debugLog("Error: Buffer does not exist");
+		return std::vector<unsigned char>();
+	}
+	// Open the file and get the size of it
 	std::string fileStr = std::string(file);
 	std::string fileDirectory = fileStr.substr(0, fileStr.find_last_of('/') + 1);
-	debugLog("File Directory: romfs:/%s", fileDirectory.c_str());
-	bytesText = get_file_contents(("romfs:/" + fileDirectory + uri).c_str());
+	FILE *file = fopen(("romfs:/" + fileDirectory + uri).c_str(), "rb");
+	if(file == nullptr)
+	{
+		debugLog("Error: File does not exist");
+		return std::vector<unsigned char>();
+	}
+	fseek(file, 0, SEEK_END);
+	unsigned int size = ftell(file);
+	rewind(file);
 
-	// Transform the raw text data into bytes and put them in a vector
-	std::vector<unsigned char> data(bytesText.begin(), bytesText.end());
+	// Store the data in a vector
+	std::vector<unsigned char> data(size);
+	fread(&data[0], 1, size, file);
+	fclose(file);
 	debugLog("Data Loaded");
 	return data;
 }
 
 std::vector<float> GameModel::getFloats(json accessor)
 {
+	if(accessor == nullptr)
+	{
+		debugLog("Error: Accessor does not exist");
+		return std::vector<float>();
+	}
 	std::vector<float> floatVec;
-
+	debugLog("Loading floats");
 	// Get properties from the accessor
 	unsigned int buffViewInd = accessor.value("bufferView", 1);
 	unsigned int count = accessor["count"];
@@ -219,7 +253,11 @@ std::vector<float> GameModel::getFloats(json accessor)
 	// Get properties from the bufferView
 	json bufferView = JSON["bufferViews"][buffViewInd];
 	unsigned int byteOffset = bufferView["byteOffset"];
-
+	if(bufferView == nullptr)
+	{	
+		debugLog("Error: BufferView %d does not exist", buffViewInd);
+		return floatVec;
+	}
 	// Interpret the type and store it into numPerVert
 	unsigned int numPerVert;
 	if (type == "SCALAR") numPerVert = 1;
@@ -291,55 +329,45 @@ std::vector<GLuint> GameModel::getIndices(json accessor)
 
 	return indices;
 }
-
 std::vector<MW_Texture> GameModel::getTextures()
 {
 	debugLog("Loading Textures");
 	std::vector<MW_Texture> textures;
 
-	std::string fileStr = std::string(file);
-	std::string fileDirectory = "romfs:/";
+	auto texIter = loadedTexName.begin();
+	std::string baseDir = "romfs:/";
 
-	// Go over all images
-	for (unsigned int i = 0; i < JSON["images"].size(); i++)
+	for (const auto& image : JSON["images"])
 	{
-		// uri of current texture
-		std::string texPath = JSON["images"][i]["uri"];
-	
-
-		// Check if the texture has already been loaded
-		bool skip = false;
-		for (unsigned int j = 0; j < loadedTexName.size(); j++)
+		debugLog("Loading Texture %s", image["uri"]);
+		std::string texPath = image["uri"];
+		texIter = std::lower_bound(loadedTexName.begin(), loadedTexName.end(), texPath);
+		if (texIter != loadedTexName.end() && *texIter == texPath)
 		{
-			if (loadedTexName[j] == texPath)
-			{
-				debugLog("Texture %s already loaded", texPath.c_str());
-				textures.push_back(loadedTex[j]);
-				skip = true;
-				break;
-			}
+			debugLog("Texture %s already loaded", texPath.c_str());
+			textures.push_back(loadedTex[texIter - loadedTexName.begin()]);
 		}
-
-		// If the texture has been loaded, skip this
-		if (!skip)
+		else
 		{
-			// Load diffuse texture
 			if (texPath.find("baseColor") != std::string::npos)
 			{
-				MW_Texture diffuse = MW_Texture((fileDirectory + texPath).c_str());
+				MW_Texture diffuse((baseDir + texPath).c_str());
 				textures.push_back(diffuse);
 				loadedTex.push_back(diffuse);
 				loadedTexName.push_back(texPath);
 				debugLog("Texture %s loaded", texPath.c_str());
 			}
-			// Load specular texture
 			else if (texPath.find("metallicRoughness") != std::string::npos)
 			{
-				MW_Texture specular = MW_Texture((fileDirectory + texPath).c_str());
+				MW_Texture specular((baseDir + texPath).c_str());
 				textures.push_back(specular);
 				loadedTex.push_back(specular);
 				loadedTexName.push_back(texPath);
 				debugLog("Texture %s loaded", texPath.c_str());
+			}
+			else
+			{
+				debugLog("Texture %s not found", texPath.c_str());
 			}
 		}
 	}

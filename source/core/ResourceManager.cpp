@@ -107,29 +107,31 @@ void ResourceManager::initResourceManager()
     vertexArrays->push_back(vb);
     */
     
-    MW_Texture tex("romfs:/robo_owl_color.png");
+    MW_Texture tex("romfs:/tex.bmp");
     tex.Bind(0);
     
-        MeshData mesh;
+        /*MeshData mesh;
         mesh.indices.assign(s_indices, s_indices + sizeof(s_indices) / sizeof(GLuint));
         mesh.vertices.assign(Pyramid, Pyramid + sizeof(Pyramid) / sizeof(VertexLit));
         mesh.initMeshLitTexture(mesh.vertices, mesh.indices, mesh.textures);
-        GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });
+        GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
         
 
     
-    //GameModel* modelTest = new GameModel("romfs:/sphere.gltf");
-    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), *modelTest);
+    GameModel* modelTest = new GameModel("romfs:/sphere.gltf");
+    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     vertexArrays = new std::vector<VertexBuffer *>;       
     vertexArrays->push_back(obj1->objectModel->meshes[0].vertexBuffer);
     gameObjects = new std::vector<GameObject *>;
     gameObjects->push_back(obj1);
-    debugLog("---------------init resource manager info:");
+
+    
+   /* debugLog("---------------init resource manager info:");
     debugLog("model test meshes: %d", gameObjects->at(0)->objectModel->meshes.size());
     debugLog("model test verts: %d", gameObjects->at(0)->objectModel->meshes[0].vertices.size());
     debugLog("model test indicies: %d", gameObjects->at(0)->objectModel->meshes[0].indices.size());
     debugLog("vertex array object: %d", vertexArrays->size());
-    debugLog("----------------init resource manager complete---------------");
+    debugLog("----------------init resource manager complete---------------");*/
     
  
 }
