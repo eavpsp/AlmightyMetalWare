@@ -6,14 +6,11 @@
 
     out vec2 v_TexCoord;
 
-    uniform mat4 mdlvMtx;
-    uniform mat4 projMtx;
-    uniform mat4 viewMtx;
-    
+    uniform mat4 camMatrix;
     void main()
     {
 
-        vec4 pos = mdlvMtx * vec4(inPos, 1.0);
-        gl_Position = projMtx * pos * viewMtx;
+        vec4 pos = camMatrix * vec4(inPos, 1.0);
+        gl_Position = pos;
         v_TexCoord = aTexCoord;
     }

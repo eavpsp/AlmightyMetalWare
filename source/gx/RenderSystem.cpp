@@ -3,7 +3,7 @@
 
 #include "../debug/debug.h"
 
-bool init = false;
+bool lightScene = false;
 void RenderSystem::render(GameObject *gameObject)//send in program and vao id array
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -61,10 +61,6 @@ void RenderSystem::RenderUnlit(GameObject *gameObject)
 
 }
 
-/**
- * @brief Renders a lit mesh using the light material.
- * @param meshData The mesh data to be rendered.
- */
 void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -74,21 +70,15 @@ void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
         debugLog("gameObjects is empty");
         return;
     }
-    if(!init)
+    if(!lightScene)
     {
         glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
-        glm::mat4 mdlvMtx{1.0};
-        mdlvMtx = glm::translate(mdlvMtx, glm::vec3(1.0f, 2.0f, 3.0f));
-        mainCamera->transform = glm::translate(mainCamera->transform, mainCamera->position);
-        auto projMtx = glm::perspective(40.0f*TAU/360.0f, SCREEN_WIDTH/SCREEN_HEIGHT, 0.01f, 1000.0f);
-        _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("mdlvMtx", mdlvMtx);
-        _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("viewMtx", mainCamera->transform);
-        _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("projMtx", projMtx);
-        init = true;
+        mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
+        lightScene = true;
     }
    
-    mainCamera->transform = glm::translate(mainCamera->transform, mainCamera->position);
-    _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("viewMtx", mainCamera->transform);
+    mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
+
    
     glBindVertexArray(_resourceManager->s_vao);
    if (vertexBuffer->ib != nullptr) 
@@ -107,13 +97,9 @@ void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
 
 void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later take in projection mode
 {
-    //glEnable(GL_DEPTH_TEST);
-   // glDepthFunc(GL_LESS);
     _resourceManager = &resourceManager;
-    mainCamera = new ViewCamera(glm::vec3(0.0f, 0.0f, -7.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    mainCamera->transform = glm::mat4(1.0f);
-    //perspective_projection = glm::perspective(glm::radians(45.0f), SCREEN_WIDTH/SCREEN_HEIGHT, 0.01f, 100.0f);
-    
+    mainCamera = new ViewCamera(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT);
+
     debugLog("---------------init render system----------------");
 }
 

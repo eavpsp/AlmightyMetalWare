@@ -18,6 +18,7 @@ Add nullptr checks to all funcs
 //texture atlas
 //shaders to manage batching
 //set max buffer size
+//proper camera controls
 */
 //
 int main(int argc, char* argv[])
@@ -46,33 +47,12 @@ int main(int argc, char* argv[])
         // Get and process input
         padUpdate(&pad);
         u32 kDown = padGetButtonsDown(&pad);
+        u32 kHeld = padGetButtons(&pad);
         if (kDown & HidNpadButton_Plus)
             break;
-        if(kDown & HidNpadButton_Left)
-        {
-            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(10.0f,0.0f,0.0f);
-            debugLog("Camera Position: %f, %f, %f", gameManager->_renderSystem->mainCamera->position.x, gameManager->_renderSystem->mainCamera->position.y, gameManager->_renderSystem->mainCamera->position.z);
-
+            gameManager->_renderSystem->mainCamera->Inputs(kHeld);
+        
         }
-        if(kDown & HidNpadButton_Right)
-        {
-            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(-10.0f,0.0f,0.0f);
-            debugLog("Camera Position: %f, %f, %f", gameManager->_renderSystem->mainCamera->position.x, gameManager->_renderSystem->mainCamera->position.y, gameManager->_renderSystem->mainCamera->position.z);
-
-        }
-        if(kDown & HidNpadButton_Up)
-        {
-            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(0.0f,10.0f,0.0f);
-            debugLog("Camera Position: %f, %f, %f", gameManager->_renderSystem->mainCamera->position.x, gameManager->_renderSystem->mainCamera->position.y, gameManager->_renderSystem->mainCamera->position.z);
-
-        }
-        if(kDown & HidNpadButton_Down)
-        {
-            gameManager->_renderSystem->mainCamera->position = gameManager->_renderSystem->mainCamera->position + glm::vec3(0.0f,-10.0f,0.0f);
-            debugLog("Camera Position: %f, %f, %f", gameManager->_renderSystem->mainCamera->position.x, gameManager->_renderSystem->mainCamera->position.y, gameManager->_renderSystem->mainCamera->position.z);
-
-        }
-    }
     romfsExit();
     gameManager->destroyGameManager();
     return EXIT_SUCCESS;

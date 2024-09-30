@@ -110,16 +110,16 @@ void ResourceManager::initResourceManager()
     MW_Texture tex("romfs:/robo_owl_color.png");
     tex.Bind(0);
     
-       /* MeshData mesh;
+        MeshData mesh;
         mesh.indices.assign(s_indices, s_indices + sizeof(s_indices) / sizeof(GLuint));
         mesh.vertices.assign(Pyramid, Pyramid + sizeof(Pyramid) / sizeof(VertexLit));
         mesh.initMeshLitTexture(mesh.vertices, mesh.indices, mesh.textures);
-        GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
+        GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });
         
 
     
-    GameModel* modelTest = new GameModel("romfs:/test.gltf");
-    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), *modelTest);
+    //GameModel* modelTest = new GameModel("romfs:/sphere.gltf");
+    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), *modelTest);
     vertexArrays = new std::vector<VertexBuffer *>;       
     vertexArrays->push_back(obj1->objectModel->meshes[0].vertexBuffer);
     gameObjects = new std::vector<GameObject *>;
