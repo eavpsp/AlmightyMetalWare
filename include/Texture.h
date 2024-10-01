@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <glad/glad.h>
 #include <string>
-#include "stb_image.h"
+#include <stb_image.h>
 class MW_Texture
 {
     private:

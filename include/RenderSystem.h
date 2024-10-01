@@ -48,9 +48,7 @@ class RenderSystem
 		void render(VertexBuffer *vertexBuffer);
 		static RenderSystem& getRenderSystem();
 		void destroyRenderSystem();
-		void RenderUnlit(GameObject *gameObject);
-		void RenderLit(VertexBuffer *vertexBuffer);
-		ViewCamera *mainCamera;
+		ViewCamera *mainCamera, *uiCamera;
 
 
 

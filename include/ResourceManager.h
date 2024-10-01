@@ -15,7 +15,7 @@ class ResourceManager
     ResourceManager(){};
     ~ResourceManager();
     EngineMaterials _engineMaterials;
-    //make sure to init in initResourceManagers
+    //make sure to init in initResourceManagers//
     GLuint s_vao_Default, s_vao_Lit, s_vao_Unlit, s_vao_3D, s_vao_2D;
     void initResourceManager();
     std::vector<ShaderInterface *> *getShaderArray();
@@ -23,12 +23,14 @@ class ResourceManager
     std::vector<GameObject *> *gameObjects;
     //Batching system
     std::vector<VertexLit> VertexLitBatch;
+    std::vector<TexturedUnlit> _2DBatch;
     std::vector<unsigned int> VertexLitBatchIndices;
+    std::vector<unsigned int> Vertex2DBatchIndices;
     static ResourceManager &getResourceManager();
     static void destroyResourceManager();
 };
 
-////
+//
 /*
 Outline all possible VAOs to be used for rendering
 Outline all engine shaders

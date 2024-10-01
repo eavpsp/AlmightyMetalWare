@@ -4,17 +4,31 @@
 #include "../debug/debug.h"
 
 bool lightScene = false;
+GLTFStaticMesh *testMesh;
+/**
+ * @brief Renders a GameObject with the given material and lights.
+ *
+ * This is the main entry point for rendering a GameObject. It sets up the
+ * camera and lighting uniforms and then calls the GameObject's DrawObjectModel()
+ * function to render the object. The function also swaps the front and back
+ * buffers so that the rendered frame is displayed on the screen.
+ *
+ * @param gameObject The GameObject to render.
+ */
 void RenderSystem::render(GameObject *gameObject)//send in program and vao id array
 {
     if(!lightScene)
     {
       
+        testMesh = new GLTFStaticMesh("romfs:/cube.gltf", 1.0f);
+
+
+        lightScene = true;
+    }
         glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::mat4 lightObject = glm::mat4(1.0f);
         lightObject = glm::translate(lightObject, lightPos);
-
-
         //light object shader
         glUseProgram(_resourceManager->_engineMaterials.getLightObjectMaterial()->getShaderInterface()->getProgramHandle());
         gameObject->material->materials->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
@@ -25,11 +39,16 @@ void RenderSystem::render(GameObject *gameObject)//send in program and vao id ar
         gameObject->material->materials->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         gameObject->material->materials->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
         mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
-        lightScene = true;
-    }
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     gameObject->DrawObjectModel();
+    gameObject->material->materials->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
+
+    mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
+
+    glm::mat4 trans = glm::mat4(1.0f);
+    gameObject->material->materials->SetUniformMat4F("model", trans);
+    testMesh->draw();
     gameObject->material->materials->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
 
     mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
@@ -81,66 +100,7 @@ void RenderSystem::destroyRenderSystem() {
 	delete &renderSystem;
 }
 
-void RenderSystem::RenderUnlit(GameObject *gameObject)
-{
 
-}
-
-void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
-{
-    if(!lightScene)
-    {
-      
-        glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-        glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
-        glm::mat4 lightObject = glm::mat4(1.0f);
-        lightObject = glm::translate(lightObject, lightPos);
-
-
-        //light object shader
-        glUseProgram(_resourceManager->_engineMaterials.getLightObjectMaterial()->getShaderInterface()->getProgramHandle());
-        _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-        _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniformMat4F("model", lightObject);
-       //light shader
-        glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
-       //check for texture
-        if(_resourceManager->gameObjects->at(0)->objectModel->meshes.at(0).textures.size() != NULL)
-        {
-            _resourceManager->gameObjects->at(0)->objectModel->meshes.at(0).textures.at(0).Bind(0);
-        }
-        _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("model", _resourceManager->gameObjects->at(0)->transform);
-        _resourceManager->_engineMaterials.getLightMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-        _resourceManager->_engineMaterials.getLightMaterial()->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
-        mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
-        lightScene = true;
-    }
-    
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (vertexBuffer == nullptr)  {
-        // Handle the case where the vector is empty/
-        debugLog("gameObjects is empty");
-        return;
-    }
-  
-    _resourceManager->_engineMaterials.getLightMaterial()->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
-    mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
-   
-    glBindVertexArray(_resourceManager->s_vao_Default);
-    if (vertexBuffer->ib != nullptr) 
-    {
-    
-        glDrawElements(GL_TRIANGLES, vertexBuffer->ib->getCount(), GL_UNSIGNED_INT, 0);
-            
-    } else 
-    {
-        // Handle the case where the mesh does not have any indices
-        debugLog("No indices found for mesh");
-    }
-
-    eglSwapBuffers(s_display, s_surface);
-
-}
 
 
 void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later take in projection mode

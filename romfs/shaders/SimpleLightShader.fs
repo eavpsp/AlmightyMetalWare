@@ -29,6 +29,17 @@
       vec3 reflectionDirection = reflect(-lightDirection, normal);
       float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8);
       float specular = specAmount * specularLight;
-      FragColor = texture(u_Texture, v_TexCoord) * u_LightColor * (diffuse + ambient + specular);
+      vec3 lightVec;
+
+      vec4 texColor = texture(u_Texture, v_TexCoord);
+       
+      if (texColor.a == 0.0) 
+      {
+        FragColor = u_LightColor * (diffuse + ambient + specular);
+      }
+      else
+      {
+        FragColor = texture(u_Texture, v_TexCoord) * u_LightColor * (diffuse + ambient + specular);
+      }
 
     };

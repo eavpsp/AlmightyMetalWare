@@ -116,12 +116,16 @@ void ResourceManager::initResourceManager()
         GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
         
 
-    glGenVertexArrays(1, &s_vao_Lit);
-    GameModel* modelTest = new GameModel("romfs:/sphere.gltf");
+    glGenVertexArrays(1, &s_vao_Lit);//
+    glGenVertexArrays(2, &s_vao_2D);
+    glGenVertexArrays(3, &s_vao_3D);
+    GameModel* modelTest = new GameModel("romfs:/test3.gltf");
     Material *mat = new LitMaterial();
     GameObject *obj1 =  new GameObject(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
-    gameObjects = new std::vector<GameObject *>;
+    gameObjects = new std::vector<GameObject *>;//
     gameObjects->push_back(obj1);
+
+   
 
     
  

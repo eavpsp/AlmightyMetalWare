@@ -3,7 +3,7 @@
 VertexArray::VertexArray(GLuint id)
 {   
     _rendererID = id;
-    debugLog("Created VertexArray %u", _rendererID);
+   
 }
 
 

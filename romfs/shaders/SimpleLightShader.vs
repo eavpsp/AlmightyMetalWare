@@ -8,7 +8,7 @@
     out vec2 v_TexCoord;
     out vec3 v_Normal;
     out vec3 crntPos;
-
+  
 
     uniform mat4 camMatrix;
     uniform mat4 model;
@@ -21,8 +21,8 @@
 
         crntPos = vec3(model * translation * -rotation * scale * vec4(inPos, 1.0f));
 	    gl_Position = camMatrix * vec4(crntPos, 1.0);
-        v_TexCoord = mat2(0.0, -10., 1.0, 0.0) * aTexCoord;
+        v_TexCoord = aTexCoord;
         v_Normal = inNormal;
-     
+       
     }
 

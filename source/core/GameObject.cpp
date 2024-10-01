@@ -75,11 +75,14 @@ void GameObject::DrawObjectModel()
 
         }
         
-        for (int j = 0; j < objectModel->meshes.at(i).textures.size(); j++)
+        if( objectModel->meshes.at(i).textures.size() != 0)
         {
-            objectModel->meshes.at(i).textures.at(j).Bind(j);
-           
+            objectModel->meshes.at(i).textures.at(i).Bind(i);
+
         }
+        
+           //
+        
     glDrawElements(GL_TRIANGLES, objectModel->vertexArray->buffersInArray.at(0).ib->getCount(), GL_UNSIGNED_INT, 0);
         
     objectModel->vertexArray->UnBind();

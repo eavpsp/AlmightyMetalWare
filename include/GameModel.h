@@ -1,5 +1,6 @@
 #ifndef GAME_MODEL_H
 #define GAME_MODEL_H
+#include <tiny_gltf.h>
 
 #include <json.hpp>
 #include "MeshData.h"
@@ -8,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <Texture.h>
 #include <VertexArray.h>
+
 using json = nlohmann::json;
 
 class GameModel 
@@ -62,6 +64,26 @@ class GameModel
         ~GameModel(){};
 };
 
+
+
+class GLTFStaticMesh {
+public:
+	tinygltf::Model model;
+	std::pair<unsigned int, std::map<int, unsigned int>> VAO_and_EBOs;
+	float scale;
+
+	GLTFStaticMesh(const char* filename, float scale);
+	~GLTFStaticMesh();
+	std::pair<unsigned int, std::map<int, unsigned int>> bindModel();
+	float prepareForDrawing();
+	void draw();
+
+private:
+	void bindModelNodes(std::map<int, unsigned int>& ebos, tinygltf::Node& node);
+	void bindMesh(std::map<int, unsigned int>& ebos, tinygltf::Mesh& mesh);
+	void drawModelNodes(tinygltf::Node& node);
+	void drawMesh(const std::map<int, unsigned int>& ebos, tinygltf::Mesh& mesh);
+};
 
 
 

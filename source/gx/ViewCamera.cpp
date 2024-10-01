@@ -128,10 +128,10 @@ void ViewCamera::Inputs(u32 currentInput)
 	// Right stick
 
 	if (rightStickX != 0.0f || rightStickY != 0.0f)
-	{
-		float angle = glm::length(glm::vec2(rightStickX, rightStickY)) * sensitivity * 0.01f;
-		glm::vec3 axis = glm::normalize(glm::vec3(rightStickY, -rightStickX, 0.0f));
-		glm::quat rotation = glm::angleAxis(angle, axis);
-		orientaion = glm::normalize(glm::vec3(rotation * glm::vec4(orientaion, 0.0f)));
-	}
+{
+    glm::vec3 axis = glm::normalize(glm::vec3(rightStickY, -rightStickX, 0.0f));
+    float angle = glm::length(glm::vec2(rightStickX, rightStickY)) * sensitivity * 0.01f;
+    glm::quat rotation = glm::angleAxis(angle, axis);
+    orientaion = glm::normalize(glm::vec3(rotation * glm::vec4(orientaion, 0.0f)));
+}
 }
