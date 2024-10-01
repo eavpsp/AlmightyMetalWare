@@ -40,47 +40,53 @@ Input system - Detailed
 Video system
 Post Processing
 
+//THREADS
+GAME -> Game Manager , Engine Objects, Physics, Input
+Render -> Render System, Draw Calls, Batchinng
 */
-
+//Callbacks for gameobjects
 EngineCallBacks *engineCallBacks;
-GraphicsCallbacks *graphicsCallbacks;
-
+std::vector<GameObject *> *GameObjects;
+std::vector<EngineObject *> *GraphicsObjects;
 
 int main(int argc, char* argv[])
 {
     romfsInit();
     debugLogInit();
+    debugLog("Starting Game...");
+    //init callbacks 
+    GameObjects = new std::vector<GameObject *>();
+    GraphicsObjects = new std::vector<EngineObject *>();
     engineCallBacks = new EngineCallBacks();
-    graphicsCallbacks = new GraphicsCallbacks();
+    
     //init GM
     GameManager *gameManager = &GameManager::getGameManager();
-  
-   
     // Configure our supported input layout: a single player with standard controller styles
     padConfigureInput(1, HidNpadStyleSet_NpadStandard);
-
     // Initialize the default gamepad (which reads handheld mode inputs as well as the first connected controller)
     PadState pad;
     padInitializeDefault(&pad);
-
-  
+    debugLog("Objects Alive: %d", GameObjects->size());
+    //put this loop into a game thread and leave the main thread to loop other stuff like queues
     // Main game loop
     //while(appletMainLoop())
     while (gameManager->Running())
     {
         //Run
-       gameManager->runGameLoop();
-      // engineCallBacks->RunCallbacks(gameManager->Running());
+    
+        gameManager->runGameLoop();
+        //Run Update Callbacks
+        engineCallBacks->RunUpdateCallbacks(gameManager->Running());
         // Get and process input
         padUpdate(&pad);
         u32 kDown = padGetButtonsDown(&pad);
         u32 kHeld = padGetButtons(&pad);
+        gameManager->_renderSystem->mainCamera->Inputs(kHeld);
+        gameManager->_renderSystem->mainCamera->updateMatrix(45.0f, 0.1f, 100.0f);
         if (kDown & HidNpadButton_Plus)
             break;
-            gameManager->_renderSystem->mainCamera->Inputs(kHeld);
-            gameManager->_renderSystem->mainCamera->updateMatrix(45.0f, 0.1f, 100.0f);
-        
-        }
+
+    }
     romfsExit();
     gameManager->destroyGameManager();
     return EXIT_SUCCESS;

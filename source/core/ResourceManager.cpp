@@ -2,7 +2,8 @@
 #include "../debug/debug.h"
 #include "Texture.h"
 #include "GameShapes.h"
-
+#include "ScriptCallbacks.h"
+#include <TestGameObject.h>
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
@@ -116,12 +117,12 @@ void ResourceManager::initResourceManager()
         GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
         
 
-    glGenVertexArrays(1, &s_vao_Lit);//
+    glGenVertexArrays(1, &s_vao_Lit);
     glGenVertexArrays(2, &s_vao_2D);
     glGenVertexArrays(3, &s_vao_3D);
     GameModel* modelTest = new GameModel("romfs:/test3.gltf");
     Material *mat = new LitMaterial();
-    GameObject *obj1 =  new GameObject(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     gameObjects = new std::vector<GameObject *>;//
     gameObjects->push_back(obj1);
 

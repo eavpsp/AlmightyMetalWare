@@ -20,7 +20,7 @@ void RenderSystem::render(GameObject *gameObject)//send in program and vao id ar
     if(!lightScene)
     {
       
-        testMesh = new GLTFStaticMesh("romfs:/cube.gltf", 1.0f);
+        testMesh = new GLTFStaticMesh("romfs:/test3.gltf", 1.0f);
 
 
         lightScene = true;
@@ -110,6 +110,7 @@ void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later tak
     glEnable(GL_DEPTH_TEST);
     debugLog("---------------init render system----------------");
 }
+
 
 
 RenderSystem::~RenderSystem()

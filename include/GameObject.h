@@ -5,33 +5,61 @@
 #include <ShaderMaterialInterface.h>
 #include "MeshData.h"
 #include "GameModel.h"
+
 /**
  * @file GameObject.h
  * @brief This class is an extension of the EngineObject class. It adds additional functionality that is specific to objects in the game world.
  * @details GameObjects can have children, a parent, and they can draw their own models. This class is used to create objects that are a bit more complex than the standard EngineObject.
+ * used as a template for all objects to inherit from. Registers to script callbacks to manage update ticks and drawing calls
  */
 class GameObject : public EngineObject
 {
     private:
         GameObject *parent = nullptr;
         std::vector<GameObject*> children;
-
+        void onInit() override;
+        void onDestroy() override;
     public:
         //base model data
         Material *material;
         GameModel *objectModel;
         ///
+        template <typename T>
+        static T* InstantiateGameObject(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, GameModel *gameModel, std::string _name = "GameObject")
+        {
+            if (!std::is_base_of<EngineObject, T>::value) {
+                // Error: T is not a derived class of EngineObject
+                return nullptr;
+            }
+                T *newObject =  new T();
+                //add callback
+                newObject->material = mat;
+                newObject->position = _position;
+                newObject->rotation = _rotation;
+                newObject->scale = _scale;
+                newObject->objectModel = gameModel;
+                //should init transform as well
+                newObject->transform = glm::mat4(1.0f);
+                newObject->transform = glm::translate(newObject->transform, newObject->position);
+                newObject->transform = glm::rotate(newObject->transform, glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+                newObject->transform = glm::rotate(newObject->transform, glm::radians(_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+                newObject->transform = glm::rotate(newObject->transform, glm::radians(_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+                newObject->transform = glm::scale(newObject->transform, _scale);
+                newObject->name = _name;
+                
+                newObject->onInit();
+                return newObject;
+        }
         void DrawObjectModel();
         void AddChild(GameObject *child);
         GameObject *GetChild(int index);
         int GetChildrenCount();
         void SetParent(GameObject *i_parent);
         GameObject *GetParent();
-         void onUpdate();
-         void onDraw();
-         void onInit();
-         void onDestroy();
-        GameObject(Material *i_mat, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, GameModel *gameModel);
+        void RegisterObject();
+        void onUpdate() override;
+        void onDraw() override;
+        GameObject();
         virtual ~GameObject();
     };
 

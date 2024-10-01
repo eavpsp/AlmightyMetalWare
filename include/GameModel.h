@@ -15,7 +15,7 @@ using json = nlohmann::json;
 class GameModel 
 {
     private:
-        const char* file;
+	 	const char* file;
 		std::vector<unsigned char> data;
 		json JSON;
 		
@@ -49,7 +49,10 @@ class GameModel
 		std::vector<glm::vec3> groupFloatsVec3(std::vector<float> floatVec);
 		std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
     public:
+       
+
 	// All the meshes and transformations
+
 		std::vector<MeshData> meshes; //create function to export final mesh object for rendering
 		std::vector<glm::vec3> translationsMeshes;
 		std::vector<glm::quat> rotationsMeshes;

@@ -2,52 +2,50 @@
 #define SCRIPTCALLBACKS_H
 
 #include <vector>
-#include <EngineObject.h>
 #include <algorithm>
-
+#include <ShaderMaterialInterface.h>
+#include <GameObject.h>
+#include "../debug/debug.h"
+extern std::vector<GameObject *> *GameObjects;
+extern std::vector<EngineObject *> *GraphicsObjects;
 class EngineCallBacks
 {
     public:
-        EngineCallBacks(){};
+        EngineCallBacks()
+        {};
         ~EngineCallBacks(){};
-        std::vector<EngineObject *> *GameObjects;
         
         
-       
+        static GameObject *InstantiateGameObject(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, GameModel *gameModel);
+ 
+        void RunGraphicsCallbacks(bool isRunning) 
+        {
+            if (!isRunning) 
+            {
+                for (auto& obj : *GraphicsObjects)
+                {
+                    obj->onDraw();
+                }
+            }
+            
+        };
+       void RunUpdateCallbacks(bool isRunning) 
+        {
+            if (isRunning) 
+            {
+                for(int i = 0; i < GameObjects->size(); i++)
+                {
+                    GameObject* obj = dynamic_cast<GameObject*>(GameObjects->at(i));
+                    if (obj != nullptr) 
+                    {
+                        obj->onUpdate(); // This will call TestObj::onUpdate() if obj is a TestObj
+                    }
+                   
+                }
+            }
+            
+        };
 };
 
-class GraphicsCallbacks
-{
-    public:
-            GraphicsCallbacks(){};
-            ~GraphicsCallbacks(){};
-            std::vector<EngineObject *> GameObjects;
-            
-            
-                void RegisterObjectCallback(EngineObject *callback) 
-                {
-                    GameObjects.push_back(callback);
-                };
-                void UnregisterObjectCallback(EngineObject *callback) 
-                {
-                    auto it = std::remove(GameObjects.begin(), GameObjects.end(), callback);
-                    if (it != GameObjects.end())
-                        GameObjects.erase(it, GameObjects.end());
-                };
-                void RunCallbacks(bool isRunning) 
-                {
-                    if (!isRunning) 
-                    {
-                        for (auto& obj : GameObjects)
-                        {
-                            obj->onDraw();
-                        }
-                    }
-                    
-                };
-};
-class PhysicsCallbacks;
-class AudioCallbacks;
-class InputCallbacks;
 
 #endif // SCRIPTCALLBACKS_H

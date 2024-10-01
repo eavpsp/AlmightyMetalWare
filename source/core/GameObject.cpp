@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "../debug/debug.h"
-
+extern std::vector<GameObject *> *GameObjects;
+extern std::vector<EngineObject *> *GraphicsObjects;
 /**
  * @brief Draws the game object's model
  *
@@ -119,43 +120,40 @@ GameObject *GameObject::GetParent()
     return parent;
 }
 
+void GameObject::RegisterObject()
+{
+    
+    GameObjects->push_back(this);
+}
+
 void GameObject::onUpdate()
 {
+   
 }
 
 void GameObject::onDraw()
 {
-   
 }
+
 void GameObject::onInit()
 {
 
 }
+
 void GameObject::onDestroy()
 {
 
 }
-GameObject::GameObject(Material *mat, glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, GameModel *gameModel)
+
+GameObject::GameObject()
 {
-    material = mat;
-    position = _position;
-    rotation = _rotation;
-    scale = _scale;
-    objectModel = gameModel;
-    //should init transform as well
-    transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, position);
-    transform = glm::rotate(transform, glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    transform = glm::rotate(transform, glm::radians(_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    transform = glm::rotate(transform, glm::radians(_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    transform = glm::scale(transform, _scale);
+    RegisterObject();
     
-}
+};
  GameObject::~GameObject()
 {
    
-    onDestroy();
-   delete objectModel;
-   delete material;
+    delete objectModel;
+    delete material;
 
 }
