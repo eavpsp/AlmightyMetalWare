@@ -116,21 +116,13 @@ void ResourceManager::initResourceManager()
         GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
         
 
-    
-    GameModel* modelTest = new GameModel("romfs:/test.gltf");
-    GameObject *obj1 =  new GameObject(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
-    vertexArrays = new std::vector<VertexBuffer *>;       
-    vertexArrays->push_back(obj1->objectModel->meshes[0].vertexBuffer);
+    glGenVertexArrays(1, &s_vao_Lit);
+    GameModel* modelTest = new GameModel("romfs:/sphere.gltf");
+    Material *mat = new LitMaterial();
+    GameObject *obj1 =  new GameObject(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     gameObjects = new std::vector<GameObject *>;
     gameObjects->push_back(obj1);
 
-    
-   /* debugLog("---------------init resource manager info:");
-    debugLog("model test meshes: %d", gameObjects->at(0)->objectModel->meshes.size());
-    debugLog("model test verts: %d", gameObjects->at(0)->objectModel->meshes[0].vertices.size());
-    debugLog("model test indicies: %d", gameObjects->at(0)->objectModel->meshes[0].indices.size());
-    debugLog("vertex array object: %d", vertexArrays->size());
-    debugLog("----------------init resource manager complete---------------");*/
     
  
 }

@@ -12,12 +12,23 @@ public:
 	std::vector <TexturedUnlit> verticesTex;
 	std::vector <GLuint> indices;
 	std::vector <MW_Texture> textures;
-    VertexBuffer *vertexBuffer;
-	// Initializes the mesh
-	void initMeshLitTexture(std::vector <VertexLit>& vertices, std::vector <GLuint>& indices, std::vector <MW_Texture>& textures);
-	void initMeshLitTexture(std::vector <TexturedUnlit>& vertices, std::vector <GLuint>& indices, std::vector <MW_Texture>& textures);
+	ShaderType shaderType;
 
-    MeshData();
+    MeshData(std::vector <VertexLit>& vertices, std::vector <GLuint>& indices, std::vector <MW_Texture>& textures)
+	{
+		this->vertices = vertices;
+		this->indices = indices;
+		this->textures = textures;
+		shaderType = ShaderType::LIT;
+	};
+
+	MeshData(std::vector <TexturedUnlit>& vertices, std::vector <GLuint>& indices, std::vector <MW_Texture>& textures)
+	{
+		this->verticesTex = vertices;
+		this->indices = indices;
+		shaderType = ShaderType::UNLIT;
+		this->textures = textures;
+	}
     ~MeshData(){};
 };
 

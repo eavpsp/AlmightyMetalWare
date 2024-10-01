@@ -6,24 +6,49 @@
 bool lightScene = false;
 void RenderSystem::render(GameObject *gameObject)//send in program and vao id array
 {
+    if(!lightScene)
+    {
+      
+        glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::mat4 lightObject = glm::mat4(1.0f);
+        lightObject = glm::translate(lightObject, lightPos);
+
+
+        //light object shader
+        glUseProgram(_resourceManager->_engineMaterials.getLightObjectMaterial()->getShaderInterface()->getProgramHandle());
+        gameObject->material->materials->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniformMat4F("model", lightObject);
+       //light shader
+        glUseProgram(gameObject->material->materials->getShaderInterface()->getProgramHandle());
+        gameObject->material->materials->SetUniformMat4F("model", gameObject->transform);
+        gameObject->material->materials->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        gameObject->material->materials->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
+        mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
+        lightScene = true;
+    }
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    //RenderLit(gameObject);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    gameObject->DrawObjectModel();
+    gameObject->material->materials->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
+
+    mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
 	eglSwapBuffers(s_display, s_surface);
 
 }
 
-void RenderSystem::render(VertexBuffer *vertexBuffer)
+void RenderSystem::render(VertexBuffer *vertexBuffer)//2D
 {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+       /* glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         ortho_projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f,SCREEN_HEIGHT, -1.0f, 1.0f);//left, right, bottom, top, near, far
         mainCamera->transform = glm::translate(glm::mat4(1.0f), mainCamera->position);  //Object A Position, Shader 
         {
             glm::mat4 mdlvMtx = ortho_projection * mainCamera->transform * glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f)); //mainCamera * model postition * projections = normalized device coordinates
             _resourceManager->_engineMaterials.getColorMaterial()->SetUniformMat4F("u_ModelViewMatrix", mdlvMtx);
+
             glUseProgram( _resourceManager->_engineMaterials.getColorMaterial()->getShaderInterface()->getProgramHandle());
-            glBindVertexArray(_resourceManager->s_vao); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+            glBindVertexArray(_resourceManager->s_vao); 
             glDrawElements(GL_TRIANGLES, vertexBuffer->ib->getCount(), GL_UNSIGNED_INT, 0);
 
         }
@@ -35,7 +60,7 @@ void RenderSystem::render(VertexBuffer *vertexBuffer)
             glDrawElements(GL_TRIANGLES, vertexBuffer->ib->getCount(), GL_UNSIGNED_INT, 0);
             
         }
-        eglSwapBuffers(s_display, s_surface);
+        eglSwapBuffers(s_display, s_surface);*/
 }
 
 RenderSystem& RenderSystem::getRenderSystem() {
@@ -65,22 +90,24 @@ void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
 {
     if(!lightScene)
     {
-        glEnable(GL_DEPTH_TEST);
+      
         glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::mat4 lightObject = glm::mat4(1.0f);
         lightObject = glm::translate(lightObject, lightPos);
 
 
-        _resourceManager->gameObjects->at(0)->transform = glm::translate(_resourceManager->gameObjects->at(0)->transform, _resourceManager->gameObjects->at(0)->position);
-       //light object shader
+        //light object shader
         glUseProgram(_resourceManager->_engineMaterials.getLightObjectMaterial()->getShaderInterface()->getProgramHandle());
         _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniformMat4F("model", lightObject);
        //light shader
         glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle());
-        MW_Texture tex("romfs:/robo_owl_color.png");
-        tex.Bind(0);
+       //check for texture
+        if(_resourceManager->gameObjects->at(0)->objectModel->meshes.at(0).textures.size() != NULL)
+        {
+            _resourceManager->gameObjects->at(0)->objectModel->meshes.at(0).textures.at(0).Bind(0);
+        }
         _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("model", _resourceManager->gameObjects->at(0)->transform);
         _resourceManager->_engineMaterials.getLightMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         _resourceManager->_engineMaterials.getLightMaterial()->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
@@ -99,7 +126,7 @@ void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
     _resourceManager->_engineMaterials.getLightMaterial()->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
     mainCamera->Matrix(45.0f,0.1f,100.0f, _resourceManager->_engineMaterials.getLightMaterial(), "camMatrix");
    
-    glBindVertexArray(_resourceManager->s_vao);
+    glBindVertexArray(_resourceManager->s_vao_Default);
     if (vertexBuffer->ib != nullptr) 
     {
     
@@ -111,10 +138,6 @@ void RenderSystem::RenderLit(VertexBuffer *vertexBuffer)
         debugLog("No indices found for mesh");
     }
 
-
-   
-    
-
     eglSwapBuffers(s_display, s_surface);
 
 }
@@ -124,7 +147,7 @@ void RenderSystem::initRenderSystem(ResourceManager &resourceManager)//later tak
 {
     _resourceManager = &resourceManager;
     mainCamera = new ViewCamera(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT);
-
+    glEnable(GL_DEPTH_TEST);
     debugLog("---------------init render system----------------");
 }
 

@@ -56,4 +56,84 @@ struct ColorMaterial : public ShaderMaterialInterface
         ~ColorMaterial(){};
 };
 
+/*
+        glUseProgram(_resourceManager->_engineMaterials.getLightObjectMaterial()->getShaderInterface()->getProgramHandle()); //LIGHT OBJ
+        _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniformMat4F("model", lightObject);
+       //light shader
+        glUseProgram(_resourceManager->_engineMaterials.getLightMaterial()->getShaderInterface()->getProgramHandle()); //LIGHT MAT
+       //check for texture
+        if(_resourceManager->gameObjects->at(0)->objectModel->meshes.at(0).textures.size() != NULL)
+        {
+            _resourceManager->gameObjects->at(0)->objectModel->meshes.at(0).textures.at(0).Bind(0);
+        }
+        _resourceManager->_engineMaterials.getLightMaterial()->SetUniformMat4F("model", _resourceManager->gameObjects->at(0)->transform);
+        _resourceManager->_engineMaterials.getLightMaterial()->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        _resourceManager->_engineMaterials.getLightMaterial()->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
+
+*/
+//struct material data 
+    struct Material
+    {
+        std::string name;
+        ShaderMaterialInterface *materials;
+    };
+
+    //struct ColorMaterial : public Material;
+
+    struct LightObjectMaterials : public Material
+    {
+        public :
+            glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+            void UpdateModelShader(glm::mat4 modelMtx)
+            {
+                materials->SetUniformMat4F("model", modelMtx);
+            };
+
+            LightObjectMaterials() 
+            {
+                name = "Light Object Material";
+                ShaderInterface *light_obj_shader = new ShaderInterface("romfs:/shaders/LightObjectShader.vs", "romfs:/shaders/LightObjectShader.fs");
+                materials = new ShaderMaterialInterface();
+                materials->SetUpShader(name, light_obj_shader);
+            };
+            ~LightObjectMaterials(){};
+    };
+
+    struct LitMaterial : public Material
+    {
+        public:
+            void UpdateModelShader(glm::mat4 modelMtx)
+            {
+                materials->SetUniformMat4F("model", modelMtx);
+            };
+            LitMaterial() 
+            {
+                name = "Lit Material";
+                ShaderInterface *light_shader = new ShaderInterface("romfs:/shaders/SimpleLightShader.vs", "romfs:/shaders/SimpleLightShader.fs");
+                materials = new ShaderMaterialInterface();
+                materials->SetUpShader(name, light_shader);
+            };
+            ~LitMaterial(){};
+    };
+
+    struct ImageMaterial : public Material
+    {
+        public:
+            void UpdateModelShader(glm::mat4 modelMtx)
+            {
+                materials->SetUniformMat4F("u_ModelViewMatrix", modelMtx);
+            };
+            ImageMaterial() 
+            {
+                name = "Image Material";
+                ShaderInterface *color_shader = new ShaderInterface("romfs:/shaders/ColorShader.vs", "romfs:/shaders/FragmentShader.fs");
+                materials = new ShaderMaterialInterface();
+                materials->SetUpShader(name, color_shader);
+            };
+            ~ImageMaterial(){};
+    };
+
+
+
 #endif // SHADERMATERIALINTERFACE_H

@@ -7,6 +7,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <Texture.h>
+#include <VertexArray.h>
 using json = nlohmann::json;
 
 class GameModel 
@@ -15,7 +16,7 @@ class GameModel
         const char* file;
 		std::vector<unsigned char> data;
 		json JSON;
-
+		
 		// Prevents textures from being loaded twice
 		std::vector<std::string> loadedTexName;
 		std::vector<MW_Texture> loadedTex;
@@ -47,14 +48,17 @@ class GameModel
 		std::vector<glm::vec4> groupFloatsVec4(std::vector<float> floatVec);
     public:
 	// All the meshes and transformations
-		std::vector<MeshData> meshes;
+		std::vector<MeshData> meshes; //create function to export final mesh object for rendering
 		std::vector<glm::vec3> translationsMeshes;
 		std::vector<glm::quat> rotationsMeshes;
 		std::vector<glm::vec3> scalesMeshes;
 		std::vector<glm::mat4> matricesMeshes;
+		VertexArray *vertexArray;
+		VertexBuffer *vertexBuffer;
+		void GenereteVertexBuffer();
         GameModel(const char* filename);
         GameModel(){};
-        GameModel(std::vector<MeshData> meshes);
+        GameModel(std::vector<MeshData> meshes, ShaderType shaderType);//used to load custom meshes
         ~GameModel(){};
 };
 

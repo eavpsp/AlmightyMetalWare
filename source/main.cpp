@@ -5,9 +5,9 @@
 #include <GameManager.h>
 #include "debug/debug.h"
 #include <json.hpp>  
-
+#include <ScriptCallbacks.h>
 /*
-///TODO
+///Things
 Create Debug Logger (Done)
 Batch Rendering (Needs system but understand how to do it)
 Create Mesh System using blender + unity or just blender(Done)
@@ -20,15 +20,40 @@ Add nullptr checks to all funcs
 //set max buffer size
 //proper camera controls
 //multiple vao buffers
+//use arrays for static objects
+custom z-lib compression for game data
 */
-//
+//////
+
+//////
+/*
+Todo:
+Finish Lights
+Batch Render Lights, Static Objects, Textures, Dynamic Objects, Skybox, Colors 
+Animation system
+Add Skybox
+UI - Font
+UI - Icons
+Physics system
+Audio system
+Input system - Detailed
+Video system
+Post Processing
+
+*/
+
+EngineCallBacks *engineCallBacks;
+GraphicsCallbacks *graphicsCallbacks;
+
+
 int main(int argc, char* argv[])
 {
     romfsInit();
     debugLogInit();
+    engineCallBacks = new EngineCallBacks();
+    graphicsCallbacks = new GraphicsCallbacks();
     //init GM
     GameManager *gameManager = &GameManager::getGameManager();
-
   
    
     // Configure our supported input layout: a single player with standard controller styles
@@ -45,6 +70,7 @@ int main(int argc, char* argv[])
     {
         //Run
        gameManager->runGameLoop();
+      // engineCallBacks->RunCallbacks(gameManager->Running());
         // Get and process input
         padUpdate(&pad);
         u32 kDown = padGetButtonsDown(&pad);

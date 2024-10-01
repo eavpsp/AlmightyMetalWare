@@ -10,6 +10,7 @@ class GameManager
         GameManager(bool running);
         ~GameManager();
     public:
+    void renderLoop();
     void runGameLoop();
     void SceneInit();
     void GameLoop();

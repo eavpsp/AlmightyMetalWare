@@ -5,8 +5,25 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+void ViewCamera::onInit()
+{
+}
+
+void ViewCamera::onDestroy()
+{
+}
+
+void ViewCamera::onDraw()
+{
+}
+
+void ViewCamera::onUpdate()
+{
+}
+
 ViewCamera::ViewCamera(glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, float width, float height)
 {
+	
     position = _position;
     rotation = _rotation;
     scale = _scale; 

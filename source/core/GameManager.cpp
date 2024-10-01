@@ -2,6 +2,7 @@
 #include "../debug/debug.h"
 ResourceManager *gameResourceManager;
 
+
 GameManager::GameManager(bool running) : _running{running}, _renderSystem{&RenderSystem::getRenderSystem()}, _resourceManager{&ResourceManager::getResourceManager()} 
 {
     
@@ -47,7 +48,20 @@ void GameManager::destroyGameManager()
 void GameManager::runGameLoop()
 {
     //_renderSystem->render(_resourceManager->gameObjects->at(0));//
-    _renderSystem->RenderLit(_resourceManager->getVertexArray()->at(0));
+     _renderSystem->render(_resourceManager->gameObjects->at(0));
+}
+
+void GameManager::renderLoop()
+{
+    //update to use resoucrce manager stored vao batches
+    
+        for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
+        {
+            /* code */
+            _renderSystem->render(_resourceManager->gameObjects->at(i));
+        }
+        
+    
 }
 
 bool GameManager::Running(){

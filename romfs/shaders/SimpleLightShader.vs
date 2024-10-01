@@ -12,13 +12,16 @@
 
     uniform mat4 camMatrix;
     uniform mat4 model;
+    uniform mat4 translation;
+    uniform mat4 rotation;
+    uniform mat4 scale;
 
     void main()
     {
 
-        crntPos = vec3(model * vec4(inPos, 1.0f));
+        crntPos = vec3(model * translation * -rotation * scale * vec4(inPos, 1.0f));
 	    gl_Position = camMatrix * vec4(crntPos, 1.0);
-        v_TexCoord = aTexCoord;
+        v_TexCoord = mat2(0.0, -10., 1.0, 0.0) * aTexCoord;
         v_Normal = inNormal;
      
     }

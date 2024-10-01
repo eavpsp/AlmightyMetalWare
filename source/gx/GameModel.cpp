@@ -2,6 +2,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include "../debug/debug.h"
+#include <ResourceManager.h>
+//MAKE CHILDREN MESHES
+extern ResourceManager *gameResourceManager;
 std::string get_file_contents(const char* filename)
 {
     debugLog("GameModel.cpp: Loading %s", filename);
@@ -24,8 +27,41 @@ std::string get_file_contents(const char* filename)
     return contents;
 }
 
-GameModel::GameModel(const char* FILENAME)
+/**
+ * @brief Generates a vertex buffer containing all the vertices and indices of this model, and stores it in the vertexBuffer field.
+ * 
+ * This function combines all the vertices and indices of the meshes in this model, and stores them in a single vertex buffer. This vertex buffer is then added to the vertexArray field.
+ * 
+ * This function is called by the ResourceManager when a model is loaded.
+ */
+void GameModel::GenereteVertexBuffer()
 {
+	vertexArray->Bind();
+	std::vector<VertexLit> vertices;
+	std::vector<GLuint> indices;
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		vertices.insert(vertices.end(), meshes[i].vertices.begin(), meshes[i].vertices.end());
+		indices.insert(indices.end(), meshes[i].indices.begin(), meshes[i].indices.end());
+	}
+	vertexBuffer = new VertexBuffer();
+	vertexBuffer->initVertexBuffer(&vertices[0], vertices.size() * sizeof(VertexLit), LIT, vertices.size());
+	vertexBuffer->ib = new IndexBuffer(indices.size());
+	vertexBuffer->ib->Bind(indices.data());
+	VertexBufferLayout layout;
+    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
+    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
+    layout.AddElement(GL_FLOAT, 2, GL_FALSE);
+    vertexArray->AddBuffer(*vertexBuffer,layout);
+	vertexBuffer->UnBind();
+    vertexArray->UnBind();
+    vertexBuffer->ib->UnBind();
+	debugLog("GameModel.cpp: Vertex Buffer Generated");
+}
+
+GameModel::GameModel(const char *FILENAME) // add custom shader types
+{
+	vertexArray = new VertexArray(gameResourceManager->s_vao_Lit); //create VAO for binding and drawing
 	meshes = std::vector<MeshData>();
 	translationsMeshes = std::vector<glm::vec3>();
 	rotationsMeshes = std::vector<glm::quat>();
@@ -37,21 +73,60 @@ GameModel::GameModel(const char* FILENAME)
 	debugLog("Text Loaded");	
 	JSON = json::parse(text);
 	debugLog("Json Parsed");	
-
+	int nodeSize = 0;
+	 if (JSON.find("scenes") != JSON.end()) {
+        const auto& scenes = JSON["scenes"];
+        if (scenes.size() > 0) {
+            nodeSize = scenes[0]["nodes"].size();
+        }
+    }
+	debugLog("Node Size: %d", nodeSize);
 	// Get the binary data
 	GameModel::file = file;
 	data = getData();
 
 	// Traverse all nodes
-	traverseNode(0);
-	debugLog("Loaded %s", FILENAME);
+	for (int i = 0; i < nodeSize; i++)
+	{
+		traverseNode(i);
+
+		/* code */
+	}
+	//get all data loaded and create VAo VBO and EBO
 	
+	debugLog("Loaded %s", FILENAME);
+	GenereteVertexBuffer();
 }
 
-GameModel::GameModel(std::vector<MeshData> meshes)
+
+GameModel::GameModel(std::vector<MeshData> meshes, ShaderType shaderType)
 {
+	//set VAO ID
+	switch (shaderType)
+	{
+	case ShaderType::UNLIT:
+		vertexArray = new VertexArray(gameResourceManager->s_vao_Unlit);
+		break;
+	case ShaderType::LIT:
+		vertexArray = new VertexArray(gameResourceManager->s_vao_Lit);
+		break;
+	default://TEX_UNLIT	
+		vertexArray = new VertexArray(gameResourceManager->s_vao_2D);
+		break;
+	}
     this->meshes = meshes;
-   
+	for (int i = 0; i < meshes.size(); i++)
+	{
+	
+		MeshData *mesh = new MeshData(meshes[i].vertices, meshes[i].indices, meshes[i].textures);
+		
+		meshes.push_back(*mesh);
+
+
+	}
+	GenereteVertexBuffer();
+
+
 }
 
 void GameModel::loadMesh(unsigned int indMesh)
@@ -91,18 +166,20 @@ void GameModel::loadMesh(unsigned int indMesh)
 	// Combine all the vertex components and also get the indices and textures
 	std::vector<VertexLit> vertices = assembleVertices(positions, normals, texUVs);
 	std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
-	//std::vector<MW_Texture> textures = getTextures();
-	std::vector<MW_Texture> textures;
+	std::vector<MW_Texture> textures = getTextures();
 	debugLog("Got Mesh %d", indMesh);
 	// Combine the vertices, indices, and textures into a mesh
-	MeshData *mesh = new MeshData();
-	mesh->initMeshLitTexture(vertices, indices, textures);
+	//Binds VBO and EBO to VAO
+	
+	MeshData *mesh = new MeshData(vertices, indices, textures);
 	meshes.push_back(*mesh);
 	debugLog("Mesh %d Loaded", indMesh);
 }
 
+
 void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 {
+
 	// Current node
 	json node = JSON["nodes"][nextNode];
 	if(node == NULL)
@@ -200,8 +277,10 @@ void GameModel::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 	}
 	else{
 		debugLog("Node: %s has no children", node["name"].get<std::string>().c_str());
+		
 	}
 	debugLog("Node: %s done", node["name"].get<std::string>().c_str());
+
 }
 
 std::vector<unsigned char> GameModel::getData()
@@ -340,7 +419,8 @@ std::vector<MW_Texture> GameModel::getTextures()
 	for (const auto& image : JSON["images"])
 	{
 		debugLog("Loading Texture %s", image["uri"]);
-		std::string texPath = image["uri"];
+		std::string imagePath = image["uri"];
+		std::string texPath = baseDir + imagePath;
 		texIter = std::lower_bound(loadedTexName.begin(), loadedTexName.end(), texPath);
 		if (texIter != loadedTexName.end() && *texIter == texPath)
 		{
@@ -349,19 +429,11 @@ std::vector<MW_Texture> GameModel::getTextures()
 		}
 		else
 		{
-			if (texPath.find("baseColor") != std::string::npos)
+			if (access(texPath.c_str(), F_OK) != -1)
 			{
-				MW_Texture diffuse((baseDir + texPath).c_str());
+				MW_Texture diffuse((texPath).c_str());
 				textures.push_back(diffuse);
 				loadedTex.push_back(diffuse);
-				loadedTexName.push_back(texPath);
-				debugLog("Texture %s loaded", texPath.c_str());
-			}
-			else if (texPath.find("metallicRoughness") != std::string::npos)
-			{
-				MW_Texture specular((baseDir + texPath).c_str());
-				textures.push_back(specular);
-				loadedTex.push_back(specular);
 				loadedTexName.push_back(texPath);
 				debugLog("Texture %s loaded", texPath.c_str());
 			}

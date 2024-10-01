@@ -57,5 +57,10 @@ class RenderSystem
 };
 constexpr auto TAU = glm::two_pi<float>();
 
+//Group GameObjects into Batches for Rendering
+//have gameobjects call renderer to render itself
+//vao buffer implementation
+//shader -> vao -> draw total vao indicies
+
 
 #endif

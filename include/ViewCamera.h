@@ -10,6 +10,10 @@ class ViewCamera : public EngineObject
     public:
         glm::vec3 orientaion = glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+        virtual void onUpdate();
+        virtual void onDraw();
+        virtual void onInit();
+        virtual void onDestroy();
         ViewCamera(glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, float width, float height);
         ~ViewCamera(){};
         float width, height;

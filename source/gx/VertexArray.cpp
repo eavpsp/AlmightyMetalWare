@@ -1,15 +1,15 @@
 #include "VertexArray.h"
 #include "../debug/debug.h"
-VertexArray::VertexArray()
-{
-    //glGenVertexArrays(1, &_rendererID);
+VertexArray::VertexArray(GLuint id)
+{   
+    _rendererID = id;
     debugLog("Created VertexArray %u", _rendererID);
 }
 
 
 VertexArray::~VertexArray()
 {
-   // glDeleteVertexArrays(1, &_rendererID);
+    glDeleteVertexArrays(1, &_rendererID);
 }
 
 /**
@@ -33,19 +33,17 @@ void VertexArray::AddBuffer(const VertexBuffer &vb, VertexBufferLayout &layout)
 
         offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
     }
+    buffersInArray.push_back(vb);
 }
 
 
 void VertexArray::Bind() 
 {
-  //  glBindVertexArray(_rendererID);
-    debugLog("Bound VertexArray %u", _rendererID);
+    glBindVertexArray(_rendererID);
+    
 }
 
-void VertexArray::SetRenderID(GLuint id)
-{
-   // _rendererID = id;
-}
+
 
 void VertexArray::UnBind() 
 {

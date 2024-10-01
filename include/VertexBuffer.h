@@ -52,7 +52,7 @@ enum ShaderType
 	UNLIT,
 	LIT,
 	TEX_UNLIT,
-	TEX_LIT
+	LIGHT_OBJ
 };
 class VertexBuffer
 {
@@ -60,7 +60,6 @@ class VertexBuffer
 		GLuint _vertexBufferID, _count;
 		GLsizei size; //verts per mesh
 	public:
-		void AddBufferLayout(VertexBufferLayout &layout);
 		GLuint getVertexBufferID();
 		void renderVertexBuffer(void *_renderSystem);
 		ShaderType *shaderType;
