@@ -1,8 +1,8 @@
 #include "VertexArray.h"
 #include "../debug/debug.h"
-VertexArray::VertexArray(GLuint id)
+VertexArray::VertexArray()
 {   
-    _rendererID = id;
+    glGenVertexArrays(1, &_rendererID);
    
 }
 

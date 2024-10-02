@@ -2,6 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+ #define TINYOBJLOADER_IMPLEMENTATION
 #include <glad/glad.h>
 #include <vector>
 #include <array>
@@ -18,3 +19,4 @@
 #include <random>
 #include <unordered_map>
 #include <tiny_gltf.h>
+#include <tiny_obj_loader.h>

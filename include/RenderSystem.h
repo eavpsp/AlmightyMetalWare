@@ -49,8 +49,8 @@ class RenderSystem
 		static RenderSystem& getRenderSystem();
 		void destroyRenderSystem();
 		ViewCamera *mainCamera, *uiCamera;
-
-
+		void SwapBuffers();
+		void RenderLights();
 
 };
 constexpr auto TAU = glm::two_pi<float>();

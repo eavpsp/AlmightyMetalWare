@@ -24,8 +24,24 @@ struct VertexLit//Add more layout structs tex coords
 		this->position = position;
 		this->normal = normal;
 		this->texUV = texUV;
-		}
+	}
 	~VertexLit(){}
+
+};
+struct VertexLitOBJ//Add more layout structs tex coords
+{
+	glm::vec3 position;
+	glm::vec2 texUV;
+	glm::vec3 normal;
+
+	VertexLitOBJ(){}
+	VertexLitOBJ(glm::vec3 position, glm::vec3 normal, glm::vec2 texUV) 
+	{
+		this->position = position;
+		this->normal = normal;
+		this->texUV = texUV;
+		}
+	~VertexLitOBJ(){}
 
 };
 struct ColorVertex

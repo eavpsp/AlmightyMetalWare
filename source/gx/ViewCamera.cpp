@@ -4,7 +4,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include "../debug/debug.h"
 void ViewCamera::onInit()
 {
 }
@@ -63,7 +63,7 @@ void ViewCamera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 //add rotation
 void ViewCamera::Inputs(u32 currentInput)
 {
-	
+	//debugLog("reading input");
 
     if (currentInput & HidNpadButton::HidNpadButton_Up) 
     {

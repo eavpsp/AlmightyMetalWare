@@ -74,7 +74,7 @@ public:
 	tinygltf::Model model;
 	std::pair<unsigned int, std::map<int, unsigned int>> VAO_and_EBOs;
 	float scale;
-
+	VertexArray *vertexArray;
 	GLTFStaticMesh(const char* filename, float scale);
 	~GLTFStaticMesh();
 	std::pair<unsigned int, std::map<int, unsigned int>> bindModel();

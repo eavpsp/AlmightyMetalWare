@@ -29,6 +29,7 @@ public:
 		shaderType = ShaderType::UNLIT;
 		this->textures = textures;
 	}
+
     ~MeshData(){};
 };
 

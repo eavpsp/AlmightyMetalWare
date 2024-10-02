@@ -7,7 +7,7 @@
 class VertexArray
 {
 public:
-    VertexArray(GLuint id);
+    VertexArray();
     ~VertexArray();
     void AddBuffer(const VertexBuffer& vb, VertexBufferLayout& layout);
     void Bind();

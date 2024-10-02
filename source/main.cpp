@@ -6,7 +6,10 @@
 #include "debug/debug.h"
 #include <json.hpp>  
 #include <ScriptCallbacks.h>
-
+#define THREAD_STACK_SIZE_Min 0x1000
+#define THREAD_STACK_SIZE_Max 0x80000
+#define THREAD_STACK_SIZE 0x4000
+#define THREAD_STACK_SIZE_FOUR 0x1000
 
 /*
 ///Things
@@ -50,19 +53,33 @@ Render -> Render System, Draw Calls, Batchinng
 EngineCallBacks *engineCallBacks;
 std::vector<GameObject *> *GameObjects;
 std::vector<EngineObject *> *GraphicsObjects;
+GameManager *gameManager;
+
+void initSystem()
+{
+    debugLog("System Starting...");
+
+    romfsInit();
+    debugLogInit();
+    //init callbacks 
+    GameObjects = new std::vector<GameObject *>();
+    GraphicsObjects = new std::vector<EngineObject *>();
+    engineCallBacks = new EngineCallBacks();
+    
+}
 
 void EngineMain()
 {
     debugLog("Engine Starting...");
       //init GM
-    GameManager *gameManager = &GameManager::getGameManager();
+    gameManager = &GameManager::getGameManager();
     // Configure our supported input layout: a single player with standard controller styles
     padConfigureInput(1, HidNpadStyleSet_NpadStandard);
     // Initialize the default gamepad (which reads handheld mode inputs as well as the first connected controller)
     PadState pad;
     padInitializeDefault(&pad);
     debugLog("Objects Alive: %d", GameObjects->size());
-    //put this loop into a game thread and leave the main thread to loop other stuff like queues
+
     // Main game loop
     //while(appletMainLoop())
     while (gameManager->Running())
@@ -87,28 +104,13 @@ void EngineMain()
 
     romfsExit();
     gameManager->destroyGameManager();
-    appletExit();
 }
-void initSystem()
-{
-    debugLog("System Starting...");
-
-    romfsInit();
-    debugLogInit();
-    //init callbacks 
-    GameObjects = new std::vector<GameObject *>();
-    GraphicsObjects = new std::vector<EngineObject *>();
-    engineCallBacks = new EngineCallBacks();
-    
-}
-
 int main(int argc, char* argv[])
 {
     initSystem();
-    debugLog("Starting Game...");
     EngineMain();
-    
-   
+    appletExit();
+    debugLog("Exiting....");
     return EXIT_SUCCESS;
     
 }

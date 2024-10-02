@@ -1,31 +1,46 @@
 #ifndef ENGINE_LIGHT_H
 #define ENGINE_LIGHT_H
 
-#include <EngineObject.h>
+
 #include "ShaderMaterialInterface.h"
 //outline the base light class then all the other light variants
 //will have an engine object parent
 //will have a shader material
 //used to render light objects
 
-class EngineLight : public EngineObject
+class EngineLight
 {
+    private:
+        std::string name;
 
     public:
+        glm::vec3 position, scale;
+        glm::quat rotation;
+        glm::mat4 transform;
         Material *light_Material;
         glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);//Define colors and shapes in seperate script
+
         void SetLightColor(glm::vec4 lightColor)
         {
             this->lightColor = lightColor;
             PointLightMaterial *pointLightMaterial = (PointLightMaterial *)this->light_Material;
             pointLightMaterial->SetLightColor(lightColor);
         };
-        Material* GetLightMaterial()
+        std::string GetName()
         {
-            return light_Material;
+            return name;
         }
         EngineLight()
         {
+            glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+            glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+            glm::quat rotation = glm::quat();
+            transform = glm::mat4(1.0f);
+            transform = glm::translate(transform, position);
+            transform = glm::rotate(transform, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+            transform = glm::scale(transform, scale);
+            name = "Light Object";
+            light_Material = new PointLightMaterial();
             SetLightColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));//default light color
 
         };
@@ -49,7 +64,7 @@ class PointLight : public EngineLight
             light_Material = new PointLightMaterial();
             UpdateLightIntensity(3.0f,0.7f);
         };
-        ~PointLight();
+        ~PointLight(){};
 
 };
 
@@ -79,7 +94,7 @@ class SpotLight : public EngineLight
             UpdateLightCone(0.90f, 0.95f);
             SetLightDirection(glm::vec3(0.0f, -1.0f, 0.0f));
         };
-        ~SpotLight();
+        ~SpotLight(){};
 };
 
 class DirectionalLight : public EngineLight

@@ -62,7 +62,7 @@ void GameModel::GenereteVertexBuffer()
 
 GameModel::GameModel(const char *FILENAME) // add custom shader types
 {
-	vertexArray = new VertexArray(gameResourceManager->s_vao_Lit); //create VAO for binding and drawing
+	vertexArray = new VertexArray(); //create VAO for binding and drawing
 	meshes = std::vector<MeshData>();
 	translationsMeshes = std::vector<glm::vec3>();
 	rotationsMeshes = std::vector<glm::quat>();
@@ -106,13 +106,13 @@ GameModel::GameModel(std::vector<MeshData> meshes, ShaderType shaderType)
 	switch (shaderType)
 	{
 	case ShaderType::UNLIT:
-		vertexArray = new VertexArray(gameResourceManager->s_vao_Unlit);
+		vertexArray = new VertexArray();
 		break;
 	case ShaderType::LIT:
-		vertexArray = new VertexArray(gameResourceManager->s_vao_Lit);
+		vertexArray = new VertexArray();
 		break;
 	default://TEX_UNLIT	
-		vertexArray = new VertexArray(gameResourceManager->s_vao_2D);
+		vertexArray = new VertexArray();
 		break;
 	}
     this->meshes = meshes;
@@ -416,7 +416,7 @@ std::vector<MW_Texture> GameModel::getTextures()
 
 	auto texIter = loadedTexName.begin();
 	std::string baseDir = "romfs:/";
-
+	int count = 0;
 	for (const auto& image : JSON["images"])
 	{
 		debugLog("Loading Texture %s", image["uri"]);
@@ -443,9 +443,10 @@ std::vector<MW_Texture> GameModel::getTextures()
 				debugLog("Texture %s not found", texPath.c_str());
 			}
 		}
+		count++;
 	}
 
-	debugLog("Loaded Textures");
+	debugLog("Loaded Textures: %d", count);	
 	return textures;
 }
 
@@ -544,7 +545,7 @@ void GLTFStaticMesh::bindMesh(std::map<int, GLuint>& ebos, tinygltf::Mesh& mesh)
         }
 
         const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
-
+	
         GLuint ebo;
         glGenBuffers(1, &ebo);
         ebos[i] = ebo;
@@ -582,8 +583,12 @@ void GLTFStaticMesh::bindMesh(std::map<int, GLuint>& ebos, tinygltf::Mesh& mesh)
             else
                 debugLog("GLTFStaticMesh: Unsupported attribute %s", attrib.first.c_str());
         }
+	
+
     }
+
 }
+
 
 /*
 * Inspect a node, create an ebo for its mesh if it has one,
@@ -610,7 +615,7 @@ void GLTFStaticMesh::bindModelNodes(std::map<int, GLuint>& ebos, tinygltf::Node&
 */
 std::pair<GLuint, std::map<int, GLuint>> GLTFStaticMesh::bindModel() {
     std::map<int, GLuint> ebos;
-	VertexArray *vertexArray = new VertexArray(gameResourceManager->s_vao_3D);
+	vertexArray = new VertexArray();
 	vertexArray->Bind();
 
     //create an ebo for each node in the scene
@@ -620,7 +625,7 @@ std::pair<GLuint, std::map<int, GLuint>> GLTFStaticMesh::bindModel() {
         bindModelNodes(ebos, model.nodes[scene.nodes[i]]);
     }
 
-    vertexArray->UnBind();
+   vertexArray->UnBind();
     //cleanup: make sure only ebos are stored
     for (auto it = ebos.cbegin(); it != ebos.cend();) {
         tinygltf::BufferView bufferView = model.bufferViews[it->first];
@@ -632,7 +637,6 @@ std::pair<GLuint, std::map<int, GLuint>> GLTFStaticMesh::bindModel() {
             ++it;
         }
     }
-
     return { gameResourceManager->s_vao_3D, ebos };
 }
 
@@ -642,8 +646,7 @@ std::pair<GLuint, std::map<int, GLuint>> GLTFStaticMesh::bindModel() {
 void GLTFStaticMesh::drawMesh(const std::map<int, GLuint>& ebos, tinygltf::Mesh& mesh) {
     for (size_t i = 0; i < mesh.primitives.size(); ++i) {
         tinygltf::Primitive primitive = mesh.primitives[i];
-        tinygltf::Accessor indexAccessor = model.accessors[primitive.indices];
-		VertexArray *vertexArray = new VertexArray(gameResourceManager->s_vao_3D);
+        tinygltf::Accessor indexAccessor = model.accessors[primitive.indices];;
 		vertexArray->Bind();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebos.at(indexAccessor.bufferView));
 

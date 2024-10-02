@@ -117,18 +117,18 @@ void ResourceManager::initResourceManager()
         GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
         
 
-    glGenVertexArrays(1, &s_vao_Lit);
-    glGenVertexArrays(2, &s_vao_2D);
-    glGenVertexArrays(3, &s_vao_3D);
-    GameModel* modelTest = new GameModel("romfs:/test3.gltf");
-    Material *mat = new LitMaterial();
-    glm::vec3 _position = glm::vec3(10.0f, 0.0f, 0.0f);
-    glm::quat _rotation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
-    glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
+    gameObjects = new std::vector<GameObject *>;
+
+    /*GameModel* modelTest = new GameModel("romfs:/test3.gltf");
+    Material *mat = new LitMaterial();
     TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
-    gameObjects = new std::vector<GameObject *>;//
     gameObjects->push_back(obj1);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    GameModel*  modelTest2 = new GameModel("romfs:/cube.gltf");
+    Material * mat2 = new LitMaterial();
+    GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(mat2, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
+    //gameObjects->push_back(obj2);*/
 
    
 

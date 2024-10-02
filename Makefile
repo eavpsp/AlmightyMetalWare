@@ -39,9 +39,9 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source source/gx source/core source/debug source/external game/objects game
+SOURCES		:=	source source/gx source/core source/debug source/external game/objects game source/external/obj_loader
 DATA		:=	data
-INCLUDES	:=	include source/debug source/external game/objects game
+INCLUDES	:=	include source/debug source/external game/objects game source/external/obj_loader
 ROMFS	:=	romfs
 APP_TITLEID := 329
 APP_VERSION := 1.0

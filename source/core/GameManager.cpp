@@ -1,5 +1,6 @@
 #include <GameManager.h>
 #include "../debug/debug.h"
+#include <objMesh.h>
 ResourceManager *gameResourceManager;
 Thread GameThread, RenderThread, AudioThread;
 
@@ -48,21 +49,43 @@ void GameManager::destroyGameManager()
 
 void GameManager::runGameLoop()
 {
-    
+    //_renderSystem->render(_resourceManager->gameObjects->at(0));//
+    // _renderSystem->render(_resourceManager->gameObjects->at(0));
 }
-
+bool didRun;
+ObjMesh *objMesh;
+Material *litMat;
+glm::mat4 transform = glm::mat4(1.0f);
+glm::vec3 position = glm::vec3(5.0f, 0.0f, 0.0f);
 void GameManager::renderLoop()
 {
-    //update to use resoucrce manager stored vao batches
-    while(_running)
+    if(!didRun)
     {
-            for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
-        {
-            /* code */
-            _renderSystem->render(_resourceManager->gameObjects->at(i));
-        }
+        MeshCreateInfo *info = new MeshCreateInfo(); //create MeshCreateInfo"romfs:/cube0001.obj"
+        info->filename = "romfs:/owl/owl.obj";
+        info->preTransform = transform;
+        objMesh = new ObjMesh(info);
+        litMat = new Material();
+        litMat->shader = new ShaderMaterialInterface();
+        litMat->shader->SetUpShader("Cube Shader", new ShaderInterface("romfs:/shaders/OBJ_Shader.vs", "romfs:/shaders/OBJ_Shader.fs"));
+        transform = glm::translate(transform, position);
+        didRun = true;
     }
-     
+    //Run Shader updats outside of glcler calls
+    
+    objMesh->UpdateMesh(litMat, transform, glm::quat(0.0f, 0.0f, 0.0f, 1.0f), glm::vec3(1.0f), _renderSystem->mainCamera);
+
+    //update to use resoucrce manager stored vao batches
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
+    {
+        /* code */
+        _renderSystem->render(_resourceManager->gameObjects->at(i));
+        //_renderSystem->RenderLights();
+    }
+    objMesh->Draw();
+     _renderSystem->SwapBuffers();
         
     
 }
