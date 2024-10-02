@@ -10,7 +10,7 @@ class TestGameObject : public GameObject
         void onUpdate() override;
         void onInit() override; 
         void onDestroy() override;
-        TestGameObject();
+        TestGameObject(){};
         ~TestGameObject()
         {
             onDestroy();

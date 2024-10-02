@@ -1,7 +1,7 @@
 #include <GameManager.h>
 #include "../debug/debug.h"
 ResourceManager *gameResourceManager;
-
+Thread GameThread, RenderThread, AudioThread;
 
 GameManager::GameManager(bool running) : _running{running}, _renderSystem{&RenderSystem::getRenderSystem()}, _resourceManager{&ResourceManager::getResourceManager()} 
 {
@@ -28,6 +28,7 @@ GameManager& GameManager::getGameManager()
         gameResourceManager = gameManager->_resourceManager;
         gameManager->_renderSystem->initRenderSystem(*(gameManager->_resourceManager));//pass in resource manager
         gameManager->_resourceManager->initResourceManager();
+      
         debugLog("Made Game Manager!");
     }
     return *gameManager;
@@ -47,19 +48,21 @@ void GameManager::destroyGameManager()
 
 void GameManager::runGameLoop()
 {
-    //_renderSystem->render(_resourceManager->gameObjects->at(0));//
-     _renderSystem->render(_resourceManager->gameObjects->at(0));
+    
 }
 
 void GameManager::renderLoop()
 {
     //update to use resoucrce manager stored vao batches
-    
-        for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
+    while(_running)
+    {
+            for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
         {
             /* code */
             _renderSystem->render(_resourceManager->gameObjects->at(i));
         }
+    }
+     
         
     
 }

@@ -37,7 +37,7 @@ void GameObject::DrawObjectModel()
     {
         //add object translation scale and rotation to sa
         
-        glUseProgram(material->materials->getShaderInterface()->getProgramHandle());
+        glUseProgram(material->shader->getShaderInterface()->getProgramHandle());
         //set uniforms
        
         if(objectModel->meshes.at(i).shaderType == ShaderType::LIT) //lit material
@@ -56,10 +56,10 @@ void GameObject::DrawObjectModel()
 
         
             // Push the matrices to the vertex shader
-            glUniformMatrix4fv(glGetUniformLocation(m_mat->materials->getShaderInterface()->getProgramHandle(), "translation"), 1, GL_FALSE, glm::value_ptr(trans));
-            glUniformMatrix4fv(glGetUniformLocation(m_mat->materials->getShaderInterface()->getProgramHandle(), "rotation"), 1, GL_FALSE, glm::value_ptr(rot));
-            glUniformMatrix4fv(glGetUniformLocation(m_mat->materials->getShaderInterface()->getProgramHandle(), "scale"), 1, GL_FALSE, glm::value_ptr(sca));
-            glUniformMatrix4fv(glGetUniformLocation(m_mat->materials->getShaderInterface()->getProgramHandle(), "model"), 1, GL_FALSE, glm::value_ptr(objectModel->matricesMeshes.at(i)));  
+            glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "translation"), 1, GL_FALSE, glm::value_ptr(trans));
+            glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "rotation"), 1, GL_FALSE, glm::value_ptr(rot));
+            glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "scale"), 1, GL_FALSE, glm::value_ptr(sca));
+            glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "model"), 1, GL_FALSE, glm::value_ptr(objectModel->matricesMeshes.at(i)));  
         
            
         }

@@ -10,17 +10,24 @@
     uniform vec3 u_LightPos;
     uniform vec4 u_LightColor;
     uniform vec3 camPos;
-
+    uniform float aVal;
+    uniform float bVal;
     out vec4 FragColor;
 
     void main()
     {
 
+      vec3 lightVec = u_LightPos - crntPos;
+      float dist = length(lightVec);
+      aVal = 3.0;
+      bVal = 0.7;
+      float inten = 1.0f/(aVal * dist * dist + bVal + 1.0f);
+
       float ambient = 0.20f;
 
       // diffuse lighting
       vec3 normal = normalize(v_Normal);
-      vec3 lightDirection = normalize(u_LightPos - crntPos);
+      vec3 lightDirection = normalize(lightVec);
       float diffuse = max(dot(normal, lightDirection), 0.0f);
 
       // specular lighting
@@ -29,17 +36,17 @@
       vec3 reflectionDirection = reflect(-lightDirection, normal);
       float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8);
       float specular = specAmount * specularLight;
-     
+      
 
       vec4 texColor = texture(u_Texture, v_TexCoord);
        
       if (texColor.a == 0.0) 
       {
-        FragColor = u_LightColor * (diffuse + ambient + specular);
+        FragColor = u_LightColor * (diffuse *inten + ambient + specular);
       }
       else
       {
-        FragColor = texture(u_Texture, v_TexCoord) * u_LightColor * (diffuse + ambient + specular);
+        FragColor = texture(u_Texture, v_TexCoord) * u_LightColor * (diffuse* inten + ambient + specular );
       }
 
     };

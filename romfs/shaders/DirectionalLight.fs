@@ -8,9 +8,9 @@
 
     uniform sampler2D u_Texture;
     uniform vec3 u_LightPos;
+    uniform vec3 u_LightDir;
     uniform vec4 u_LightColor;
     uniform vec3 camPos;
-
     out vec4 FragColor;
 
     void main()
@@ -20,7 +20,7 @@
 
       // diffuse lighting
       vec3 normal = normalize(v_Normal);
-      vec3 lightDirection = normalize(u_LightPos - crntPos);
+      vec3 lightDirection = normalize(u_LightDir);
       float diffuse = max(dot(normal, lightDirection), 0.0f);
 
       // specular lighting
@@ -29,7 +29,7 @@
       vec3 reflectionDirection = reflect(-lightDirection, normal);
       float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 8);
       float specular = specAmount * specularLight;
-     
+      
 
       vec4 texColor = texture(u_Texture, v_TexCoord);
        

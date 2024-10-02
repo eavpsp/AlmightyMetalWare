@@ -5,6 +5,8 @@
 
 bool lightScene = false;
 GLTFStaticMesh *testMesh;
+glm::mat4 trans = glm::mat4(1.0f);
+LitMaterial *litMat;
 /**
  * @brief Renders a GameObject with the given material and lights.
  *
@@ -20,41 +22,59 @@ void RenderSystem::render(GameObject *gameObject)//send in program and vao id ar
     if(!lightScene)
     {
       
-        testMesh = new GLTFStaticMesh("romfs:/test3.gltf", 1.0f);
-
+        testMesh = new GLTFStaticMesh("romfs:/cube.gltf", 1.0f);
+        litMat = new LitMaterial();
+        trans = glm::translate(trans, glm::vec3(10.0f, 10.0f, 0.0f));
 
         lightScene = true;
     }
+    { 
         glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::mat4 lightObject = glm::mat4(1.0f);
         lightObject = glm::translate(lightObject, lightPos);
         //light object shader
         glUseProgram(_resourceManager->_engineMaterials.getLightObjectMaterial()->getShaderInterface()->getProgramHandle());
-        gameObject->material->materials->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        gameObject->material->shader->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         _resourceManager->_engineMaterials.getLightObjectMaterial()->SetUniformMat4F("model", lightObject);
        //light shader
-        glUseProgram(gameObject->material->materials->getShaderInterface()->getProgramHandle());
-        gameObject->material->materials->SetUniformMat4F("model", gameObject->transform);
-        gameObject->material->materials->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-        gameObject->material->materials->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
-        mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
+        glUseProgram(gameObject->material->shader->getShaderInterface()->getProgramHandle());
+        gameObject->material->shader->SetUniformMat4F("model", gameObject->transform);
+        gameObject->material->shader->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        gameObject->material->shader->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
+        mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->shader, "camMatrix");
+        
+        glUseProgram(gameObject->material->shader->getShaderInterface()->getProgramHandle());
+        litMat->shader->SetUniformMat4F("model", trans);
+        litMat->shader->SetUniform4F("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        litMat->shader->SetUniform3F("u_LightPos", lightPos.x, lightPos.y, lightPos.z);
+        mainCamera->Matrix(45.0f,0.1f,100.0f, litMat->shader, "camMatrix");
+    }
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    gameObject->DrawObjectModel();
-    gameObject->material->materials->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
 
-    mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
 
-    glm::mat4 trans = glm::mat4(1.0f);
-    gameObject->material->materials->SetUniformMat4F("model", trans);
-    testMesh->draw();
-    gameObject->material->materials->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
+    gameObject->material->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
+    
+    mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->shader, "camMatrix");
+    
+    gameObject->DrawObjectModel();//DRAW CALL
 
-    mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->materials, "camMatrix");
+    mainCamera->Matrix(45.0f,0.1f,100.0f, litMat->shader, "camMatrix");
+
+
+    litMat->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
+
+    testMesh->draw();//DRAW CALL
+   
+    
+
+   
+   
 	eglSwapBuffers(s_display, s_surface);
 
 }
+
 
 void RenderSystem::render(VertexBuffer *vertexBuffer)//2D
 {

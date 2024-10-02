@@ -6,6 +6,8 @@
 #include "debug/debug.h"
 #include <json.hpp>  
 #include <ScriptCallbacks.h>
+
+
 /*
 ///Things
 Create Debug Logger (Done)
@@ -44,22 +46,15 @@ Post Processing
 GAME -> Game Manager , Engine Objects, Physics, Input
 Render -> Render System, Draw Calls, Batchinng
 */
-//Callbacks for gameobjects
+
 EngineCallBacks *engineCallBacks;
 std::vector<GameObject *> *GameObjects;
 std::vector<EngineObject *> *GraphicsObjects;
 
-int main(int argc, char* argv[])
+void EngineMain()
 {
-    romfsInit();
-    debugLogInit();
-    debugLog("Starting Game...");
-    //init callbacks 
-    GameObjects = new std::vector<GameObject *>();
-    GraphicsObjects = new std::vector<EngineObject *>();
-    engineCallBacks = new EngineCallBacks();
-    
-    //init GM
+    debugLog("Engine Starting...");
+      //init GM
     GameManager *gameManager = &GameManager::getGameManager();
     // Configure our supported input layout: a single player with standard controller styles
     padConfigureInput(1, HidNpadStyleSet_NpadStandard);
@@ -75,6 +70,7 @@ int main(int argc, char* argv[])
         //Run
     
         gameManager->runGameLoop();
+        gameManager->renderLoop();
         //Run Update Callbacks
         engineCallBacks->RunUpdateCallbacks(gameManager->Running());
         // Get and process input
@@ -87,7 +83,32 @@ int main(int argc, char* argv[])
             break;
 
     }
+    debugLog("Game Stopped....");
+
     romfsExit();
     gameManager->destroyGameManager();
+    appletExit();
+}
+void initSystem()
+{
+    debugLog("System Starting...");
+
+    romfsInit();
+    debugLogInit();
+    //init callbacks 
+    GameObjects = new std::vector<GameObject *>();
+    GraphicsObjects = new std::vector<EngineObject *>();
+    engineCallBacks = new EngineCallBacks();
+    
+}
+
+int main(int argc, char* argv[])
+{
+    initSystem();
+    debugLog("Starting Game...");
+    EngineMain();
+    
+   
     return EXIT_SUCCESS;
+    
 }

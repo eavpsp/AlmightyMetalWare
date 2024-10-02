@@ -122,6 +122,10 @@ void ResourceManager::initResourceManager()
     glGenVertexArrays(3, &s_vao_3D);
     GameModel* modelTest = new GameModel("romfs:/test3.gltf");
     Material *mat = new LitMaterial();
+    glm::vec3 _position = glm::vec3(10.0f, 0.0f, 0.0f);
+    glm::quat _rotation = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
+    glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
     TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     gameObjects = new std::vector<GameObject *>;//
     gameObjects->push_back(obj1);
