@@ -18,6 +18,12 @@ ShaderMaterialInterface *EngineMaterials::getLightObjectMaterial()
     return &_lightObjectMaterial;
 }
 
+
+GameFontMaterial *EngineMaterials::getGameFontMaterial()
+{
+    return _gameFontMaterial;
+}
+
 void EngineMaterials::initEngineMaterials()
 {
     //
@@ -27,6 +33,7 @@ void EngineMaterials::initEngineMaterials()
     _colorMaterial.SetUpShader("ColorMaterial", color_shader);
     _lightMaterial.SetUpShader("LightMaterial", light_shader);
     _lightObjectMaterial.SetUpShader("LightObjectMaterial", light_object_shader);
+    _gameFontMaterial = new GameFontMaterial();
    
 }
 

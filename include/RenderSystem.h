@@ -36,7 +36,6 @@ class RenderSystem
 		void deinitEgl();
 		void sceneExit();
 		GLuint s_program;
-		glm::mat4 ortho_projection, perspective_projection;
 		RenderProjectionMode projectionMode;
  		ResourceManager* _resourceManager;
 		RenderSystem(){};
@@ -49,6 +48,8 @@ class RenderSystem
 		static RenderSystem& getRenderSystem();
 		void destroyRenderSystem();
 		ViewCamera *mainCamera, *uiCamera;
+		glm::mat4 ortho_projection, perspective_projection;
+
 		void SwapBuffers();
 		void RenderLights();
 

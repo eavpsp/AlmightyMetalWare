@@ -79,6 +79,28 @@ struct ColorMaterial : public ShaderMaterialInterface
         ShaderMaterialInterface *shader;
     };
 
+    struct GameFontMaterial : public Material
+    {
+        bool operator==(GameFontMaterial other)
+        {
+            return fontColor == other.fontColor;
+        }
+        glm::vec4 fontColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        void UpdateProjectionShader(glm::mat4 projMtx)
+        {
+            shader->SetUniform4F("aColor", fontColor.x, fontColor.y, fontColor.z, fontColor.w);
+            shader->SetUniformMat4F("projection", projMtx);
+        };
+
+        GameFontMaterial() 
+        {
+            name = "Game Font Material";
+            ShaderInterface *font_shader = new ShaderInterface("romfs:/gameFonts/GameFontShader.vs", "romfs:/gameFonts/GameFontShader.fs");
+            shader = new ShaderMaterialInterface();
+            shader->SetUpShader(name, font_shader);
+        };
+        ~GameFontMaterial(){};
+    };
     //struct ColorMaterial : public Material; //Create color only mats
 
     struct LightObjectMaterials : public Material //TEMPORARY

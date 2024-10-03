@@ -10,10 +10,12 @@ class EngineMaterials
       ColorMaterial _colorMaterial;
       LightMaterial _lightMaterial;
       LightObjectMaterial _lightObjectMaterial;
+      GameFontMaterial *_gameFontMaterial;
     public:
         ShaderMaterialInterface *getLightMaterial();
         ShaderMaterialInterface *getColorMaterial();
         ShaderMaterialInterface *getLightObjectMaterial();
+        GameFontMaterial *getGameFontMaterial();
         
         void initEngineMaterials();
         static EngineMaterials &getEngineMaterialsClass();

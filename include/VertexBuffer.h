@@ -28,6 +28,18 @@ struct VertexLit//Add more layout structs tex coords
 	~VertexLit(){}
 
 };
+struct Image2D
+{
+	glm::vec2 position;
+	glm::vec2 texCoords;
+	Image2D(){}
+	Image2D(glm::vec2 position, glm::vec2 texUV) 
+	{
+		this->position = position;
+		this->texCoords = texUV;
+	}
+	~Image2D(){}
+};
 struct VertexLitOBJ//Add more layout structs tex coords
 {
 	glm::vec3 position;
@@ -68,7 +80,8 @@ enum ShaderType
 	UNLIT,
 	LIT,
 	TEX_UNLIT,
-	LIGHT_OBJ
+	LIGHT_OBJ,
+	UI_TEXT,
 };
 class VertexBuffer
 {

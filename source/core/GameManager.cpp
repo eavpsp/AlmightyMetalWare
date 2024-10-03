@@ -31,7 +31,7 @@ GameManager& GameManager::getGameManager()
         gameRenderSystem = gameManager->_renderSystem;
         gameManager->_renderSystem->initRenderSystem(*(gameManager->_resourceManager));//pass in resource manager
         gameManager->_resourceManager->initResourceManager();
-      
+
         debugLog("Made Game Manager!");
     }
     return *gameManager;
@@ -65,6 +65,7 @@ void GameManager::renderLoop()
     //update to use resoucrce manager stored vao batches
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    _resourceManager->_gameFont->RenderText("Hello World", glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1));
     //ONLY DRAWS HERE
     for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
     {
