@@ -165,8 +165,8 @@ void GameObject::DrawOBJ()
 void GameObject::UpdateOBJ()
 {
     OBJ_MeshRenderer *mesh = (OBJ_MeshRenderer*)objectModel;
-    mesh->UpdateMesh(material,this, gameRenderSystem->mainCamera);       
     mesh->EnableTextures();
+    mesh->UpdateMesh(material,this, gameRenderSystem->mainCamera);       
 
 }
 

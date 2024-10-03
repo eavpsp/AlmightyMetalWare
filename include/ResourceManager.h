@@ -4,6 +4,7 @@
 #include <vector>
 #include <EngineMaterials.h>    
 #include "GameObject.h"
+#include <GameFont.h>
 
 class ResourceManager
 {
@@ -16,7 +17,8 @@ class ResourceManager
     ~ResourceManager();
     EngineMaterials _engineMaterials;
     //make sure to init in initResourceManagers//
-    GLuint s_vao_Default, s_vao_Lit, s_vao_Unlit, s_vao_3D, s_vao_2D;
+    GLuint s_vao_Default, s_vao_Lit, s_vao_Unlit, s_vao_3D, s_vao_2D, fontAtlasID;
+    FontData *fontData;
     void initResourceManager();
     std::vector<ShaderInterface *> *getShaderArray();
     std::vector<VertexBuffer *> *getVertexArray();

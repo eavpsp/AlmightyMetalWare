@@ -128,6 +128,8 @@ void ViewCamera::Inputs(u32 currentInput)
 		float angleX = (rightStickX * sensitivity * 0.01f);
 		float angleY = (rightStickY * sensitivity * 0.01f);
 
+		
+
 		glm::quat rotationX = glm::angleAxis(angleX, glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::quat rotationY = glm::angleAxis(angleY, glm::vec3(1.0f, 0.0f, 0.0f));
 

@@ -1,6 +1,6 @@
  #version 330 core
 
-    in vec3 ourColor;
+
     in vec2 v_TexCoord;
     in vec3 v_Normal;
     in vec3 crntPos;
@@ -10,6 +10,7 @@
     uniform vec3 u_LightPos;
     uniform vec4 u_LightColor;
     uniform vec3 camPos;
+    uniform vec4 modelColor;
     out vec4 FragColor;
 
     void main()

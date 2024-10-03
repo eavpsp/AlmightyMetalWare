@@ -9,7 +9,7 @@ GameManager::GameManager(bool running) : _running{running}, _renderSystem{&Rende
 {
     
 }
-
+//
 GameManager::~GameManager()
 {
     _resourceManager->destroyResourceManager();

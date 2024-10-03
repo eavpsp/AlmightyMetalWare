@@ -71,8 +71,9 @@
                 "C:/devkitpro/portlibs/switch/include/**",
                 "${workspaceFolder}/include/**",
                 "${workspaceFolder}/source/**",
-                "${workspaceFolder}/game/objects",
-                "${workspaceFolder}/source/external/obj_loader"
+                "${workspaceFolder}/game/objects/**",
+                "${workspaceFolder}/source/external/obj_loader/**",
+                "${workspaceFolder}/source/debug/**"
             ],
             "defines": [
                 "\"__SWITCH__\"",

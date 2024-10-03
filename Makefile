@@ -39,9 +39,9 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source source/gx source/core source/debug source/external game/objects game source/external/obj_loader
+SOURCES		:=	source source/gx source/core source/debug source/external game/objects game source/external/obj_loader source/external/freetype source/external/freetype/config
 DATA		:=	data
-INCLUDES	:=	include source/debug source/external game/objects game source/external/obj_loader
+INCLUDES	:=	include source/debug source/external game/objects game source/external/obj_loader source/external/freetype source/external/freetype/config
 ROMFS	:=	romfs
 APP_TITLEID := 329
 APP_VERSION := 1.0
@@ -62,13 +62,13 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lglad -lEGL -lglapi -ldrm_nouveau -lnx -lm
+LIBS	:= -lglad -lEGL -lglapi -ldrm_nouveau -lnx -lm -lfreetype `freetype-config --libs` -lnx
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(LIBNX)
+LIBDIRS	:= $(CURDIR)/source/external/freetype $(PORTLIBS) $(LIBNX) 
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

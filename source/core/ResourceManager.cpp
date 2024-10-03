@@ -56,6 +56,8 @@ void ResourceManager::initResourceManager()
     //set up materials
     _engineMaterials = EngineMaterials::getEngineMaterialsClass();
     _engineMaterials.initEngineMaterials();
+    //set up game fonts
+    fontData = new FontData();
     //sglEnable(GL_BLEND);
    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //glEnable(GL_DEPTH_TEST);
@@ -117,7 +119,7 @@ void ResourceManager::initResourceManager()
         GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
         
 
-
+    LoadFont("romfs:/gameFonts/mp1m.ttf", 32);
     gameObjects = new std::vector<GameObject *>;
 
     OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/cube.obj");

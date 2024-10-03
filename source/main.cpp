@@ -6,10 +6,7 @@
 #include "debug/debug.h"
 #include <json.hpp>  
 #include <ScriptCallbacks.h>
-#define THREAD_STACK_SIZE_Min 0x1000
-#define THREAD_STACK_SIZE_Max 0x80000
-#define THREAD_STACK_SIZE 0x4000
-#define THREAD_STACK_SIZE_FOUR 0x1000
+
 
 /*
 ///Things

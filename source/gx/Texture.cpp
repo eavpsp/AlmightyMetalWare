@@ -23,6 +23,7 @@ MW_Texture::MW_Texture(const char* path) : filePath(path),  _textureID(0), _widt
     stbi_set_flip_vertically_on_load(true);
     _localBuffer = stbi_load(path, &_width, &_height, &_bpp, 4);
     glGenTextures(1, &_textureID);
+    glActiveTexture(GL_TEXTURE0);
     glBindBuffer(GL_TEXTURE_2D, _textureID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
