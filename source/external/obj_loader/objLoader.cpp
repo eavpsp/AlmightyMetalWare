@@ -21,15 +21,28 @@ std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm:
 	std::vector<tinyobj::material_t> materials;
 	std::string warning, error;
 	
-	if (!tinyobj::LoadObj(&attributes, &shapes, &materials, &error, filename, "romfs:/")) 
+	if (!tinyobj::LoadObj(&attributes, &shapes, &materials, &error, filename, "romfs:/textures/")) 
 	{
    	 	debugLog("Error: %s", error.c_str());
 	}
 	//
-	for (const auto& mat : materials) 
+	if(materials.size() == 0)
 	{
-		debugLog("Material: %s", get_filename(mat.diffuse_texname).c_str());
+		debugLog("No Material");
+		MW_Texture tex("romfs:/textures/NoTex.png");
+		meshRender->textures.push_back(&tex);
+
 	}
+	else
+	{
+		for (const auto& mat : materials) 
+		{
+			debugLog("Material: %s", get_filename(mat.diffuse_texname).c_str());
+			MW_Texture tex(("romfs:/textures/" + get_filename(mat.diffuse_texname)).c_str());
+			meshRender->textures.push_back(&tex);
+		}
+	}
+	
 	for (const auto& shape : shapes) 
 	{
 		for (const auto& index : shape.mesh.indices) 
@@ -77,7 +90,7 @@ std::vector<float> util::load_model_from_file(const char* filename, glm::mat4 pr
 	std::vector<tinyobj::material_t> materials;
 	std::string warning, error;
 
-	if (!tinyobj::LoadObj(&attributes, &shapes, &materials, &error, filename, "romfs:/")) {
+	if (!tinyobj::LoadObj(&attributes, &shapes, &materials, &error, filename, "romfs:/textures/")) {
    	 debugLog("Error: %s", error.c_str());
 	}
 	

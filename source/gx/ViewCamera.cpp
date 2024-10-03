@@ -124,28 +124,18 @@ void ViewCamera::Inputs(u32 currentInput)
 
 	if (rightStickX != 0.0f || rightStickY != 0.0f)
 	{
-		glm::vec3 axis = glm::normalize(glm::vec3(rightStickY, -rightStickX, 0.0f));
-		float angle = glm::length(glm::vec2(rightStickX, rightStickY)) * sensitivity * 0.01f;
-		glm::quat rotation = glm::angleAxis(angle, axis);
-		orientaion = glm::normalize(glm::vec3(rotation * glm::vec4(orientaion, 0.0f)));
 
+		float angleX = (rightStickX * sensitivity * 0.01f);
+		float angleY = (rightStickY * sensitivity * 0.01f);
 
-		/*float rotX = sensitivity * (float)(rightStickY);
-		float rotY = sensitivity * (float)(rightStickX);
+		glm::quat rotationX = glm::angleAxis(angleX, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::quat rotationY = glm::angleAxis(angleY, glm::vec3(1.0f, 0.0f, 0.0f));
 
-		float upcomingY = std::asin(orientaion.y + rotX);
-		float upcomingX = std::acos(orientaion.z / std::cos(upcomingY));
-		float upcomingZ = std::asin(orientaion.x + rotY);
+		glm::quat totalRotation = rotationX * rotationY;
+		orientaion = glm::normalize(glm::vec3(totalRotation * glm::vec4(orientaion, 0.0f)));
 
-		if (upcomingX >= 0.0f && upcomingX <= 3.14159f && upcomingY >= -1.571f && upcomingY <= 1.571f)
-		{
-			orientaion = glm::normalize(glm::vec3(std::cos(upcomingX) * std::cos(upcomingY), std::sin(upcomingY), std::sin(upcomingX) * std::cos(upcomingY)));
-		}
-		if (upcomingZ >= 0.0f && upcomingZ <= 3.14159f && upcomingY >= -1.571f && upcomingY <= 1.571f)
-		{
-			orientaion = glm::normalize(glm::vec3(std::sin(upcomingZ) * std::cos(upcomingY), std::sin(upcomingY), -std::cos(upcomingZ) * std::cos(upcomingY)));
-		}*/
-		
-		
+	
+
 	}
+
 }

@@ -5,7 +5,7 @@
 #include "ViewCamera.h"
 #include <objMesh.h>
 #include <GameModel.h>
-
+class GameObject;
 enum MeshType
 {
     OBJ,
@@ -15,6 +15,7 @@ enum MeshType
 struct MeshRender
 {
     MeshType type;
+    std::vector<MW_Texture*> textures;
     MeshRender(){};
     virtual ~MeshRender(){};
 };
@@ -26,7 +27,7 @@ struct OBJ_MeshRenderer : public MeshRender
     public:
     OBJ_MeshRenderer(const char* filePath)
     {
-        mesh = new ObjMesh(filePath);
+        mesh = new ObjMesh(filePath, this);
         type = OBJ;
     };
      OBJ_MeshRenderer(MeshCreateInfo* createInfo)
@@ -39,10 +40,16 @@ struct OBJ_MeshRenderer : public MeshRender
     {
         mesh->Draw();
     };
-
-     void UpdateMesh(Material* mat, glm::mat4 transform, glm::quat rotation, glm::vec3 scale, ViewCamera* mainCamera)
+    void EnableTextures()
     {
-        mesh->UpdateMesh(mat, transform, rotation, scale, mainCamera);
+        for (int i = 0; i < textures.size(); i++)
+        {
+            textures[i]->Bind(i);
+        }
+    }
+     void UpdateMesh(Material* mat, GameObject* obj, ViewCamera* mainCamera)
+    {
+        mesh->UpdateMesh(mat, obj, mainCamera);
     }
 };
 

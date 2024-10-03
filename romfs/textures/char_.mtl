@@ -1,0 +1,111 @@
+# Blender 4.2.2 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl Beard_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd C:/Beard_Color.png
+map_Ks C:/Beard_Spec.png
+map_d C:/Beard_Color.png
+map_Bump -bm 1.000000 C:/Beard_Normal.png
+
+newmtl Body_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+map_Kd C:/Body_Color.png
+map_Ks C:/Body_Spec.png
+map_Bump -bm 1.000000 C:/Body_Normal.png
+
+newmtl Bracer_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd C:/Bracer_Color.png
+map_Ks C:/Bracer_Spec.png
+map_d C:/Bracer_Color.png
+map_Bump -bm 1.000000 C:/Bracer_Normal.png
+
+newmtl Eyes_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Kd 0.500000 0.500000 0.500000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+
+newmtl Hair_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd C:/Hair_Color.png
+map_Ks C:/Hair_Spec.png
+map_d C:/Hair_Color.png
+map_Bump -bm 1.000000 C:/Hair_Normal.png
+
+newmtl Sandals_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd C:/Sandals_Color.png
+map_Ks C:/Sandals_Spec.png
+map_d C:/Sandals_Color.png
+map_Bump -bm 1.000000 C:/Sandals_Normal.png
+
+newmtl Shield_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd C:/Shield_Color.png
+map_Ks C:/Shield_Spec.png
+map_d C:/Shield_Color.png
+map_Bump -bm 1.000000 C:/Shield_Normal.png
+
+newmtl Shoulder_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd C:/Shoulder_Color.png
+map_Ks C:/Shoulder_Spec.png
+map_d C:/Shoulder_Color.png
+map_Bump -bm 1.000000 C:/Shoulder_Normal.png
+
+newmtl Skirt_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd C:/Skirt_Color.png
+map_Ks C:/Skirt_Spec.png
+map_d C:/Skirt_Color.png
+map_Bump -bm 1.000000 C:/Skirt_Normal.png
+
+newmtl Sword_Mat
+Ns 63.117920
+Ka 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+map_Kd C:/Sword_Color.png
+map_Ks C:/Sword_Spec.png
+map_Bump -bm 1.000000 C:/Sword_Normal.png

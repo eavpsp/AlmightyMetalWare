@@ -6,6 +6,7 @@
 #include <VertexArray.h>
 #include <ViewCamera.h>
 
+class GameObject;
 class OBJ_MeshRenderer;
 struct MeshCreateInfo {
 	const char* filename;
@@ -18,7 +19,7 @@ public:
 	VertexArray *vertexArray;
 	VertexBuffer *vertexBuffer;
 	void Draw();
-	void UpdateMesh(Material* mat, glm::mat4 transform, glm::quat rotation, glm::vec3 scale, ViewCamera* mainCamera);
+	void UpdateMesh(Material* mat, GameObject* obj, ViewCamera* mainCamera);
 	ObjMesh(MeshCreateInfo* createInfo);
 	ObjMesh(const char* filePath, OBJ_MeshRenderer* meshRender);
 	~ObjMesh();

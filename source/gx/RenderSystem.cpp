@@ -36,9 +36,9 @@ void RenderSystem::render(GameObject *gameObject)//send in program and vao id ar
         //gameObject->material->shader->SetUniform3F("u_LightPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
         pointLight->light_Material->shader->SetUniform4F("u_LightColor",  pointLight->lightColor.x, pointLight->lightColor.y, pointLight->lightColor.z, pointLight->lightColor.w);
 
-        glUseProgram(gameObject->material->shader->getShaderInterface()->getProgramHandle());
-        gameObject->material->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
-        mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->shader, "camMatrix");
+       // glUseProgram(gameObject->material->shader->getShaderInterface()->getProgramHandle());
+      //  gameObject->material->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
+        //mainCamera->Matrix(gameObject->material->shader, "camMatrix");
 
         
         
@@ -59,7 +59,7 @@ void RenderSystem::RenderLights()
     }
     glUseProgram(pointLight->light_Material->shader->getShaderInterface()->getProgramHandle());
     pointLight->light_Material->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
-    mainCamera->Matrix(45.0f,0.1f,100.0f, pointLight->light_Material->shader, "camMatrix");
+    mainCamera->Matrix(pointLight->light_Material->shader, "camMatrix");
 }
 void RenderSystem::SwapBuffers()
 {

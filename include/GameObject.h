@@ -45,13 +45,8 @@ class GameObject : public EngineObject
                 newObject->rotation = _rotation;
                 newObject->scale = _scale;
                 newObject->objectModel = gameModel;
-                //should init transform as well
                 newObject->transform = glm::mat4(1.0f);
-                newObject->transform = glm::translate(newObject->transform, newObject->position);
-                newObject->transform = glm::rotate(newObject->transform, glm::radians(_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-                newObject->transform = glm::rotate(newObject->transform, glm::radians(_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-                newObject->transform = glm::rotate(newObject->transform, glm::radians(_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-                newObject->transform = glm::scale(newObject->transform, _scale);
+
                 newObject->name = _name;
                
                 newObject->onInit();

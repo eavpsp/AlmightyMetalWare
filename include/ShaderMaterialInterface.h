@@ -116,7 +116,7 @@ struct ColorMaterial : public ShaderMaterialInterface
             };
             ~LitMaterial(){};
     };
-
+ 
     struct DirectionalLightMaterial : public Material
     {
         public:
