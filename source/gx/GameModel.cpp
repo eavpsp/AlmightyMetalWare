@@ -60,6 +60,13 @@ void GameModel::GenereteVertexBuffer()
 	debugLog("GameModel.cpp: Vertex Buffer Generated");
 }
 
+void GameModel::Draw()
+{
+	vertexArray->Bind();
+    glDrawElements(GL_TRIANGLES, vertexArray->buffersInArray.at(0).ib->getCount(), GL_UNSIGNED_INT, 0);
+    vertexBuffer->UnBind();
+    vertexArray->UnBind();
+}
 GameModel::GameModel(const char *FILENAME) // add custom shader types
 {
 	vertexArray = new VertexArray(); //create VAO for binding and drawing

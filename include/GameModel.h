@@ -60,6 +60,7 @@ class GameModel
 		std::vector<glm::mat4> matricesMeshes;
 		VertexArray *vertexArray;
 		VertexBuffer *vertexBuffer;
+		void Draw();
 		void GenereteVertexBuffer();
         GameModel(const char* filename);
         GameModel(){};

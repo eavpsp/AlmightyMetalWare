@@ -120,15 +120,12 @@ void ResourceManager::initResourceManager()
 
     gameObjects = new std::vector<GameObject *>;
 
-    /*GameModel* modelTest = new GameModel("romfs:/test3.gltf");
+    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/owl/owl.obj");
     Material *mat = new LitMaterial();
-    TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     gameObjects->push_back(obj1);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    GameModel*  modelTest2 = new GameModel("romfs:/cube.gltf");
-    Material * mat2 = new LitMaterial();
-    GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(mat2, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
-    //gameObjects->push_back(obj2);*/
+    
 
    
 

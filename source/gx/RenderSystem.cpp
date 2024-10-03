@@ -28,12 +28,7 @@ void RenderSystem::render(GameObject *gameObject)//send in program and vao id ar
     {
         
         //Create our lights
-        pointLight = new PointLight();
-        glUseProgram(pointLight->light_Material->shader->getShaderInterface()->getProgramHandle());
-        pointLight->transform = glm::translate(pointLight->transform, glm::vec3(5.0f, 0.0f, 0.0f));
-        pointLight->light_Material->shader->SetUniformMat4F("model", pointLight->transform);
-        pointLight->light_Material->shader->SetUniform4F("u_LightColor",  pointLight->lightColor.x, pointLight->lightColor.y, pointLight->lightColor.z, pointLight->lightColor.w);
-        sceneStart = true;
+              sceneStart = true;
     }
  
         gameObject->material->shader->SetUniform4F("u_LightColor",  0.0f, 0.0f, 0.0f, 0.0f);
@@ -44,7 +39,6 @@ void RenderSystem::render(GameObject *gameObject)//send in program and vao id ar
         glUseProgram(gameObject->material->shader->getShaderInterface()->getProgramHandle());
         gameObject->material->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
         mainCamera->Matrix(45.0f,0.1f,100.0f, gameObject->material->shader, "camMatrix");
-        gameObject->DrawObjectModel();//DRAW CALL//
 
         
         
@@ -54,10 +48,10 @@ void RenderSystem::RenderLights()
 {
     if(!lightScene)
     {
-      
-        //Create our lights
-       
+        pointLight = new PointLight();
         glUseProgram(pointLight->light_Material->shader->getShaderInterface()->getProgramHandle());
+        pointLight->transform = glm::translate(pointLight->transform, glm::vec3(5.0f, 0.0f, 0.0f));
+         //Create our lights
         pointLight->light_Material->shader->SetUniformMat4F("model", pointLight->transform);
         pointLight->light_Material->shader->SetUniform4F("u_LightColor",  pointLight->lightColor.x, pointLight->lightColor.y, pointLight->lightColor.z, pointLight->lightColor.w);
         debugLog("Created Point Light");

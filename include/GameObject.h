@@ -5,6 +5,7 @@
 #include <ShaderMaterialInterface.h>
 #include "MeshData.h"
 #include "GameModel.h"
+#include "MeshRender.h"
 
 /**
  * @file GameObject.h
@@ -19,13 +20,19 @@ class GameObject : public EngineObject
         std::vector<GameObject*> children;
         void onInit() override;
         void onDestroy() override;
+
     public:
         //base model data
         Material *material;
-        GameModel *objectModel;
+        MeshRender *objectModel;
+        void DrawGLTF();
+        void DrawMesh();
+        void DrawOBJ();
+        void UpdateOBJ();
+        void UpdateMesh();
         ///
         template <typename T>
-        static T* InstantiateGameObject(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, GameModel *gameModel, std::string _name = "GameObject")
+        static T* InstantiateGameObject(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject")
         {
             if (!std::is_base_of<EngineObject, T>::value) {
                 // Error: T is not a derived class of EngineObject
@@ -46,11 +53,11 @@ class GameObject : public EngineObject
                 newObject->transform = glm::rotate(newObject->transform, glm::radians(_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
                 newObject->transform = glm::scale(newObject->transform, _scale);
                 newObject->name = _name;
-                
+               
                 newObject->onInit();
                 return newObject;
         }
-        void DrawObjectModel();
+        void UpdateGLTF();
         void AddChild(GameObject *child);
         GameObject *GetChild(int index);
         int GetChildrenCount();

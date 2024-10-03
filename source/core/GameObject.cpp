@@ -1,7 +1,10 @@
 #include "GameObject.h"
 #include "../debug/debug.h"
+
+#include <RenderSystem.h>
 extern std::vector<GameObject *> *GameObjects;
 extern std::vector<EngineObject *> *GraphicsObjects;
+extern RenderSystem *gameRenderSystem;
 /**
  * @brief Draws the game object's model
  *
@@ -10,30 +13,66 @@ extern std::vector<EngineObject *> *GraphicsObjects;
  *
  * @return None
  */
-void GameObject::DrawObjectModel()
+
+void GameObject::DrawMesh()
+{
+    //switch
+    switch (objectModel->type)
+    {
+    case MeshType::OBJ:
+            DrawOBJ();
+        /* code */
+        break;
+    
+    default:
+        DrawGLTF();
+        break;
+    }
+    onDraw();
+
+}
+
+void GameObject::UpdateMesh()
+{
+    switch (objectModel->type)
+    {
+        case MeshType::OBJ:
+
+            UpdateOBJ();
+            break;
+
+        default:
+        
+            UpdateGLTF();
+            break;
+    }
+}
+//GLTF
+void GameObject::UpdateGLTF()
 {
     //send base object postion relative to meshes
     //get game model
     //start shader program
     //get vao
     //bind textures
-    if(objectModel == nullptr )//has va?
+    GLTF_MeshRenderer *meshRenderer = (GLTF_MeshRenderer*)objectModel;
+    if(meshRenderer == nullptr )//has va?
     {
         debugLog("no model ");
         return;
     }
-    else if(objectModel->vertexArray == nullptr ){
+    else if(meshRenderer->mesh->vertexArray == nullptr ){
         debugLog("no va ");
         return;
     }
-    else if(objectModel->meshes.size() == 0)
+    else if(meshRenderer->mesh->meshes.size() == 0)
     {
         debugLog("no meshes ");
         return;
     }
-    objectModel->vertexArray->Bind();
+    meshRenderer->mesh->vertexArray->Bind();
 
-    for (int i = 0; i < objectModel->meshes.size(); i++)
+    for (int i = 0; i < meshRenderer->mesh->meshes.size(); i++)
     {
         //bind texture
        
@@ -42,7 +81,7 @@ void GameObject::DrawObjectModel()
         glUseProgram(material->shader->getShaderInterface()->getProgramHandle());
         //set uniforms
        
-        if(objectModel->meshes.at(i).shaderType == ShaderType::LIT) //lit material
+        if(meshRenderer->mesh->meshes.at(i).shaderType == ShaderType::LIT) //lit material
         {
             LitMaterial *m_mat = (LitMaterial*)material;
             m_mat->UpdateModelShader(transform);
@@ -61,53 +100,74 @@ void GameObject::DrawObjectModel()
             glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "translation"), 1, GL_FALSE, glm::value_ptr(trans));
             glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "rotation"), 1, GL_FALSE, glm::value_ptr(rot));
             glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "scale"), 1, GL_FALSE, glm::value_ptr(sca));
-            glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "model"), 1, GL_FALSE, glm::value_ptr(objectModel->matricesMeshes.at(i)));  
+            glUniformMatrix4fv(glGetUniformLocation(m_mat->shader->getShaderInterface()->getProgramHandle(), "model"), 1, GL_FALSE, glm::value_ptr(trans));  
         
            
         }
-        else if(objectModel->meshes.at(i).shaderType == ShaderType::LIGHT_OBJ) //light object material
+        else if(meshRenderer->mesh->meshes.at(i).shaderType == ShaderType::LIGHT_OBJ) //light object material
         {
             LightObjectMaterials *m_mat = (LightObjectMaterials*)material;
             m_mat->UpdateModelShader(transform);
             
         }
-        else if(objectModel->meshes.at(i).shaderType == ShaderType::TEX_UNLIT) //image material
+        else if(meshRenderer->mesh->meshes.at(i).shaderType == ShaderType::TEX_UNLIT) //image material
         {
             ImageMaterial *m_mat = (ImageMaterial*)material;
             m_mat->UpdateModelShader(transform);
 
         }
         
-        if( objectModel->meshes.at(i).textures.size() != 0)
+        if( meshRenderer->mesh->meshes.at(i).textures.size() != 0)
         {
-            for(int j = 0; j < objectModel->meshes.at(i).textures.size(); j++)
+            for(int j = 0; j < meshRenderer->mesh->meshes.at(i).textures.size(); j++)
             {
-            objectModel->meshes.at(i).textures.at(j).Bind(j);
+            meshRenderer->mesh->meshes.at(i).textures.at(j).Bind(j);
 
             }
 
         }
         
            //
-        
-    glDrawElements(GL_TRIANGLES, objectModel->vertexArray->buffersInArray.at(0).ib->getCount(), GL_UNSIGNED_INT, 0);
-     if( objectModel->meshes.at(i).textures.size() != 0)
+   
+     if( meshRenderer->mesh->meshes.at(i).textures.size() != 0)
         {
-            for(int j = 0; j < objectModel->meshes.at(i).textures.size(); j++)
+            for(int j = 0; j < meshRenderer->mesh->meshes.at(i).textures.size(); j++)
             {
-            objectModel->meshes.at(i).textures.at(j).UnBind();
+            meshRenderer->mesh->meshes.at(i).textures.at(j).UnBind();
 
             }
 
         }   
-    objectModel->vertexArray->UnBind();
+    meshRenderer->mesh->vertexBuffer->UnBind();
+    meshRenderer->mesh->vertexArray->UnBind();
     
     }
    
     //draw vbo
     //with ibo
-    onDraw();
 }
+
+void GameObject::DrawGLTF()
+{
+    GLTF_MeshRenderer *meshRenderer = (GLTF_MeshRenderer*)objectModel;
+    meshRenderer->Draw();
+  
+}
+
+//OBJ
+void GameObject::DrawOBJ()
+{
+    OBJ_MeshRenderer *meshRender = (OBJ_MeshRenderer*)objectModel;
+    meshRender->Draw();
+}
+
+
+void GameObject::UpdateOBJ()
+{
+    OBJ_MeshRenderer *mesh = (OBJ_MeshRenderer*)objectModel;
+    mesh->UpdateMesh(material, transform, rotation, scale, gameRenderSystem->mainCamera);       
+}
+
 
 void GameObject::AddChild(GameObject *child)
 {
