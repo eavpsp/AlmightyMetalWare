@@ -2,7 +2,16 @@
 #include <tiny_obj_loader.h>
 #include <iostream>
 #include "../../debug/debug.h"
-std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm::mat4 preTransform) 
+#include <MeshRender.h>
+
+std::string util::get_filename(const std::string& path) {
+    size_t pos = path.find_last_of('/');
+    if (pos == std::string::npos) {
+        return path;
+    }
+    return path.substr(pos + 1);
+}
+std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm::mat4 preTransform, OBJ_MeshRenderer* meshRender) 
 {
 	
 	std::vector<VertexLit> vertices;
@@ -11,10 +20,15 @@ std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm:
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
 	std::string warning, error;
-
+	
 	if (!tinyobj::LoadObj(&attributes, &shapes, &materials, &error, filename, "romfs:/")) 
 	{
    	 	debugLog("Error: %s", error.c_str());
+	}
+	//
+	for (const auto& mat : materials) 
+	{
+		debugLog("Material: %s", get_filename(mat.diffuse_texname).c_str());
 	}
 	for (const auto& shape : shapes) 
 	{
@@ -27,9 +41,7 @@ std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm:
 				glm::vec3(attributes.normals[3 * index.normal_index],attributes.normals[3 * index.normal_index + 1],attributes.normals[3 * index.normal_index + 2]),
 				glm::vec2(attributes.texcoords[2 * index.texcoord_index],attributes.texcoords[2 * index.texcoord_index + 1])
 			};
-			debugLog("Vertex: %f %f %f", vert.position.x, vert.position.y, vert.position.z);
-			debugLog("Normal: %f %f %f", vert.normal.x, vert.normal.y, vert.normal.z);
-			debugLog("TexCoord: %f %f", vert.texUV.x, vert.texUV.y);
+
 			vertices.push_back(vert);
 		}
 
@@ -68,6 +80,7 @@ std::vector<float> util::load_model_from_file(const char* filename, glm::mat4 pr
 	if (!tinyobj::LoadObj(&attributes, &shapes, &materials, &error, filename, "romfs:/")) {
    	 debugLog("Error: %s", error.c_str());
 	}
+	
 	for (const auto& shape : shapes) {
 		for (const auto& index : shape.mesh.indices) {
 

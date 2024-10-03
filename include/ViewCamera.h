@@ -18,10 +18,10 @@ class ViewCamera : public EngineObject
         float width, height;
         float speed = 0.1f;
         float sensitivity = 5.0f;  
-        void Matrix(float fovDef, float nearPlane, float farPlane, ShaderMaterialInterface *shaderInterface, const char *uniform);
+        void Matrix(ShaderMaterialInterface *shaderInterface, const char *uniform);
         void Inputs(u32 currentInput);
         void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
 };
 
-
+//
 #endif

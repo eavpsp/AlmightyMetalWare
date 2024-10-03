@@ -7,10 +7,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <VertexBuffer.h>
 
+class OBJ_MeshRenderer;
 namespace util 
 {
 	std::vector<float> load_model_from_file(const char* filename, glm::mat4 preTransform);
-	std::vector<VertexLit> load_model_from_file_obj(const char* filename, glm::mat4 preTransform);
+	std::vector<VertexLit> load_model_from_file_obj(const char* filename, glm::mat4 preTransform, OBJ_MeshRenderer* meshRender);
+	std::string get_filename(const std::string& path);
 };
 
 #endif

@@ -33,7 +33,8 @@ custom z-lib compression for game data
 //////
 /*
 Todo:
-Finish Lights
+Finish Lights - Done
+Fix Camera -
 Batch Render Lights, Static Objects, Textures, Dynamic Objects, Skybox, Colors 
 Animation system
 Add Skybox

@@ -5,6 +5,8 @@
 #include <ShaderMaterialInterface.h>
 #include <VertexArray.h>
 #include <ViewCamera.h>
+
+class OBJ_MeshRenderer;
 struct MeshCreateInfo {
 	const char* filename;
 	glm::mat4 preTransform;
@@ -18,7 +20,7 @@ public:
 	void Draw();
 	void UpdateMesh(Material* mat, glm::mat4 transform, glm::quat rotation, glm::vec3 scale, ViewCamera* mainCamera);
 	ObjMesh(MeshCreateInfo* createInfo);
-	ObjMesh(const char* filePath);
+	ObjMesh(const char* filePath, OBJ_MeshRenderer* meshRender);
 	~ObjMesh();
 };
 

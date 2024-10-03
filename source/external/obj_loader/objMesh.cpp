@@ -28,10 +28,10 @@ ObjMesh::ObjMesh(MeshCreateInfo* createInfo)
 
 	
 }
-ObjMesh::ObjMesh(const char* fileName) 
+ObjMesh::ObjMesh(const char* fileName, OBJ_MeshRenderer* meshRender) 
 {
 
-	std::vector<VertexLit> vertices = util::load_model_from_file_obj(fileName, glm::mat4(1.0f));
+	std::vector<VertexLit> vertices = util::load_model_from_file_obj(fileName, glm::mat4(1.0f), meshRender);
 	vertexCount = vertices.size();
     vertexArray = new VertexArray();
     vertexArray->Bind();
@@ -62,6 +62,8 @@ void ObjMesh::Draw()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+
 void ObjMesh::UpdateMesh(Material* mat, glm::mat4 transform, glm::quat rotation, glm::vec3 scale, ViewCamera *mainCamera) 
 {
     glm::quat rotationQuat = glm::quat(rotation);
@@ -77,11 +79,12 @@ void ObjMesh::UpdateMesh(Material* mat, glm::mat4 transform, glm::quat rotation,
     mat->shader->SetUniform4F("u_LightColor",  1.0f, 1.0f, 1.0f, 1.0f);
     mat->shader->SetUniform3F("u_LightPos", 1, 1, 1);
     mat->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
-    mainCamera->Matrix(45.0f,0.1f,100.0f, mat->shader, "camMatrix");
+    mainCamera->Matrix(mat->shader, "camMatrix");
    
     
   
-}ObjMesh::~ObjMesh() 
+}
+ObjMesh::~ObjMesh() 
 {
 	vertexArray->~VertexArray();
     vertexBuffer->~VertexBuffer();
