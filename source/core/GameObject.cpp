@@ -241,3 +241,45 @@ GameObject::GameObject()
     delete material;
 
 }
+
+GameObject *GameObject::CreateCylinder(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, std::string _name)
+{
+    OBJ_MeshRenderer *model = new OBJ_MeshRenderer("romfs:/models/prim/cylinder.obj");
+    
+    return GameObject::InstantiateGameObject<GameObject>(mat, _position, _rotation, _scale, model, _name);
+}
+
+GameObject *GameObject::CreateTorus(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, std::string _name)
+{
+     OBJ_MeshRenderer *model = new OBJ_MeshRenderer("romfs:/models/prim/torus.obj");
+    
+    return GameObject::InstantiateGameObject<GameObject>(mat, _position, _rotation, _scale, model, _name);
+}
+
+GameObject *GameObject::CreateCapsule(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, std::string _name)
+{
+    OBJ_MeshRenderer *model = new OBJ_MeshRenderer("romfs:/models/prim/capsule.obj");
+    
+    return GameObject::InstantiateGameObject<GameObject>(mat, _position, _rotation, _scale, model, _name);
+}
+
+GameObject *GameObject::CreateCone(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, std::string _name)
+{
+     OBJ_MeshRenderer *model = new OBJ_MeshRenderer("romfs:/models/prim/cone.obj");
+    
+    return GameObject::InstantiateGameObject<GameObject>(mat, _position, _rotation, _scale, model, _name);
+}
+
+GameObject *GameObject::CreateCube(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, std::string _name)
+{
+     OBJ_MeshRenderer *model = new OBJ_MeshRenderer("romfs:/models/prim/cube.obj");
+    
+    return GameObject::InstantiateGameObject<GameObject>(mat, _position, _rotation, _scale, model, _name);
+}
+
+GameObject *GameObject::CreateSphere(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, std::string _name)
+{
+     OBJ_MeshRenderer *model = new OBJ_MeshRenderer("romfs:/models/prim/sphere.obj");
+    
+    return GameObject::InstantiateGameObject<GameObject>(mat, _position, _rotation, _scale, model, _name);
+}

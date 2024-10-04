@@ -78,6 +78,24 @@ struct ColorMaterial : public ShaderMaterialInterface
         std::string name;
         ShaderMaterialInterface *shader;
     };
+    struct SkyBoxMaterial : public Material
+    {
+        //projection and view
+        void UpdateProjectionShader(glm::mat4 projMtx, glm::mat4 viewMtx)
+        {
+            shader->SetUniformMat4F("projection", projMtx);
+            shader->SetUniformMat4F("view", viewMtx);
+        };
+
+        SkyBoxMaterial() 
+        {
+            name = "Sky Box Material";
+            ShaderInterface *font_shader = new ShaderInterface("romfs:/shaders/Skybox.vs", "romfs:/shaders/Skybox.fs");
+            shader = new ShaderMaterialInterface();
+            shader->SetUpShader(name, font_shader);
+        };
+        ~SkyBoxMaterial(){};
+    };
 
     struct GameFontMaterial : public Material
     {

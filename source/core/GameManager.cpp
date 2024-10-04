@@ -61,16 +61,9 @@ void GameManager::renderLoop()
     //_renderSystem->RenderLights();
 
     //update to use resoucrce manager stored vao batches
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(_resourceManager->_gameScene->sceneColor.x, _resourceManager->_gameScene->sceneColor.y, _resourceManager->_gameScene->sceneColor.z, _resourceManager->_gameScene->sceneColor.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //ONLY DRAWS HERE
-    for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
-    {
-        _resourceManager->gameObjects->at(i)->UpdateMesh();
-          
-    }
-    //UI SCOPE
+     //UI SCOPE
     {
         _resourceManager->_gameFont->RenderTextFormat("obj 1 pos: %f %f %f", 
         glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1),
@@ -85,6 +78,14 @@ void GameManager::renderLoop()
          _renderSystem->mainCamera->position.x, _renderSystem->mainCamera->position.y, _renderSystem->mainCamera->position.z);
 
     }
+    //ONLY DRAWS HERE
+    for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
+    {
+        _resourceManager->gameObjects->at(i)->UpdateMesh();
+        //skybox
+       
+    }
+   // _resourceManager->_gameScene->skybox->RenderSkybox();
         
      _renderSystem->SwapBuffers();
         

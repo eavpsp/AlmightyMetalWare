@@ -5,6 +5,7 @@
 #include <EngineMaterials.h>    
 #include "GameObject.h"
 #include <GameFont.h>
+#include "GameScene.h"
 
 class ResourceManager
 {
@@ -19,6 +20,7 @@ class ResourceManager
     //make sure to init in initResourceManagers//
     GLuint s_vao_Default, s_vao_Lit, s_vao_Unlit, s_vao_3D, s_vao_2D, fontAtlasID;
     GameFont *_gameFont;
+    GameScene *_gameScene;
     void initResourceManager();
     std::vector<ShaderInterface *> *getShaderArray();
     std::vector<VertexBuffer *> *getVertexArray();

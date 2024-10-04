@@ -20,8 +20,7 @@
 #include <GameObject.h>
 #include <ViewCamera.h>
 // nintendo switch screen width and height
-const float SCREEN_WIDTH = 1280.0f;
-const float SCREEN_HEIGHT = 720.0f;
+
 enum RenderProjectionMode{ORTHOGRAPHIC, PERSPECTIVE};
 class RenderSystem
 {
@@ -49,7 +48,8 @@ class RenderSystem
 		void destroyRenderSystem();
 		ViewCamera *mainCamera, *uiCamera;
 		glm::mat4 ortho_projection, perspective_projection;
-
+		const float SCREEN_WIDTH = 1280.0f;
+		const float SCREEN_HEIGHT = 720.0f;
 		void SwapBuffers();
 		void RenderLights();
 

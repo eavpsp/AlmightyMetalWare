@@ -4,6 +4,8 @@
 #include "GameShapes.h"
 #include "ScriptCallbacks.h"
 #include <TestGameObject.h>
+
+#include <mwmath.h>
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
@@ -17,47 +19,20 @@ ResourceManager::~ResourceManager()
     }
     delete vertexArrays;
 }
-    VertexLit Square[] =
-    {
-        { { -50.0f, -50.0f, 0.0f }, { 1.0f, 0.0f, 0.0f } , { 0.0f, 0.0f } },//bottom left
-        { { 50.0f, -50.0f, 0.0f }, { 0.0f, 1.0f, 0.0f } , { 1.0f, 0.0f } },//bottom right
-        { { 50.0f, 50.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } , { 1.0f, 1.0f } },//top right
-        { { -50.0f, 50.0f, 0.0f }, { 1.0f, 1.0f, 0.0f } , { 0.0f, 1.0f } },//top left
-    };
 
-     GLuint indices[] =
-    {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    VertexLit Pyramid[] =
-    { //     COORDINATES     /        COLORS      /   TexCoord  //
-        {{-0.5f, 0.0f,  0.5f},     {0.83f, 0.70f, 0.44f},	{0.0f, 0.0f}},
-        {{-0.5f, 0.0f, -0.5f},     {0.83f, 0.70f, 0.44f},	{5.0f, 0.0f}},
-        {{ 0.5f, 0.0f, -0.5f},     {0.83f, 0.70f, 0.44f},	{0.0f, 0.0f}},
-        {{ 0.5f, 0.0f,  0.5f},     {0.83f, 0.70f, 0.44f},	{5.0f, 0.0f}},
-        {{ 0.0f, 0.8f,  0.0f},     {0.92f, 0.86f, 0.76f},	{2.5f, 5.0f}}
-    };
-
-// Indices for vertices order
-GLuint s_indices[] =
-{
-	0, 1, 2,
-	0, 2, 3,
-	0, 1, 4,
-	1, 2, 4,
-	2, 3, 4,
-	3, 0, 4
-};
 
 void ResourceManager::initResourceManager()
 {
     //set up materials
     _engineMaterials = EngineMaterials::getEngineMaterialsClass();
     _engineMaterials.initEngineMaterials();
+    //Set up font
     _gameFont = new GameFont("romfs:/gameFonts/mp1m.ttf", 32);
+    //set up Game Scene and Skybox
+    
+    SceneSkybox *skybox = new SceneSkybox();//load default skybox
 
+    _gameScene = new GameScene(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f), skybox);
    //Objects must use the same shader to draw into the scene at its own positions
    //this is because the shader program stores uniform data such as camera position and view matrix
    //since this is how the camera references positions, the objects can use the same shader
@@ -65,9 +40,8 @@ void ResourceManager::initResourceManager()
 
     gameObjects = new std::vector<GameObject *>;
 
-    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/prim/sphere.obj");
-
-    GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f,0.0f), glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    glm::vec3 pos = glm::vec3(MW_Math::Random(0.0f,5.0f), 0.0f, 0.0f);
+    GameObject *obj1 = GameObject::CreateCapsule(_engineMaterials.getLightMaterial(), pos, glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     
     OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/owl.obj"); //object model name or sha hash buffer for dupes
 

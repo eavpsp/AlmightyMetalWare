@@ -73,7 +73,8 @@
                 "${workspaceFolder}/source/**",
                 "${workspaceFolder}/game/objects/**",
                 "${workspaceFolder}/source/external/obj_loader/**",
-                "${workspaceFolder}/source/debug/**"
+                "${workspaceFolder}/source/debug/**",
+                "${workspaceFolder}/game/objects"
             ],
             "defines": [
                 "\"__SWITCH__\"",

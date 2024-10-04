@@ -64,11 +64,12 @@ class GameObject : public EngineObject
         GameObject();
         virtual ~GameObject();
         //Draw Primatives
-        static GameObject* CreateSphere(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject_Sphere");
-        static GameObject* CreateCube(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject_Cube");
-        static GameObject* CreateCylinder(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject_Cylinder");
-        static GameObject* CreateCone(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject_Cone");
-        static GameObject* CreateTorus(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject_Torus");
+        static GameObject* CreateSphere(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale,  std::string _name = "GameObject_Sphere");
+        static GameObject* CreateCube(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale,  std::string _name = "GameObject_Cube");
+        static GameObject* CreateCylinder(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale,  std::string _name = "GameObject_Cylinder");
+        static GameObject* CreateCone(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale,  std::string _name = "GameObject_Cone");
+        static GameObject* CreateTorus(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale,  std::string _name = "GameObject_Torus");
+        static GameObject* CreateCapsule(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale,  std::string _name = "GameObject_Capsule");
 
     };
 

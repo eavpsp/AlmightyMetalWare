@@ -9,21 +9,19 @@
 
 
 /*
-///Things
+/Things
 Create Debug Logger (Done)
 Batch Rendering (Needs system but understand how to do it)
 Create Mesh System using blender + unity or just blender(Done)
 Add nullptr checks to all funcs
-//setup threads for game , physics, audio, input, and render
-//metadata for materials and other game objects ofc
-//font system
-//texture atlas
-//shaders to manage batching
-//set max buffer size
-//proper camera controls
-//multiple vao buffers
-//use arrays for static objects
+setup threads for game , physics, audio, input, and render (maybe)
+metadata for materials and other game objects ofc
+shaders to manage batching
+set max buffer size
+proper camera controls
+use arrays for static objects
 custom z-lib compression for game data
+create scene object that stores level metadata bg color and skybox textures
 */
 
 
@@ -35,15 +33,20 @@ Fix Camera - Done
 Fix Texture Loading - Done
 UI - Font - Done
 UI - Icons - WIP
-Primitive Shape Library - WIP
-Framebuffers
-Batch Render Lights, Static Objects, Textures, Dynamic Objects, Skybox, Colors 
-Animation system
-Add Skybox
-Physics system
+Primitive Shape Library - Done
+Batch Render Lights 
+Static Objects - Done
+Textures - Normals, Spec, Roughness, AA
+Dynamic Objects -> Animation System
+Skybox - Done
+Colors - Red, Green, Blue, White, Yellow, Black, Orange, Purple
+Animation system - Animation Controller
+Physics system - bullet or homemade
+Particle system - 
 Audio system
 Input system - Detailed
 Video system
+Framebuffers
 Post Processing
 
 //THREADS
