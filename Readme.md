@@ -17,4 +17,5 @@ Thank you for your interest in the Almighty Metal Engine. We hope that it will b
 Sincerely,
 
 The Almighty Metal Engine Team
-![Almighty Metal Engine](https://github.com/eavpsp/AlmightyMetalWare/blob/main/romfs/tex.bmp)
+-Putting the holy spirit into computing! 
+[Almighty Metal Engine](https://github.com/eavpsp/AlmightyMetalWare/blob/main/amw_icon.png)
