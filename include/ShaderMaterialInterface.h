@@ -125,6 +125,7 @@ struct ColorMaterial : public ShaderMaterialInterface
     struct LitMaterial : public Material
     {
         public:
+
             void UpdateModelShader(glm::mat4 modelMtx)
             {
                 shader->SetUniformMat4F("model", modelMtx);

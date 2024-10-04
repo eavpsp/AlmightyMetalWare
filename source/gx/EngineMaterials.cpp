@@ -3,9 +3,10 @@
 #include <EngineMaterials.h>
 #include "../debug/debug.h"
 
-ShaderMaterialInterface *EngineMaterials::getLightMaterial()
+
+Material *EngineMaterials::getLightMaterial()
 {
-    return  &_lightMaterial;
+    return  _lightMaterial;
 }
 
 ShaderMaterialInterface *EngineMaterials::getColorMaterial()
@@ -31,7 +32,7 @@ void EngineMaterials::initEngineMaterials()
     ShaderInterface *light_shader = new ShaderInterface("romfs:/shaders/SimpleLightShader.vs", "romfs:/shaders/SimpleLightShader.fs");
     ShaderInterface *light_object_shader = new ShaderInterface("romfs:/shaders/GlobalLight.vs", "romfs:/shaders/GlobalLight.fs");
     _colorMaterial.SetUpShader("ColorMaterial", color_shader);
-    _lightMaterial.SetUpShader("LightMaterial", light_shader);
+    _lightMaterial = new LitMaterial();
     _lightObjectMaterial.SetUpShader("LightObjectMaterial", light_object_shader);
     _gameFontMaterial = new GameFontMaterial();
    

@@ -61,13 +61,13 @@ void ResourceManager::initResourceManager()
    
     gameObjects = new std::vector<GameObject *>;
 
-    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/owl.obj");
-    Material *mat = new LitMaterial();
-    GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(mat, glm::vec3(1.0f, 2.0f, 5.0f), glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/cube.obj");
+
+    GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f,0.0f), glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     
-    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/owl.obj");
-    Material *mat2 = new LitMaterial();
-    GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
+    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/owl.obj"); //object model name or sha hash buffer for dupes
+
+    GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(10.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     gameObjects->push_back(obj1);
     gameObjects->push_back(obj2);

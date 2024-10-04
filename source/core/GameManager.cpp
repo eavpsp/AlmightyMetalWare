@@ -71,10 +71,21 @@ void GameManager::renderLoop()
         _resourceManager->gameObjects->at(i)->UpdateMesh();
        
         _resourceManager->gameObjects->at(i)->DrawMesh();
+
           
     }
 
-    _resourceManager->_gameFont->RenderText("Hello World", glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1));
+        _resourceManager->_gameFont->RenderTextFormat("obj 1 pos: %f %f %f", 
+        glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1),
+         _resourceManager->gameObjects->at(0)->position.x, _resourceManager->gameObjects->at(0)->position.y, _resourceManager->gameObjects->at(0)->position.z);
+       
+        _resourceManager->_gameFont->RenderTextFormat("obj 2 pos: %f %f %f", 
+        glm::vec2(0.0f, 50.0f), 1.0f, glm::vec3(1,1,1),
+        _resourceManager->gameObjects->at(1)->position.x, _resourceManager->gameObjects->at(1)->position.y, _resourceManager->gameObjects->at(1)->position.z);
+       
+        _resourceManager->_gameFont->RenderTextFormat("cam pos: %f %f %f", 
+        glm::vec2(0.0f, 100.0f), 1.0f, glm::vec3(1,1,1),
+         _renderSystem->mainCamera->position.x, _renderSystem->mainCamera->position.y, _renderSystem->mainCamera->position.z);
 
      _renderSystem->SwapBuffers();
         

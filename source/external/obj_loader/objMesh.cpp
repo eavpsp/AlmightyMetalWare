@@ -1,7 +1,7 @@
 #include "objMesh.h"
 #include <glad/glad.h>
 #include <GameObject.h>
-ObjMesh::ObjMesh(MeshCreateInfo* createInfo) 
+ObjMesh::ObjMesh(MeshCreateInfo* createInfo) //Not Used
 {
 
 	std::vector<float> vertices = 
@@ -10,18 +10,13 @@ ObjMesh::ObjMesh(MeshCreateInfo* createInfo)
     vertexArray = new VertexArray();
     vertexArray->Bind();
 	vertexBuffer = new VertexBuffer();
-    //VertexLit elem = 24 bytes
-    //3, 2, 3 elm
-  
+
     vertexBuffer->initVertexBuffer(&vertices.data()[0], (GLsizei)(vertices.size() * sizeof(float)), ShaderType::LIT, vertexCount);
     VertexBufferLayout layout;
     layout.AddElement(GL_FLOAT, 3, GL_FALSE);
     layout.AddElement(GL_FLOAT, 2, GL_FALSE);
     layout.AddElement(GL_FLOAT, 3, GL_FALSE);
     vertexArray->AddBuffer(*vertexBuffer,layout);
-
-////
-	//pos: 0, texcoord: 1, normal: 2
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -36,38 +31,27 @@ ObjMesh::ObjMesh(const char* fileName, OBJ_MeshRenderer* meshRender)
     vertexArray = new VertexArray();
     vertexArray->Bind();
 	vertexBuffer = new VertexBuffer();
-    //VertexLit elem = 24 bytes
-    //3, 2, 3 elm
-  
     vertexBuffer->initVertexBuffer(vertices.data(), (vertices.size() * sizeof(VertexLit)), ShaderType::LIT, vertexCount);
     VertexBufferLayout layout;
     layout.AddElement(GL_FLOAT, 3, GL_FALSE);
     layout.AddElement(GL_FLOAT, 3, GL_FALSE);
     layout.AddElement(GL_FLOAT, 2, GL_FALSE);
     vertexArray->AddBuffer(*vertexBuffer,layout);
-
-
-	//pos: 0, texcoord: 1, normal: 2
-
     glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 	
 }
 void ObjMesh::Draw()
 {
   
-    vertexArray->Bind();
-    vertexBuffer->Bind();
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-    //glBindVertexArray(0);
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 
 void ObjMesh::UpdateMesh(Material* mat, GameObject* obj, ViewCamera *mainCamera) 
 {
-    //glUseProgram(mat->shader->getShaderInterface()->getProgramHandle());
+    
+    glUseProgram(mat->shader->getShaderInterface()->getProgramHandle());
 
     mat->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
     mainCamera->Matrix(mat->shader, "camMatrix");
@@ -84,7 +68,6 @@ void ObjMesh::UpdateMesh(Material* mat, GameObject* obj, ViewCamera *mainCamera)
     glUniformMatrix4fv(glGetUniformLocation(mat->shader->getShaderInterface()->getProgramHandle(), "model"), 1, GL_FALSE, glm::value_ptr(obj->transform));  
     mat->shader->SetUniform4F("u_LightColor",  1.0f, 1.0f, 1.0f, 1.0f);
     mat->shader->SetUniform3F("u_LightPos", 1, 1, 1);
-    glUseProgram(mat->shader->getShaderInterface()->getProgramHandle());
    
     
   

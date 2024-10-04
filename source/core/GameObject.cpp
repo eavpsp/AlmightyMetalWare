@@ -158,6 +158,7 @@ void GameObject::DrawGLTF()
 void GameObject::DrawOBJ()
 {
     OBJ_MeshRenderer *meshRender = (OBJ_MeshRenderer*)objectModel;
+    meshRender->mesh->vertexArray->Bind();
     meshRender->EnableTextures();
     meshRender->Draw();
 }

@@ -33,10 +33,11 @@ class GameFont
         void LoadFont(const char* filePath, int fontSize);
         void RenderText(std::string text, glm::vec2 pos, float scale, glm::vec3 color);
         template <typename... Args>
-        void draw_format_ui_text(char* format, glm::vec2 pos, float scale, glm::vec3 color, Args... args)
+        void RenderTextFormat(char* format, glm::vec2 pos, float scale, glm::vec3 color, Args... args)
         {
-        char* text = format_text(format, args...);
-            RenderText(text, pos, scale, color);
+            char buffer[256];
+            snprintf(buffer, 256, format, args...);
+            RenderText(std::string(buffer), pos, scale, color);
         }
         GameFont(const char* filePath, int fontSize)
         {

@@ -8,11 +8,11 @@ class EngineMaterials
 {
     private: 
       ColorMaterial _colorMaterial;
-      LightMaterial _lightMaterial;
+      LitMaterial *_lightMaterial;
       LightObjectMaterial _lightObjectMaterial;
       GameFontMaterial *_gameFontMaterial;
     public:
-        ShaderMaterialInterface *getLightMaterial();
+        Material *getLightMaterial();
         ShaderMaterialInterface *getColorMaterial();
         ShaderMaterialInterface *getLightObjectMaterial();
         GameFontMaterial *getGameFontMaterial();

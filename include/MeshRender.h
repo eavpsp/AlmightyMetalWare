@@ -22,9 +22,9 @@ struct MeshRender
 
 struct OBJ_MeshRenderer : public MeshRender
 {
-    private:
-    ObjMesh *mesh;
+   
     public:
+     ObjMesh *mesh;
     OBJ_MeshRenderer(const char* filePath)
     {
         mesh = new ObjMesh(filePath, this);
