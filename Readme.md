@@ -18,4 +18,4 @@ Sincerely,
 
 The Almighty Metal Engine Team
 -Putting the holy spirit into computing! 
-[Almighty Metal Engine](https://github.com/eavpsp/AlmightyMetalWare/blob/main/amw_icon.png)
+![Almighty Metal Engine](https://github.com/eavpsp/AlmightyMetalWare/blob/main/amw_icon.png)
