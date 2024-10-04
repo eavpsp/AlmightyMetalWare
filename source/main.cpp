@@ -22,32 +22,44 @@ proper camera controls
 use arrays for static objects
 custom z-lib compression for game data
 create scene object that stores level metadata bg color and skybox textures
+
+-Text only menus for now-
+selction options
+change text color when hilighted
+--
+-Demo Levels
+Plane and Sphere
+
 */
 
 
 
 /*
 Todo:
+DONE
 Finish Lights - Done
 Fix Camera - Done
 Fix Texture Loading - Done
 UI - Font - Done
-UI - Icons - WIP
 Primitive Shape Library - Done
-Batch Render Lights 
 Static Objects - Done
-Textures - Normals, Spec, Roughness, AA
-Dynamic Objects -> Animation System
-Skybox - Done
-Colors - Red, Green, Blue, White, Yellow, Black, Orange, Purple
-Animation system - Animation Controller
-Physics system - bullet or homemade
-Particle system - 
-Audio system
+Skybox - Done (Breaks Text rendering)
+Colors - Red, Green, Blue, White, Yellow, Black, Orange, Purple - Done
+
+WIP
+UI - Icons - WIP
 Input system - Detailed
-Video system
-Framebuffers
-Post Processing
+
+NS
+Batch Render Lights -
+Textures - Normals, Spec, Roughness, AA -
+Animation system - Animation Controller
+Physics system - bullet engine or homemade system?
+Particle system - 
+Audio system -
+Video system -
+Framebuffers -
+Post Processing -
 
 //THREADS
 GAME -> Game Manager , Engine Objects, Physics, Input
