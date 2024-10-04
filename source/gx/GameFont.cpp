@@ -23,66 +23,71 @@ void GameFont::LoadFont(const char *filePath, int fontSize)
 {
 
     glUseProgram(gameResourceManager->_engineMaterials.getGameFontMaterial()->shader->getShaderInterface()->getProgramHandle());
-    mdlvMtx = gameRenderSystem->ortho_projection * gameRenderSystem->mainCamera->transform;
-            
-    gameResourceManager->_engineMaterials.getGameFontMaterial()->shader->SetUniformMat4F("projection", mdlvMtx);
+    gameResourceManager->_engineMaterials.getGameFontMaterial()->shader->SetUniformMat4F("projection", gameRenderSystem->ortho_projection);
     
-
-
-
-
-
-
-    this->size = size;
-
-    // Initialize FreeType
-    FT_Init_FreeType(&ft);
-
-    // Load the font file
-    FT_New_Face(ft, filePath, 0, &face);
-    FT_Set_Pixel_Sizes(face, 0, 48); 
-    // Set the font size
-    FT_Set_Char_Size(face, 0, size * 64, 0, 0);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    // Create a texture to store the font glyphs
-    for (unsigned char c = 0; c < 128; c++)
+  // FreeType
+    // --------
+    FT_Library ft;
+    // All functions return a value different than 0 whenever an error occurred
+    if (FT_Init_FreeType(&ft))
     {
-      // load character glyph 
-      if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-      {
-          debugLog("ERROR::FREETYTPE: Failed to load Glyph");
-          continue;
-      }
-      // generate texture
-      unsigned int texture;
-      glGenTextures(1, &texture);
-      glBindTexture(GL_TEXTURE_2D, texture);
-      glTexImage2D(
-          GL_TEXTURE_2D,
-          0,
-          GL_RED,
-          face->glyph->bitmap.width,
-          face->glyph->bitmap.rows,
-          0,
-          GL_RED,
-          GL_UNSIGNED_BYTE,
-          face->glyph->bitmap.buffer
-      );
-      // set texture options
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      // now store character for later use
-      Character character = {
-          texture, 
-          glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-          glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-          face->glyph->advance.x
-      };
-      this->Characters.insert(std::pair<char, Character>(c, character));
+       debugLog("ERROR::FREETYPE: Could not init FreeType Library");
+        return;
     }
-    // Create a VAO and VBO to store the font vertex data
+	
+	// load font as face
+    FT_Face face;
+    if (FT_New_Face(ft, filePath, 0, &face)) {
+       debugLog("ERROR::FREETYPE: Failed to load font");
+        return;
+    }
+    else {
+        FT_Set_Pixel_Sizes(face, 0, 48);
+
+        // disable byte-alignment restriction
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        // load first 128 characters of ASCII set
+        for (unsigned char c = 0; c < 128; c++)
+        {
+            // Load character glyph 
+            if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+            {
+                debugLog("ERROR::FREETYTPE: Failed to load Glyph");
+                continue;
+            }
+            // generate texture
+            unsigned int texture;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RED,
+                face->glyph->bitmap.width,
+                face->glyph->bitmap.rows,
+                0,
+                GL_RED,
+                GL_UNSIGNED_BYTE,
+                face->glyph->bitmap.buffer
+            );
+            // set texture options
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            // now store character for later use
+            Character character = {
+                texture,
+                glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+                glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+                static_cast<unsigned int>(face->glyph->advance.x)
+            };
+            Characters.insert(std::pair<char, Character>(c, character));
+        }
+        debugLog("Font loaded successfully");
+        glBindTexture(GL_TEXTURE_2D, 0);
+
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
@@ -93,32 +98,28 @@ void GameFont::LoadFont(const char *filePath, int fontSize)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
+   
 }
 
-
-
-
+}
 void GameFont::RenderText(std::string text, glm::vec2 pos, float scale, glm::vec3 color)
 {
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
-   
+    glEnable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // activate corresponding render state	
     glUseProgram(gameResourceManager->_engineMaterials.getGameFontMaterial()->shader->getShaderInterface()->getProgramHandle());
     glUniform3f(glGetUniformLocation(gameResourceManager->_engineMaterials.getGameFontMaterial()->shader->getShaderInterface()->getProgramHandle(), "textColor"), color.x, color.y, color.z);
-    mdlvMtx = gameRenderSystem->ortho_projection * gameRenderSystem->mainCamera->transform;      
-    gameResourceManager->_engineMaterials.getGameFontMaterial()->shader->SetUniformMat4F("projection", mdlvMtx);
-    
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
     // iterate through all characters
     std::string::const_iterator c;
-    for (c = text.begin(); c != text.end(); c++)
+    for (c = text.begin(); c != text.end(); c++) 
     {
-        Character ch = this->Characters[*c];
+        Character ch = Characters[*c];
 
         float xpos = pos.x + ch.Bearing.x * scale;
         float ypos = pos.y - (ch.Size.y - ch.Bearing.y) * scale;
@@ -149,15 +150,12 @@ void GameFont::RenderText(std::string text, glm::vec2 pos, float scale, glm::vec
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glBlendFunc(GL_ONE, GL_ZERO);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_BLEND);
 }
 
 
 GameFont::~GameFont()
-{
-     // Clean up FreeType
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
-
+{  
 
 }

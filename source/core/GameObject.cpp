@@ -158,6 +158,7 @@ void GameObject::DrawGLTF()
 void GameObject::DrawOBJ()
 {
     OBJ_MeshRenderer *meshRender = (OBJ_MeshRenderer*)objectModel;
+    meshRender->EnableTextures();
     meshRender->Draw();
 }
 
@@ -165,7 +166,7 @@ void GameObject::DrawOBJ()
 void GameObject::UpdateOBJ()
 {
     OBJ_MeshRenderer *mesh = (OBJ_MeshRenderer*)objectModel;
-    mesh->EnableTextures();
+   
     mesh->UpdateMesh(material,this, gameRenderSystem->mainCamera);       
 
 }

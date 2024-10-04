@@ -59,22 +59,23 @@ void GameManager::renderLoop()
 {
  
     //Run Shader updats outside of glcler calls
-   // _renderSystem->RenderLights();
+    _renderSystem->RenderLights();
 
    //
     //update to use resoucrce manager stored vao batches
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _resourceManager->_gameFont->RenderText("Hello World", glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1));
     //ONLY DRAWS HERE
     for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
     {
         _resourceManager->gameObjects->at(i)->UpdateMesh();
        
-       _resourceManager->gameObjects->at(i)->DrawMesh();
-        
+        _resourceManager->gameObjects->at(i)->DrawMesh();
+          
     }
-//
+
+    _resourceManager->_gameFont->RenderText("Hello World", glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1));
+
      _renderSystem->SwapBuffers();
         
     

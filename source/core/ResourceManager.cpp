@@ -58,80 +58,16 @@ void ResourceManager::initResourceManager()
     _engineMaterials.initEngineMaterials();
     _gameFont = new GameFont("romfs:/gameFonts/mp1m.ttf", 32);
 
-    //set up game fonts
-   
-    //sglEnable(GL_BLEND);
-   // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glEnable(GL_DEPTH_TEST);
-   // glDepthFunc(GL_LESS);
-    //Pipeline: Materials -> Models -> Textures -> Draw
-    /*
-     MW_Texture tex("romfs:/tex.bmp");
-    tex.Bind(0);
-    glGenVertexArrays(1, &s_vao);
-    VertexBuffer *vb = new VertexBuffer();
-    glBindVertexArray(s_vao);
-    //create a batching system to store staic verts and draw them all at once
-    vb->initVertexBuffer(Pyramid, sizeof(Pyramid), ShaderType::LIT, sizeof(Pyramid) / sizeof(Pyramid[0]));
-    vb->ib = new IndexBuffer(sizeof(s_indices) / sizeof(s_indices[0]));
-    vb->ib->Bind(indices);
-    VertexBufferLayout layout;
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
-    layout.AddElement(GL_FLOAT, 2, GL_FALSE);
-    vb->AddBufferLayout(layout);
-    vb->UnBind();
-    glBindVertexArray(0);
-    vb->ib->UnBind();
-    debugLog("Index Buffer Count : %d", vb->ib->getCount());
-    vertexArrays = new std::vector<VertexBuffer *>;       
-    vertexArrays->push_back(vb);
-    debugLog("-------------Resources Loaded-------------");
-    */
-    /*
-    MW_Texture tex("romfs:/tex.bmp");
-    tex.Bind(0);
-    VertexArray va;
-    glGenVertexArrays(1, &s_vao);
-    VertexBuffer *vb = new VertexBuffer();
-    glBindVertexArray(s_vao);
-    //create a batching system to store staic verts and draw them all at once
-    vb->initVertexBuffer(Square, sizeof(Square), ShaderType::UNLIT, sizeof(Square) / sizeof(Square[0]));
-    vb->ib = new IndexBuffer(sizeof(indices) / sizeof(indices[0]));
-    vb->ib->Bind(indices);
-    VertexBufferLayout layout;
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
-    layout.AddElement(GL_FLOAT, 3, GL_FALSE);
-    layout.AddElement(GL_FLOAT, 2, GL_FALSE);
-    va.AddBuffer(*vb,layout);
-    vb->UnBind();
-    va.UnBind();
-    vb->ib->UnBind();
-    debugLog("Index Buffer Count : %d", vb->ib->getCount());
-    vertexArrays = new std::vector<VertexBuffer *>;       
-    vertexArrays->push_back(vb);
-    */
-    
-    
-    
-        /*MeshData mesh;
-        mesh.indices.assign(s_indices, s_indices + sizeof(s_indices) / sizeof(GLuint));
-        mesh.vertices.assign(Pyramid, Pyramid + sizeof(Pyramid) / sizeof(VertexLit));
-        mesh.initMeshLitTexture(mesh.vertices, mesh.indices, mesh.textures);
-        GameModel* modelTest = new GameModel(std::vector<MeshData> { mesh });*/
-        
-//
    
     gameObjects = new std::vector<GameObject *>;
 
-    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/cube.obj");
+    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/owl.obj");
     Material *mat = new LitMaterial();
-    GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(mat, glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(mat, glm::vec3(1.0f, 2.0f, 5.0f), glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     
     OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/owl.obj");
     Material *mat2 = new LitMaterial();
     GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
-  //
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     gameObjects->push_back(obj1);
     gameObjects->push_back(obj2);

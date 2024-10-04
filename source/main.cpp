@@ -25,14 +25,15 @@ Add nullptr checks to all funcs
 //use arrays for static objects
 custom z-lib compression for game data
 */
-//
-//
+
+
+
 /*
 Todo:
 Finish Lights - Done
 Fix Camera - Done
 Fix Texture Loading - Done
-UI - Font
+UI - Font - Done
 UI - Icons
 Batch Render Lights, Static Objects, Textures, Dynamic Objects, Skybox, Colors 
 Animation system
