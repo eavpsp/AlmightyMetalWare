@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include <glad/glad.h>
 namespace UI
 {
     //Shapes
@@ -17,6 +18,8 @@ namespace UI
         glm::vec2 size;
         glm::vec3 color;
         bool visible;
+        GLuint vao, vbo;
+        //MW_Texture bgImage; //Eventually add this
         virtual void Render() = 0;
         virtual void Update() = 0;
         virtual void Init() = 0;
@@ -25,6 +28,9 @@ namespace UI
     };
     struct Panel : UIElement
     {
+        void Render(glm::vec2 pos, glm::vec2 size, glm::vec4 color);
+        void Update();
+        void Init();
         std::vector<UIElement *> elements;
     };
     struct Button : UIElement
