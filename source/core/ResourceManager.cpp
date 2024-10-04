@@ -58,10 +58,14 @@ void ResourceManager::initResourceManager()
     _engineMaterials.initEngineMaterials();
     _gameFont = new GameFont("romfs:/gameFonts/mp1m.ttf", 32);
 
-   
+   //Objects must use the same shader to draw into the scene at its own positions
+   //this is because the shader program stores uniform data such as camera position and view matrix
+   //since this is how the camera references positions, the objects can use the same shader
+   //if not objects spawn in the most recent object shader program position because they are using the data first stored into the shader
+
     gameObjects = new std::vector<GameObject *>;
 
-    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/cube.obj");
+    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/prim/sphere.obj");
 
     GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(0.0f, 0.0f,0.0f), glm::vec3(100.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     

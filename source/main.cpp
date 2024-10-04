@@ -34,7 +34,9 @@ Finish Lights - Done
 Fix Camera - Done
 Fix Texture Loading - Done
 UI - Font - Done
-UI - Icons
+UI - Icons - WIP
+Primitive Shape Library - WIP
+Framebuffers
 Batch Render Lights, Static Objects, Textures, Dynamic Objects, Skybox, Colors 
 Animation system
 Add Skybox

@@ -15,10 +15,10 @@ class MW_Texture
         int _bpp;
 
     public:
-        MW_Texture(const char* path);
+        MW_Texture(const char* path, int slot = 0);
         ~MW_Texture();
 
-        void Bind(unsigned int slot);
+        void Bind(unsigned int slot = 0);
         void UnBind();
 
         inline int GetWidth() { return _width; }

@@ -1,15 +1,14 @@
 #include <GameManager.h>
 #include "../debug/debug.h"
 #include <objMesh.h>
+#include <UserInterface.h>
 ResourceManager *gameResourceManager;
 RenderSystem *gameRenderSystem;
 Thread GameThread, RenderThread, AudioThread;
 
 GameManager::GameManager(bool running) : _running{running}, _renderSystem{&RenderSystem::getRenderSystem()}, _resourceManager{&ResourceManager::getResourceManager()} 
-{
-    
-}
-//
+{}
+
 GameManager::~GameManager()
 {
     _resourceManager->destroyResourceManager();
@@ -31,7 +30,7 @@ GameManager& GameManager::getGameManager()
         gameRenderSystem = gameManager->_renderSystem;
         gameManager->_renderSystem->initRenderSystem(*(gameManager->_resourceManager));//pass in resource manager
         gameManager->_resourceManager->initResourceManager();
-
+       
         debugLog("Made Game Manager!");
     }
     return *gameManager;
@@ -54,27 +53,25 @@ void GameManager::runGameLoop()
     //_renderSystem->render(_resourceManager->gameObjects->at(0));//
     // _renderSystem->render(_resourceManager->gameObjects->at(0));
 }
-
+ 
 void GameManager::renderLoop()
 {
  
     //Run Shader updats outside of glcler calls
-    _renderSystem->RenderLights();
+    //_renderSystem->RenderLights();
 
-   //
     //update to use resoucrce manager stored vao batches
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     //ONLY DRAWS HERE
     for (int i = 0; i < _resourceManager->gameObjects->size(); i++)
     {
         _resourceManager->gameObjects->at(i)->UpdateMesh();
-       
-        _resourceManager->gameObjects->at(i)->DrawMesh();
-
           
     }
-
+    //UI SCOPE
+    {
         _resourceManager->_gameFont->RenderTextFormat("obj 1 pos: %f %f %f", 
         glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1),
          _resourceManager->gameObjects->at(0)->position.x, _resourceManager->gameObjects->at(0)->position.y, _resourceManager->gameObjects->at(0)->position.z);
@@ -87,6 +84,8 @@ void GameManager::renderLoop()
         glm::vec2(0.0f, 100.0f), 1.0f, glm::vec3(1,1,1),
          _renderSystem->mainCamera->position.x, _renderSystem->mainCamera->position.y, _renderSystem->mainCamera->position.z);
 
+    }
+        
      _renderSystem->SwapBuffers();
         
     

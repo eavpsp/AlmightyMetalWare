@@ -2,9 +2,10 @@
 #include "../debug/debug.h"
 
 #include <RenderSystem.h>
-extern std::vector<GameObject *> *GameObjects;
-extern std::vector<EngineObject *> *GraphicsObjects;
+extern std::vector<GameObject *> *GameObjects;//NEED THIS FOR CALLBACKS
+extern std::vector<EngineObject *> *GraphicsObjects;//NEED THIS FOR CALLBACKS
 extern RenderSystem *gameRenderSystem;
+extern ResourceManager *gameResourceManager;
 /**
  * @brief Draws the game object's model
  *
@@ -158,17 +159,22 @@ void GameObject::DrawGLTF()
 void GameObject::DrawOBJ()
 {
     OBJ_MeshRenderer *meshRender = (OBJ_MeshRenderer*)objectModel;
-    meshRender->mesh->vertexArray->Bind();
-    meshRender->EnableTextures();
-    meshRender->Draw();
+   
+   
 }
 
 
 void GameObject::UpdateOBJ()
 {
-    OBJ_MeshRenderer *mesh = (OBJ_MeshRenderer*)objectModel;
-   
-    mesh->UpdateMesh(material,this, gameRenderSystem->mainCamera);       
+    OBJ_MeshRenderer *meshRender = (OBJ_MeshRenderer*)objectModel;
+    meshRender->UpdateMesh(material,this, gameRenderSystem->mainCamera);
+    meshRender->EnableTextures();
+    glUseProgram(gameResourceManager->_engineMaterials.getLightMaterial()->shader->getShaderInterface()->getProgramHandle());
+    meshRender->mesh->vertexArray->Bind();       
+    meshRender->Draw();
+    meshRender->DisableTextures();
+
+
 
 }
 
@@ -225,7 +231,7 @@ void GameObject::onDestroy()
 
 GameObject::GameObject()
 {
-    RegisterObject();
+    RegisterObject();//NEDED FOR CALLBACKS
     
 };
  GameObject::~GameObject()

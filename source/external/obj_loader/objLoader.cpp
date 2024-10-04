@@ -29,17 +29,19 @@ std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm:
 	if(materials.size() == 0)
 	{
 		debugLog("No Material");
-		MW_Texture tex("romfs:/textures/NoTex.png");
-		meshRender->textures.push_back(&tex);
+		MW_Texture *tex = new MW_Texture("romfs:/textures/NoTex.png", 0);
+		meshRender->textures.push_back(tex);
 
 	}
 	else
 	{
+		int slot = 0;
 		for (const auto& mat : materials) 
 		{
 			debugLog("Material: %s", get_filename(mat.diffuse_texname).c_str());
-			MW_Texture tex(("romfs:/textures/" + get_filename(mat.diffuse_texname)).c_str());
-			meshRender->textures.push_back(&tex);
+			MW_Texture *tex = new MW_Texture(("romfs:/textures/" + get_filename(mat.diffuse_texname)).c_str(), slot);
+			meshRender->textures.push_back(tex);
+			slot++;
 		}
 	}
 	

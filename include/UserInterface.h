@@ -20,7 +20,6 @@ namespace UI
         bool visible;
         GLuint vao, vbo;
         //MW_Texture bgImage; //Eventually add this
-        virtual void Render() = 0;
         virtual void Update() = 0;
         virtual void Init() = 0;
         UIElement(){};
@@ -28,19 +27,24 @@ namespace UI
     };
     struct Panel : UIElement
     {
-        void Render(glm::vec2 pos, glm::vec2 size, glm::vec4 color);
-        void Update();
-        void Init();
+        void Render(glm::vec2 pos, glm::vec2 size, glm::vec4 color);//update to intake local vars
+        void Update() override;
+        void Init() override;
         std::vector<UIElement *> elements;
+        Panel();
+        ~Panel(){};
     };
     struct Button : UIElement
     {
+        void Render(glm::vec2 pos, glm::vec2 size, glm::vec4 color);
+        //MW_Texture bgImage;
         std::string text;
         bool pressed;
         void OnClick();
     };
     struct TextBox : UIElement
     {
+        //MW_Texture bgImage;
         std::string text;
     };
 }

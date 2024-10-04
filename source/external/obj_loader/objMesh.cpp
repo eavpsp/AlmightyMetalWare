@@ -42,9 +42,9 @@ ObjMesh::ObjMesh(const char* fileName, OBJ_MeshRenderer* meshRender)
 }
 void ObjMesh::Draw()
 {
-  
+    
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-    glBindVertexArray(0);
+   
 }
 
 
@@ -52,6 +52,7 @@ void ObjMesh::UpdateMesh(Material* mat, GameObject* obj, ViewCamera *mainCamera)
 {
     
     glUseProgram(mat->shader->getShaderInterface()->getProgramHandle());
+    mat->shader->SetUniform4F("modelColor", 1.0f, 1.0f, 1.0f, 1.0f);
 
     mat->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
     mainCamera->Matrix(mat->shader, "camMatrix");

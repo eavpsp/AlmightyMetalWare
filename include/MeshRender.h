@@ -44,7 +44,14 @@ struct OBJ_MeshRenderer : public MeshRender
     {
         for (int i = 0; i < textures.size(); i++)
         {
-            textures[i]->Bind(i);
+            textures.at(i)->Bind(i);
+        }
+    }
+    void DisableTextures()
+    {
+        for (int i = 0; i < textures.size(); i++)
+        {
+            textures.at(i)->UnBind();
         }
     }
      void UpdateMesh(Material* mat, GameObject* obj, ViewCamera* mainCamera)
