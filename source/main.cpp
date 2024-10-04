@@ -22,7 +22,10 @@ proper camera controls
 use arrays for static objects
 custom z-lib compression for game data
 create scene object that stores level metadata bg color and skybox textures
-
+component script
+has parent gameobject
+get component
+add component
 -Text only menus for now-
 selction options
 change text color when hilighted
@@ -52,7 +55,7 @@ Input system - Detailed
 
 NS
 Batch Render Lights -
-Textures - Normals, Spec, Roughness, AA -
+Textures - Normals, Spec, Roughness, AA, View Culling -
 Animation system - Animation Controller
 Physics system - bullet engine or homemade system?
 Particle system - 
@@ -60,6 +63,10 @@ Audio system -
 Video system -
 Framebuffers -
 Post Processing -
+
+
+FUTURE
+Skeletal Animation -
 
 //THREADS
 GAME -> Game Manager , Engine Objects, Physics, Input
