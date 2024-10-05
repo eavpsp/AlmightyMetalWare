@@ -8,6 +8,7 @@
 #include "../debug/debug.h"
 extern std::vector<GameObject *> *GameObjects;
 extern std::vector<EngineObject *> *GraphicsObjects;
+extern std::vector<ViewCamera *> *CameraObjects;
 class EngineCallBacks
 {
     public:
@@ -39,6 +40,21 @@ class EngineCallBacks
                     if (obj != nullptr) 
                     {
                         obj->onUpdate(); // This will call TestObj::onUpdate() if obj is a TestObj
+                    }
+                   
+                }
+            }
+            
+        };
+         void RunUpdateCameraCallbacks(bool isRunning) 
+        {
+            if (isRunning) 
+            {
+                for(int i = 0; i < CameraObjects->size(); i++)
+                {
+                    if (CameraObjects->at(i) != nullptr) 
+                    {
+                        CameraObjects->at(i)->onUpdate();
                     }
                    
                 }

@@ -5,6 +5,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../debug/debug.h"
+#include <GameObject.h>
+extern std::vector<ViewCamera *> *CameraObjects;
 void ViewCamera::onInit()
 {
 }
@@ -19,8 +21,22 @@ void ViewCamera::onDraw()
 
 void ViewCamera::onUpdate()
 {
+
+	updateMatrix(45.0f, 0.1f, 100.0f);
+	
 }
 
+/**
+ * @brief Constructs a ViewCamera.
+ *
+ * The ViewCamera is a special type of EngineObject that handles the camera and view matrix for the game.
+ *
+ * @param _position The position of the camera.
+ * @param _rotation The rotation of the camera.
+ * @param _scale The scale of the camera.
+ * @param width The width of the screen.
+ * @param height The height of the screen.
+ */
 ViewCamera::ViewCamera(glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, float width, float height)
 {
 	
@@ -29,6 +45,7 @@ ViewCamera::ViewCamera(glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scal
     scale = _scale; 
     this->width = width;
     this->height = height;
+	CameraObjects->push_back(this);
 }
 
 void ViewCamera::Matrix(ShaderMaterialInterface *shaderInterface, const char *uniform)

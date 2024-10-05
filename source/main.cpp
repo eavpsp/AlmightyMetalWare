@@ -6,7 +6,7 @@
 #include "debug/debug.h"
 #include <json.hpp>  
 #include <ScriptCallbacks.h>
-#include "btBulletDynamicsCommon.h"
+
 
 /*
 /Things
@@ -80,17 +80,18 @@ Render -> Render System, Draw Calls, Batchinng
 EngineCallBacks *engineCallBacks;
 std::vector<GameObject *> *GameObjects;
 std::vector<EngineObject *> *GraphicsObjects;
+std::vector<ViewCamera *> *CameraObjects;
 GameManager *gameManager;
 
 void initSystem()
 {
     debugLog("System Starting...");
-
     romfsInit();
     debugLogInit();
     //init callbacks 
     GameObjects = new std::vector<GameObject *>();
     GraphicsObjects = new std::vector<EngineObject *>();
+    CameraObjects = new std::vector<ViewCamera *>();
     engineCallBacks = new EngineCallBacks();
     
 }
@@ -117,6 +118,7 @@ void EngineMain()
         gameManager->renderLoop();
         //Run Update Callbacks
         engineCallBacks->RunUpdateCallbacks(gameManager->Running());
+        engineCallBacks->RunUpdateCameraCallbacks(gameManager->Running());
         // Get and process input
         padUpdate(&pad);
         u32 kDown = padGetButtonsDown(&pad);
@@ -132,12 +134,14 @@ void EngineMain()
     romfsExit();
     gameManager->destroyGameManager();
 }
+
 int main(int argc, char* argv[])
 {
     initSystem();
-    EngineMain();
-    appletExit();
+   
+      EngineMain();
     debugLog("Exiting....");
+    appletExit();
     return EXIT_SUCCESS;
     
 }

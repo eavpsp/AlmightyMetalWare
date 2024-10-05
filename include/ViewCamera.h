@@ -3,14 +3,15 @@
 #include <EngineObject.h>
 #include <ShaderMaterialInterface.h>
 //Add camera functions for view frustrum and movement
+//register obj callback for updates
 class ViewCamera : public EngineObject
 {
-    private:
-        virtual void onUpdate();
-        virtual void onDraw();
-        virtual void onInit();
-        virtual void onDestroy();
+       
     public:
+        void onUpdate() override;
+        void onDraw() override;
+        void onInit() override;
+        void onDestroy() override;
         glm::vec3 orientaion = glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
         ViewCamera(glm::vec3 _position, glm::vec3 _rotation, glm::vec3 _scale, float width, float height);

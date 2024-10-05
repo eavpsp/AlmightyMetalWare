@@ -43,7 +43,7 @@ void ResourceManager::initResourceManager()
     glm::vec3 pos = glm::vec3(MW_Math::Random(0.0f,5.0f), 0.0f, 0.0f);
     GameObject *obj1 = GameObject::CreateCapsule(_engineMaterials.getLightMaterial(), pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     
-    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/owl.obj"); //object model name or sha hash buffer for dupes
+    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/proto/glitch.obj"); //object model name or sha hash buffer for dupes
 
     GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
