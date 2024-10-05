@@ -8,13 +8,20 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
+#include <typeinfo>
+#include <vector>
 class EngineObject
 {
     //private funcs onUpdate, onDraw onInit onDestroy
+    //implement component handling
     private:
 
         virtual void onInit() = 0;
         virtual void onDestroy() = 0;
+        template <typename T>
+        const char* get_type_name() {
+            return typeid(T).name();
+        }   
     public:
         virtual void onUpdate() = 0;
         virtual void onDraw() = 0;

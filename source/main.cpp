@@ -6,6 +6,7 @@
 #include "debug/debug.h"
 #include <json.hpp>  
 #include <ScriptCallbacks.h>
+#include <EnginePhysics.h>
 
 
 /*
@@ -82,21 +83,24 @@ std::vector<GameObject *> *GameObjects;
 std::vector<EngineObject *> *GraphicsObjects;
 std::vector<ViewCamera *> *CameraObjects;
 GameManager *gameManager;
+EnginePhysics *enginePhysics;
 
 
 void initSystem()
 {   
-    
+    debugLogInit();
     debugLog("System Starting...");
     romfsInit();
-    debugLogInit();
-    
+    debugLog("romFS Init");
+    enginePhysics = new EnginePhysics();
+    debugLog("Engine Physics Init");
     //init callbacks 
     GameObjects = new std::vector<GameObject *>();
     GraphicsObjects = new std::vector<EngineObject *>();
     CameraObjects = new std::vector<ViewCamera *>();
     engineCallBacks = new EngineCallBacks();
-    
+    debugLog("Engine Callbacks Init");
+
 }
 
 void EngineMain()
@@ -120,6 +124,7 @@ void EngineMain()
         gameManager->runGameLoop();
         gameManager->renderLoop();
         //Run Update Callbacks
+        enginePhysics->DoPhysicsSimulation();
         engineCallBacks->RunUpdateCallbacks();
         
         // Get and process input
@@ -134,7 +139,6 @@ void EngineMain()
     //while(!gameManager->Running() && gameManger->GamePaused() or menu)
     //alternate loop to pause game
     debugLog("Game Stopped....");
-
     romfsExit();
     gameManager->destroyGameManager();
 }

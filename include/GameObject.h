@@ -7,6 +7,22 @@
 #include "GameModel.h"
 #include "MeshRender.h"
 
+
+/**
+ * @class GameComponent
+ * @brief This is the base class for all game components.
+ * @details This class is the base class for all game components. It provides a common interface for all components to inherit from and implement. The interface includes a method to update the component and a method to set the parent object of the component.
+ */
+class GameComponent
+{
+    public:
+        GameObject* parentObject;
+        virtual void OnUpdate() = 0;
+        void SetParentObject(GameObject* obj) { parentObject = obj; }
+        GameComponent(){};
+        virtual ~GameComponent() {}
+};
+
 /**
  * @file GameObject.h
  * @brief This class is an extension of the EngineObject class. It adds additional functionality that is specific to objects in the game world.
@@ -30,6 +46,7 @@ class GameObject : public EngineObject
         void DrawOBJ();
         void UpdateOBJ();
         void UpdateMesh();
+        
         ///
         template <typename T>
         static T* InstantiateGameObject(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject")
@@ -61,6 +78,45 @@ class GameObject : public EngineObject
         void RegisterObject();
         void onUpdate() override;
         void onDraw() override;
+        std::vector<GameComponent *> components;
+
+        void AddComponent(GameComponent *component)
+        {
+            components.push_back(component);
+            component->SetParentObject(this);
+        };
+        void UpdateComponents()
+        {
+            for (int i = 0; i < components.size(); i++)
+            {
+                components.at(i)->OnUpdate();
+            }
+        }
+        
+        void RemoveComponent(GameComponent *component)
+        {
+            for (int i = 0; i < components.size(); i++)
+            {
+                if (components[i] == component)
+                {
+                    components.erase(components.begin() + i);
+                    break;
+                }
+            }
+        };
+        template<typename T>
+        T *GetComponent()
+        {
+            for (int i = 0; i < components.size(); i++)
+            {
+                if (dynamic_cast<T*>(components[i]))
+                {
+                    return dynamic_cast<T*>(components[i]);
+                }
+            }
+            return nullptr;
+        }
+        
         GameObject();
         virtual ~GameObject();
         //Draw Primatives
@@ -73,7 +129,7 @@ class GameObject : public EngineObject
 
     };
 
-
+ 
 
 
 

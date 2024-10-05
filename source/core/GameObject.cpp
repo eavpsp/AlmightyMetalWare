@@ -212,7 +212,7 @@ void GameObject::RegisterObject()
 
 void GameObject::onUpdate()
 {
-   
+   UpdateComponents();//NEDED TO UPDATE COMPONENT DATA
 }
 
 void GameObject::onDraw()

@@ -32,7 +32,7 @@ std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm:
 		{
 			MW_Texture *tex = new MW_Texture("romfs:/textures/NoTexo.png", 0);
 
-		//	meshRender->textures.push_back(tex);
+			meshRender->textures.push_back(tex);
 
 		}
 

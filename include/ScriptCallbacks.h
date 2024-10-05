@@ -8,9 +8,11 @@ constexpr double UPDATE_TICK_DELAY = 1.0 / TARGET_FPS;
 #include <ShaderMaterialInterface.h>
 #include <GameObject.h>
 #include "../debug/debug.h"
+
 extern std::vector<GameObject *> *GameObjects;
 extern std::vector<EngineObject *> *GraphicsObjects;
 extern std::vector<ViewCamera *> *CameraObjects;
+
 class EngineCallBacks
 {
     private:
@@ -53,7 +55,8 @@ class EngineCallBacks
         };
        void RunUpdateCallbacks() 
         {
-        updateTicks += _deltaTime;
+            updateTicks += _deltaTime;
+           
 
            if(updateTicks >= UPDATE_TICK_DELAY)
            {
@@ -73,6 +76,7 @@ class EngineCallBacks
             }
                
         };
+       
          void RunUpdateCameraCallbacks() 
         {
             

@@ -41,7 +41,7 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source source/gx source/core source/debug source/external game/objects game source/external/obj_loader source/external/freetype source/external/freetype/config source/math source/external/bullet
 DATA		:=	data
-INCLUDES	:=	include source/debug source/external game/objects game source/external/obj_loader source/external/freetype source/external/freetype/config source/math source/external/bullet
+INCLUDES	:=	include source/debug source/external game/objects game source/external/obj_loader source/external/freetype source/external/freetype/config source/math source/external/bullet include/components
 ROMFS	:=	romfs
 APP_TITLEID := 329
 APP_VERSION := 1.0
@@ -57,7 +57,7 @@ CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
+CXXFLAGS	:= $(CFLAGS) -frtti -fno-exceptions
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)

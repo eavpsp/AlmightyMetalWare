@@ -4,7 +4,7 @@
 #include "GameShapes.h"
 #include "ScriptCallbacks.h"
 #include <TestGameObject.h>
-
+#include <BPhysics.h>
 #include <mwmath.h>
 ResourceManager::~ResourceManager()
 {
@@ -46,6 +46,13 @@ void ResourceManager::initResourceManager()
     OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/aman.obj"); //object model name or sha hash buffer for dupes
 
     GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
+    
+    btCollisionShape* colShape = new btSphereShape(btScalar(1.));//need
+   
+    BPhysicsComponent* rigidBody = new BPhysicsComponent(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, colShape);
+
+   
+    obj2->AddComponent(rigidBody);
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
     gameObjects->push_back(obj1);
     gameObjects->push_back(obj2);
