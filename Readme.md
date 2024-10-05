@@ -1,4 +1,16 @@
 # Almighty Metal Engine
+Current LIBS Used:
+Open GL
+Bullet Physics
+GLM
+GLAD
+Freetype
+tinyglft loader
+tinyobj loader
+std-image
+std-image_write
+json parser - Niels Lohmann
+
 
 A game engine inspired by Open RW and some Glitchy code.
 

@@ -6,7 +6,7 @@
 #include "debug/debug.h"
 #include <json.hpp>  
 #include <ScriptCallbacks.h>
-
+#include "btBulletDynamicsCommon.h"
 
 /*
 /Things
@@ -55,18 +55,22 @@ Input system - Detailed
 
 NS
 Batch Render Lights -
-Textures - Normals, Spec, Roughness, AA, View Culling -
 Animation system - Animation Controller
-Physics system - bullet engine or homemade system?
-Particle system - 
-Audio system -
-Video system -
+    Loads Multiple OBJ files and stores them as keyframes
+    Dynamic VBO gets updated based on current frame and animation
+Physics system - bullet engine integration
+    -Link Library with GLM to use bullet physics
+Particle system (Dynamic Batched Software Particles)- 
+Audio system (MP3, OGG Playback)-
+Video system (MP4 Playback)-
+Textures - Normals, Spec, Roughness, AA, View Culling -
 Framebuffers -
 Post Processing -
 
 
 FUTURE
 Skeletal Animation -
+Rigid Body Physics -
 
 //THREADS
 GAME -> Game Manager , Engine Objects, Physics, Input
