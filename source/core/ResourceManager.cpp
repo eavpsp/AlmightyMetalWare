@@ -35,7 +35,7 @@ void ResourceManager::initResourceManager()
     _gameScene = new GameScene(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f), skybox);
    //Objects must use the same shader to draw into the scene at its own positions
    //this is because the shader program stores uniform data such as camera position and view matrix
-   //since this is how the camera references positions, the objects can use the same shader
+   //since this is how the camera references positions, the objects can use the same shader//
    //if not objects spawn in the most recent object shader program position because they are using the data first stored into the shader
 
     gameObjects = new std::vector<GameObject *>;
@@ -43,7 +43,7 @@ void ResourceManager::initResourceManager()
     glm::vec3 pos = glm::vec3(MW_Math::Random(0.0f,5.0f), 0.0f, 0.0f);
     GameObject *obj1 = GameObject::CreateCapsule(_engineMaterials.getLightMaterial(), pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     
-    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/proto/glitch.obj"); //object model name or sha hash buffer for dupes
+    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/aman.obj"); //object model name or sha hash buffer for dupes
 
     GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);

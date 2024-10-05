@@ -25,15 +25,14 @@ std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm:
 	{
    	 	debugLog("Error: %s", error.c_str());
 	}
-	//
 	if(materials.size() == 0)
 	{
 		debugLog("No Material");
 		if(meshRender != nullptr)
 		{
-			MW_Texture *tex = new MW_Texture("romfs:/textures/NoTex.png", 0);
+			MW_Texture *tex = new MW_Texture("romfs:/textures/NoTexo.png", 0);
 
-			meshRender->textures.push_back(tex);
+		//	meshRender->textures.push_back(tex);
 
 		}
 

@@ -83,11 +83,14 @@ std::vector<EngineObject *> *GraphicsObjects;
 std::vector<ViewCamera *> *CameraObjects;
 GameManager *gameManager;
 
+
 void initSystem()
-{
+{   
+    
     debugLog("System Starting...");
     romfsInit();
     debugLogInit();
+    
     //init callbacks 
     GameObjects = new std::vector<GameObject *>();
     GraphicsObjects = new std::vector<EngineObject *>();
@@ -109,7 +112,7 @@ void EngineMain()
     debugLog("Objects Alive: %d", GameObjects->size());
 
     // Main game loop
-    //while(appletMainLoop())
+    //while()
     while (gameManager->Running())
     {
         //Run
@@ -117,18 +120,19 @@ void EngineMain()
         gameManager->runGameLoop();
         gameManager->renderLoop();
         //Run Update Callbacks
-        engineCallBacks->RunUpdateCallbacks(gameManager->Running());
-        engineCallBacks->RunUpdateCameraCallbacks(gameManager->Running());
+        engineCallBacks->RunUpdateCallbacks();
+        
         // Get and process input
         padUpdate(&pad);
         u32 kDown = padGetButtonsDown(&pad);
         u32 kHeld = padGetButtons(&pad);
         gameManager->_renderSystem->mainCamera->Inputs(kHeld);
-        gameManager->_renderSystem->mainCamera->updateMatrix(45.0f, 0.1f, 100.0f);
         if (kDown & HidNpadButton_Plus)
             break;
 
     }
+    //while(!gameManager->Running() && gameManger->GamePaused() or menu)
+    //alternate loop to pause game
     debugLog("Game Stopped....");
 
     romfsExit();
@@ -139,7 +143,8 @@ int main(int argc, char* argv[])
 {
     initSystem();
    
-      EngineMain();
+    EngineMain();
+    //need a backup 
     debugLog("Exiting....");
     appletExit();
     return EXIT_SUCCESS;

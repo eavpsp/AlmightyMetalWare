@@ -27,7 +27,7 @@ GameFontMaterial *EngineMaterials::getGameFontMaterial()
 
 void EngineMaterials::initEngineMaterials()
 {
-    //
+    
     ShaderInterface *color_shader = new ShaderInterface("romfs:/shaders/ColorShader.vs", "romfs:/shaders/FragmentShader.fs");
     ShaderInterface *light_shader = new ShaderInterface("romfs:/shaders/SimpleLightShader.vs", "romfs:/shaders/SimpleLightShader.fs");
     ShaderInterface *light_object_shader = new ShaderInterface("romfs:/shaders/GlobalLight.vs", "romfs:/shaders/GlobalLight.fs");

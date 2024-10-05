@@ -29,7 +29,7 @@ void GameObject::DrawMesh()
         DrawGLTF();
         break;
     }
-    onDraw();
+   // onDraw();
 
 }
 

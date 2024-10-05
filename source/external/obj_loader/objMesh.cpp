@@ -52,7 +52,7 @@ void ObjMesh::UpdateMesh(Material* mat, GameObject* obj, ViewCamera *mainCamera)
 {
     
     glUseProgram(mat->shader->getShaderInterface()->getProgramHandle());
-    //mat->shader->SetUniform4F("modelColor", 1.0f, 1.0f, 1.0f, 1.0f);
+    mat->shader->SetUniform4F("modelColor", 1.0f, 1.0f, 1.0f, 1.0f);
 
     mat->shader->SetUniform3F("camPos", mainCamera->position.x, mainCamera->position.y, mainCamera->position.z);
     mainCamera->Matrix(mat->shader, "camMatrix");

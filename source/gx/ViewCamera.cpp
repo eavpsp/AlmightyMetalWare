@@ -6,7 +6,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../debug/debug.h"
 #include <GameObject.h>
+#include <mwmath.h>
+#include <ScriptCallbacks.h>
 extern std::vector<ViewCamera *> *CameraObjects;
+extern EngineCallBacks *engineCallBacks;
 void ViewCamera::onInit()
 {
 }
@@ -76,31 +79,42 @@ void ViewCamera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 void ViewCamera::Inputs(u32 currentInput)
 {
 	//debugLog("reading input");
-
+	prevPos = position;
     if (currentInput & HidNpadButton::HidNpadButton_Up) 
     {
-		position += speed * orientaion;
+		glm::vec3 newPos = prevPos + speed * orientaion;
+		position = MW_Math::lerp(prevPos, newPos, engineCallBacks->GetInterpolatedTickTime());
 	}
 	if (currentInput  & HidNpadButton::HidNpadButton_Left)
 	{
 
-		position += speed * -glm::normalize(glm::cross(orientaion, upVector));
+		glm::vec3 newPos = prevPos += speed * -glm::normalize(glm::cross(orientaion, upVector));
+		position = MW_Math::lerp(prevPos, newPos, engineCallBacks->GetInterpolatedTickTime());
+
 	}
 	if (currentInput & HidNpadButton::HidNpadButton_Down)
 	{
-		position += speed * -orientaion;
+		glm::vec3 newPos  = prevPos += speed * -orientaion;
+		position = MW_Math::lerp(prevPos, newPos, engineCallBacks->GetInterpolatedTickTime());
+
 	}
 	if (currentInput & HidNpadButton::HidNpadButton_Right)
 	{
-		position += speed * glm::normalize(glm::cross(orientaion, upVector));
+		glm::vec3 newPos = prevPos += speed * glm::normalize(glm::cross(orientaion, upVector));
+		position = MW_Math::lerp(prevPos, newPos, engineCallBacks->GetInterpolatedTickTime());
+
 	}
 	if (currentInput & HidNpadButton::HidNpadButton_R)
 	{
-		position += speed * upVector;
+		glm::vec3 newPos = prevPos += speed * upVector;
+		position = MW_Math::lerp(prevPos, newPos, engineCallBacks->GetInterpolatedTickTime());
+
 	}
 	if (currentInput & HidNpadButton::HidNpadButton_L)
 	{
-		position += speed * -upVector;
+		glm::vec3 newPos = prevPos += speed * -upVector;
+		position = MW_Math::lerp(prevPos, newPos, engineCallBacks->GetInterpolatedTickTime());
+
 	}
 	if (currentInput & HidNpadButton::HidNpadButton_X)
 	{

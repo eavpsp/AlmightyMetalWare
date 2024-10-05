@@ -43,3 +43,26 @@ int MW_Math::Random(int min, int max)
     std::uniform_real_distribution<float> dis(min, max);
     return (int)dis(gen);
 }
+
+float MW_Math::lerp(float a, float b, float t)
+{
+    return a + (b - a) * t;
+}
+
+glm::vec3 MW_Math::lerp(glm::vec3 a, glm::vec3 b, float t)
+{
+    glm::vec results = glm::vec3();
+    results.x = lerp(a.x, b.x, t);
+    results.y = lerp(a.y, b.y, t);
+    results.z = lerp(a.z, b.z, t);
+    return results;
+}
+
+float MW_Math::clamp(float value, float min, float max)
+{
+    if (value < min)
+        return min;
+    if (value > max)
+        return max;
+    return value;
+}
