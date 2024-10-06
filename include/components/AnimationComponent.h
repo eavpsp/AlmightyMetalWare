@@ -1,0 +1,8 @@
+#ifndef ANIMATIONCOMPONENT_H_
+#define ANIMATIONCOMPONENT_H_
+
+
+
+
+
+#endif /* ANIMATIONCOMPONENT_H_ */

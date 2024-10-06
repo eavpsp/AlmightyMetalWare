@@ -19,6 +19,7 @@ class GameComponent
         GameObject* parentObject;
         virtual void OnUpdate() = 0;
         void SetParentObject(GameObject* obj) { parentObject = obj; }
+        bool isActive = true;
         GameComponent(){};
         virtual ~GameComponent() {}
 };

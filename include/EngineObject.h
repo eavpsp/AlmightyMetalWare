@@ -31,6 +31,7 @@ class EngineObject
         glm::quat rotation;
         glm::mat4 transform;
         std::string name;
+        bool isActive = true;
         
 };
 

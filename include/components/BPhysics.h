@@ -56,37 +56,16 @@ class BPhysicsComponent : public GameComponent
     btRigidBody* body;
     //ref to gameobject
    
-    glm::mat4 btScalar2mat4(btScalar* matrix) {
-    return glm::mat4(
-        matrix[0], matrix[1], matrix[2], matrix[3],
-        matrix[4], matrix[5], matrix[6], matrix[7],
-        matrix[8], matrix[9], matrix[10], matrix[11],
-        matrix[12], matrix[13], matrix[14], matrix[15]);
-}
+   
     void BindMatrix()
     {
+
+        myMotionState->getWorldTransform(*transform); 
+
         
-        btScalar gl_transform[16];
 
-        if (myMotionState)
-        {
-            myMotionState->getWorldTransform(*transform); 
-
-        }
-
-     if (body) 
-     {
-        transform = &body->getWorldTransform();
-        transform->getOpenGLMatrix(gl_transform);
-     }
-         
-        glm::mat4 matrix = btScalar2mat4(gl_transform);
-        parentObject->transform = matrix;
-
-       
-      
-        
-        parentObject->position = glm::vec3(transform->getOrigin().x(), transform->getOrigin().y(), transform->getOrigin().z());
+        //bullet and open gl postions are inverted, might fix in shader
+        parentObject->position = -glm::vec3(transform->getOrigin().x(), transform->getOrigin().y(), transform->getOrigin().z());
         parentObject->rotation = glm::quat(transform->getRotation().getW(), transform->getRotation().getX(), transform->getRotation().getY(), transform->getRotation().getZ());
      
     }
@@ -101,9 +80,10 @@ class BPhysicsComponent : public GameComponent
  */
         BPhysicsComponent(glm::vec3 pos, glm::quat rot, float mass, btCollisionShape* shape)
         {
+            transform = new btTransform(btQuaternion(rot.x, rot.y, rot.z, 1.0f), btVector3(pos.x, pos.y, pos.z));
             this->mass = btScalar(mass);
             this->localInertia = btVector3(0, 0, 0);
-            this->myMotionState = new btDefaultMotionState(btTransform(btQuaternion(rot.x, rot.y, rot.z, 1.0f), btVector3(pos.x, pos.y, pos.z)));
+            this->myMotionState = new btDefaultMotionState(*transform);
             collisionShapes.push_back(shape);
             btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, shape, localInertia);
             btRigidBody* body = new btRigidBody(rbInfo);
@@ -114,6 +94,10 @@ class BPhysicsComponent : public GameComponent
 
         void OnUpdate() override
         {
+            if(!parentObject->isActive || !isActive)
+            {
+                return;
+            }
             BindMatrix();
         }
 };

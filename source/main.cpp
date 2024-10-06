@@ -120,11 +120,11 @@ void EngineMain()
     while (gameManager->Running())
     {
         //Run
+        enginePhysics->DoPhysicsSimulation();
     
         gameManager->runGameLoop();
         gameManager->renderLoop();
         //Run Update Callbacks
-        enginePhysics->DoPhysicsSimulation();
         engineCallBacks->RunUpdateCallbacks();
         
         // Get and process input

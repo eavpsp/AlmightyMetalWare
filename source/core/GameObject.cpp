@@ -212,6 +212,10 @@ void GameObject::RegisterObject()
 
 void GameObject::onUpdate()
 {
+    if(!isActive)
+    {
+        return;
+    }
    UpdateComponents();//NEDED TO UPDATE COMPONENT DATA
 }
 
