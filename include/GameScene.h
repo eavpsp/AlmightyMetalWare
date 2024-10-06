@@ -6,7 +6,7 @@ struct SceneSkybox
 {
     public:
     GLuint cubemapTexture, skyboxVAO, skyboxVBO, skyboxEBO;
-    int vertexCount;;
+    int vertexCount;
     SkyBoxMaterial *skyboxMat;
     void RenderSkybox();
     SceneSkybox();//take in enum for type of skybox

@@ -54,6 +54,7 @@ class BPhysicsComponent : public GameComponent
     btVector3 localInertia;
     btDefaultMotionState* myMotionState;
     btRigidBody* body;
+    void ComponentAddedCallback();
     //ref to gameobject
    
    
@@ -66,7 +67,7 @@ class BPhysicsComponent : public GameComponent
 
         //bullet and open gl postions are inverted, might fix in shader
         parentObject->position = -glm::vec3(transform->getOrigin().x(), transform->getOrigin().y(), transform->getOrigin().z());
-        parentObject->rotation = glm::quat(transform->getRotation().getW(), transform->getRotation().getX(), transform->getRotation().getY(), transform->getRotation().getZ());
+        parentObject->rotation = glm::quat(transform->getRotation().getW(), transform->getRotation().getX(), -transform->getRotation().getY(), transform->getRotation().getZ());
      
     }
     public:

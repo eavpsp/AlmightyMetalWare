@@ -5,6 +5,7 @@
 #include "ScriptCallbacks.h"
 #include <TestGameObject.h>
 #include <BPhysics.h>
+#include <AnimationComponent.h>
 #include <mwmath.h>
 ResourceManager::~ResourceManager()
 {
@@ -19,7 +20,10 @@ ResourceManager::~ResourceManager()
     }
     delete vertexArrays;
 }
-
+//praying animation
+//207 frames
+//praying_Anim000x.obj naming convention
+//romfs:/models/animations/praying/praying_Anim000x.obj
 
 void ResourceManager::initResourceManager()
 {
@@ -29,7 +33,6 @@ void ResourceManager::initResourceManager()
     //Set up font
     _gameFont = new GameFont("romfs:/gameFonts/mp1m.ttf", 32);
     //set up Game Scene and Skybox
-    
     SceneSkybox *skybox = new SceneSkybox();//load default skybox
 
     _gameScene = new GameScene(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f), skybox);
@@ -49,15 +52,33 @@ void ResourceManager::initResourceManager()
 
    
     obj1->AddComponent(rigidBody1);
-
+    AnimationFile *prayingAnim = new AnimationFile("praying", true, 30.0f);
+    prayingAnim->frameCount = 207;
+  
+    for (int i = 0; i < prayingAnim->frameCount; i++)//works create a func for this later
+    {
+        std::string num = std::to_string(i + 1);
+        std::stringstream ss;
+        ss << "romfs:/models/animations/praying/praying_Anim" << std::setw(4) << std::setfill('0') << (i + 1) << ".obj";
+        std::string filename = ss.str();
+        prayingAnim->objFiles.push_back(filename);
+    }
+    AnimationArchive *prayingArchive = new AnimationArchive();
+    debugLog("archive made");
+    prayingArchive->animationFiles.push_back(prayingAnim);
+    debugLog("animation files added");
     OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/aman.obj"); //object model name or sha hash buffer for dupes
+    AnimationComponent *animComp = new AnimationComponent(*prayingArchive,modelTest2);
+    debugLog("animation component made");
 
     GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(5.0f, 15.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
     
     btCollisionShape* colShape = new btSphereShape(btScalar(1.));//need
    
     BPhysicsComponent* rigidBody = new BPhysicsComponent(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, colShape);
-
+    obj2->AddComponent(animComp);
+     AnimationComponent *animCompGot = obj2->GetComponent<AnimationComponent>();
+    animCompGot->PlayAnimation("praying");
    
     obj2->AddComponent(rigidBody);
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);

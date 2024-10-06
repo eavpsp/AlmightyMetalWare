@@ -20,6 +20,7 @@ class GameComponent
         virtual void OnUpdate() = 0;
         void SetParentObject(GameObject* obj) { parentObject = obj; }
         bool isActive = true;
+        virtual void ComponentAddedCallback() = 0;
         GameComponent(){};
         virtual ~GameComponent() {}
 };
@@ -37,7 +38,6 @@ class GameObject : public EngineObject
         std::vector<GameObject*> children;
         void onInit() override;
         void onDestroy() override;
-
     public:
         //base model data
         Material *material;
@@ -47,7 +47,9 @@ class GameObject : public EngineObject
         void DrawOBJ();
         void UpdateOBJ();
         void UpdateMesh();
-        
+        bool renderMesh = true;
+        bool hasAnimator = false;
+
         ///
         template <typename T>
         static T* InstantiateGameObject(Material *mat, glm::vec3 _position, glm::quat _rotation, glm::vec3 _scale, MeshRender *gameModel, std::string _name = "GameObject")
@@ -80,11 +82,11 @@ class GameObject : public EngineObject
         void onUpdate() override;
         void onDraw() override;
         std::vector<GameComponent *> components;
-
         void AddComponent(GameComponent *component)
         {
             components.push_back(component);
             component->SetParentObject(this);
+            component->ComponentAddedCallback();
         };
         void UpdateComponents()
         {

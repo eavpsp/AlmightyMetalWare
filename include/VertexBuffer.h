@@ -97,6 +97,7 @@ class VertexBuffer
 		GLuint getCount();
 		void initVertexBuffer(const GLvoid *data, GLsizei size, ShaderType shader, GLuint count);
 		void initVertexBuffer(std::vector <VertexLit>& vertices, GLsizei size, ShaderType shader, GLuint count);
+		void initVertexBufferDynamic(GLsizei size);
 		VertexBuffer();
 		~VertexBuffer();
 		IndexBuffer	*ib;

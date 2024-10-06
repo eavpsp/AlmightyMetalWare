@@ -2,6 +2,7 @@
 #include "../debug/debug.h"
 
 #include <RenderSystem.h>
+#include <AnimationComponent.h>
 extern std::vector<GameObject *> *GameObjects;//NEED THIS FOR CALLBACKS
 extern std::vector<EngineObject *> *GraphicsObjects;//NEED THIS FOR CALLBACKS
 extern RenderSystem *gameRenderSystem;
@@ -17,6 +18,10 @@ extern ResourceManager *gameResourceManager;
 
 void GameObject::DrawMesh()
 {
+    if(!renderMesh)
+    {
+        return;
+    }
     //switch
     switch (objectModel->type)
     {
@@ -170,8 +175,30 @@ void GameObject::UpdateOBJ()
     meshRender->UpdateMesh(material,this, gameRenderSystem->mainCamera);
     meshRender->EnableTextures();
     glUseProgram(gameResourceManager->_engineMaterials.getLightMaterial()->shader->getShaderInterface()->getProgramHandle());
-    meshRender->mesh->vertexArray->Bind();       
-    meshRender->Draw();
+   //check animation component
+   
+   if(hasAnimator)
+   {
+        AnimationComponent *animComp = GetComponent<AnimationComponent>();
+
+        if(animComp->IsPlaying())
+        {    
+            animComp->RunAnimation();
+            debugLog("running animation");
+        }
+        else
+        {
+            meshRender->mesh->vertexArray->Bind();       
+            meshRender->Draw();
+        }
+   }
+   else
+   {
+            meshRender->mesh->vertexArray->Bind();       
+            meshRender->Draw();
+
+   }
+  
     meshRender->DisableTextures();
 
 

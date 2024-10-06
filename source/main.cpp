@@ -49,18 +49,19 @@ Primitive Shape Library - Done
 Static Objects - Done
 Skybox - Done (Breaks Text rendering)
 Colors - Red, Green, Blue, White, Yellow, Black, Orange, Purple - Done
+Physics system - bullet engine integration - Done
+
 
 WIP
 UI - Icons - WIP
 Input system - Detailed
-
-NS
-Batch Render Lights -
 Animation system - Animation Controller
     Loads Multiple OBJ files and stores them as keyframes
     Dynamic VBO gets updated based on current frame and animation
-Physics system - bullet engine integration
-    -Link Library with GLM to use bullet physics
+
+
+NS
+Batch Render Lights -
 Particle system (Dynamic Batched Software Particles)- 
 Audio system (MP3, OGG Playback)-
 Video system (MP4 Playback)-
@@ -71,7 +72,6 @@ Post Processing -
 
 FUTURE
 Skeletal Animation -
-Rigid Body Physics -
 
 //THREADS
 GAME -> Game Manager , Engine Objects, Physics, Input
@@ -88,10 +88,10 @@ EnginePhysics *enginePhysics;
 
 void initSystem()
 {   
-    debugLogInit();
-    debugLog("System Starting...");
     romfsInit();
+    debugLogInit();
     debugLog("romFS Init");
+    debugLog("System Starting...");
     enginePhysics = new EnginePhysics();
     debugLog("Engine Physics Init");
     //init callbacks 

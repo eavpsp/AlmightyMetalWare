@@ -38,6 +38,12 @@ void VertexBuffer::initVertexBuffer(const GLvoid *data, GLsizei size, ShaderType
     shaderType = &shader;
     _count = count;
 }
+void VertexBuffer::initVertexBufferDynamic(GLsizei size)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
+    glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
+
+}
 void VertexBuffer::initVertexBuffer(std::vector <VertexLit>& vertices, GLsizei size, ShaderType shader, GLuint count)
 {
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBufferID);
