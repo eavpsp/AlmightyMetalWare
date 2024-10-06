@@ -69,6 +69,7 @@ class AnimationComponent : public GameComponent//no blending until skeletal mesh
     AnimationData currentAnimation;
     int vertexCount = 0;
     OBJ_MeshRenderer *_meshRender;
+    float animationTime;
     public:
         void PlayAnimation(std::string animName)
         {
@@ -101,6 +102,7 @@ class AnimationComponent : public GameComponent//no blending until skeletal mesh
             isPlaying = true;
             RunAnimation();
         };
+
         bool IsPlaying()
         {
             return isPlaying;
@@ -118,6 +120,7 @@ class AnimationComponent : public GameComponent//no blending until skeletal mesh
                 AnimationData *animData = new AnimationData();//create animation data
                 _animations.push_back(anim->animName);//store animation name
                 animData->animName = anim->animName;
+                animData->framerate = anim->framerate;
                 animData->loop = anim->loop;
                 //loop files to load
                 debugLog("Frame Count: %d", anim->objFiles.size());

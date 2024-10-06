@@ -61,9 +61,9 @@ class GameObject : public EngineObject
                 T *newObject =  new T();
                 //add callback
                 newObject->material = mat;
-                newObject->position = _position;
+                newObject->position = _position;//flipped y to work with BulletPhysics and OpenGL
                 newObject->rotation = _rotation;
-                newObject->scale = _scale;
+                newObject->scale = glm::vec3(_scale.x, -_scale.y, _scale.z);//flipped y to work with BulletPhysics and OpenGL
                 newObject->objectModel = gameModel;
                 newObject->transform = glm::mat4(1.0f);
 

@@ -55,16 +55,20 @@ Physics system - bullet engine integration - Done
 WIP
 UI - Icons - WIP
 Input system - Detailed
-Animation system - Animation Controller
+Animation system - Done  Animation Controller
     Loads Multiple OBJ files and stores them as keyframes
     Dynamic VBO gets updated based on current frame and animation
 
 
 NS
-Batch Render Lights -
 Particle system (Dynamic Batched Software Particles)- 
-Audio system (MP3, OGG Playback)-
-Video system (MP4 Playback)-
+    each obj will hold vertex data
+    push vertex data to one buffer
+    update each individual particle data per frame
+Audio system (MP3, OGG Playback)- SDL Audio
+Video system (MP4 Playback)- MPV
+
+Batch Render Lights -
 Textures - Normals, Spec, Roughness, AA, View Culling -
 Framebuffers -
 Post Processing -

@@ -59,17 +59,16 @@ class BPhysicsComponent : public GameComponent
    
    
     void BindMatrix()
-    {
+    {       
 
         myMotionState->getWorldTransform(*transform); 
 
         
 
         //bullet and open gl postions are inverted, might fix in shader
-        parentObject->position = -glm::vec3(transform->getOrigin().x(), transform->getOrigin().y(), transform->getOrigin().z());
-        parentObject->rotation = glm::quat(transform->getRotation().getW(), transform->getRotation().getX(), -transform->getRotation().getY(), transform->getRotation().getZ());
-     
-    }
+        parentObject->position = -glm::vec3(transform->getOrigin().x(), transform->getOrigin().y(), transform->getOrigin().z());//fine
+        parentObject->rotation = glm::quat(transform->getRotation().getW(), transform->getRotation().getX(), transform->getRotation().getZ(), transform->getRotation().getY());
+          }
     public:
 /**
  * Constructor for BPhysicsComponent.

@@ -65,6 +65,8 @@ void GameManager::renderLoop()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      //UI SCOPE
     {
+        //Negative Bullet = Postive OpenGL in Y direction
+        //move in postive open gl to move in negative bullet
         _resourceManager->_gameFont->RenderTextFormat("obj 1 pos: %f %f %f", 
         glm::vec2(0.0f, 0.0f), 1.0f, glm::vec3(1,1,1),
          _resourceManager->gameObjects->at(0)->position.x, -_resourceManager->gameObjects->at(0)->position.y, _resourceManager->gameObjects->at(0)->position.z);

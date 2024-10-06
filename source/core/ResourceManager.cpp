@@ -52,7 +52,7 @@ void ResourceManager::initResourceManager()
 
    
     obj1->AddComponent(rigidBody1);
-    AnimationFile *prayingAnim = new AnimationFile("praying", true, 30.0f);
+    AnimationFile *prayingAnim = new AnimationFile("praying", true, 60.0f);
     prayingAnim->frameCount = 207;
   
     for (int i = 0; i < prayingAnim->frameCount; i++)//works create a func for this later
