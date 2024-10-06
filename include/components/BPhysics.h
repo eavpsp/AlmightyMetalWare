@@ -56,13 +56,39 @@ class BPhysicsComponent : public GameComponent
     btRigidBody* body;
     //ref to gameobject
    
-
+    glm::mat4 btScalar2mat4(btScalar* matrix) {
+    return glm::mat4(
+        matrix[0], matrix[1], matrix[2], matrix[3],
+        matrix[4], matrix[5], matrix[6], matrix[7],
+        matrix[8], matrix[9], matrix[10], matrix[11],
+        matrix[12], matrix[13], matrix[14], matrix[15]);
+}
     void BindMatrix()
     {
-        body->getMotionState()->getWorldTransform(*transform);
+        
+        btScalar gl_transform[16];
+
+        if (myMotionState)
+        {
+            myMotionState->getWorldTransform(*transform); 
+
+        }
+
+     if (body) 
+     {
+        transform = &body->getWorldTransform();
+        transform->getOpenGLMatrix(gl_transform);
+     }
+         
+        glm::mat4 matrix = btScalar2mat4(gl_transform);
+        parentObject->transform = matrix;
+
+       
+      
+        
         parentObject->position = glm::vec3(transform->getOrigin().x(), transform->getOrigin().y(), transform->getOrigin().z());
         parentObject->rotation = glm::quat(transform->getRotation().getW(), transform->getRotation().getX(), transform->getRotation().getY(), transform->getRotation().getZ());
-
+     
     }
     public:
 /**

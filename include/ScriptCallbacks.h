@@ -62,7 +62,7 @@ class EngineCallBacks
            {
                 updateTicks -= UPDATE_TICK_DELAY;
                     RunUpdateCameraCallbacks();
-
+               
                     for(int i = 0; i < GameObjects->size(); i++)
                     {
                         GameObject* obj = dynamic_cast<GameObject*>(GameObjects->at(i));
