@@ -56,13 +56,15 @@ Skybox - Done (Breaks Text rendering)
 Colors - Red, Green, Blue, White, Yellow, Black, Orange, Purple - Done
 Physics system - bullet engine integration - Done
 Animation system - Done 
+Audio system (MP3, OGG Playback)- SDL Audio - Done
 
 WIP
-UI - Icons - WIP
+UI - Icons - Overlays - WIP
 Input system - Detailed
-Animation Controller -
+Animation Controller - 
+    Dynamic System for changing animations as well as animation events
 Particle system (Dynamic Batched Software Particles)- Breaks RenderText, May need its own Camera(Text/UI)
-Audio system (MP3, OGG Playback)- SDL Audio
+
 
 
 NS
@@ -75,6 +77,8 @@ Post Processing -
 
 FUTURE
 Skeletal Animation -
+IK -
+Procedural Animation -
 
 //THREADS
 GAME -> Game Manager , Engine Objects, Physics, Input

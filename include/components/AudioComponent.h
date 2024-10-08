@@ -75,24 +75,24 @@ class AudioComponent : public GameComponent
     {
         Mix_ResumeMusic();
     };
-    AudioComponent(int freq, Uint16 format, int channels, int buffersize, const char* audioFile)
+    AudioComponent(const char* audioFile)
     {
-      
-
-       
-            Mix_OpenAudio(freq, format, channels, buffersize);
-            debugLog("Audio File: %s", audioFile);
-            audio = Mix_LoadMUS(audioFile);
-            if(audio == NULL)
-            {
-                debugLog("Failed to load audio file: %s", audioFile);
-            }
+        Mix_Init(MIX_INIT_MP3);
+        Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
+        debugLog("Audio File: %s", audioFile);
+        audio = Mix_LoadMUS(audioFile);
+        if(audio == NULL)
+        {
+            debugLog("Failed to load audio file: %s", audioFile);
+        }
+        isSFX = false;
         
     };
     AudioComponent(int freq, Uint16 format, int channels, int buffersize, const char* audioSFXFile, bool loop) 
     {
         Mix_OpenAudio(freq, format, channels, buffersize);
         sfx = Mix_LoadWAV(audioSFXFile);
+        isSFX = true;
     };
     ~AudioComponent()
     {
