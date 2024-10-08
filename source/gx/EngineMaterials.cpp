@@ -9,6 +9,11 @@ Material *EngineMaterials::getLightMaterial()
     return  _lightMaterial;
 }
 
+ImageMaterial *EngineMaterials::getImageMaterial()
+{
+    return _imageMaterial;
+}
+
 ShaderMaterialInterface *EngineMaterials::getColorMaterial()
 {
     return &_colorMaterial;
@@ -25,6 +30,11 @@ GameFontMaterial *EngineMaterials::getGameFontMaterial()
     return _gameFontMaterial;
 }
 
+ParticleFX3DMaterial *EngineMaterials::getGet3DParticleFXMaterial()
+{
+    return _particleFX3DMaterial;
+}
+
 void EngineMaterials::initEngineMaterials()
 {
     
@@ -35,7 +45,8 @@ void EngineMaterials::initEngineMaterials()
     _lightMaterial = new LitMaterial();
     _lightObjectMaterial.SetUpShader("LightObjectMaterial", light_object_shader);
     _gameFontMaterial = new GameFontMaterial();
-   
+   _particleFX3DMaterial = new ParticleFX3DMaterial();
+   _imageMaterial = new ImageMaterial();
 }
 
 EngineMaterials &EngineMaterials::getEngineMaterialsClass()

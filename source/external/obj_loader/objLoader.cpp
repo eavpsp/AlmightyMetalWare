@@ -11,6 +11,45 @@ std::string util::get_filename(const std::string& path) {
     }
     return path.substr(pos + 1);
 }
+std::vector<ParticleVertexData>util::load_particle_from_file_obj(const char* filename, glm::vec4 color) 
+{
+	
+	std::vector<ParticleVertexData> vertices;
+
+	tinyobj::attrib_t attributes;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::string warning, error;
+	
+	if (!tinyobj::LoadObj(&attributes, &shapes, &materials, &error, filename, "romfs:/textures/")) 
+	{
+   	 	debugLog("Error: %s", error.c_str());
+	}
+	
+	for (const auto& shape : shapes) 
+	{
+		for (const auto& index : shape.mesh.indices) 
+		{
+
+			ParticleVertexData vert = 
+			{
+				glm::vec3(attributes.vertices[3 * index.vertex_index],attributes.vertices[3 * index.vertex_index + 1],attributes.vertices[3 * index.vertex_index + 2]),
+				color,
+			};
+
+			vertices.push_back(vert);
+		}
+
+		
+	}
+	debugLog("OBJ Model Loaded----------");
+	debugLog("Vertices: %d", vertices.size());
+	debugLog("Shapes: %d", shapes.size());
+	debugLog("Materials: %d", materials.size());
+	debugLog("--------------------------");
+
+	return vertices;
+}
 std::vector<VertexLit> util::load_model_from_file_obj(const char* filename, glm::mat4 preTransform, OBJ_MeshRenderer* meshRender) 
 {
 	

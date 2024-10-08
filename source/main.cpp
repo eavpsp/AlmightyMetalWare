@@ -27,6 +27,8 @@ component script
 has parent gameobject
 get component
 add component
+gameobject child positions and a matrix data
+on init callback //called before update in main loop, ran once per game object
 -Text only menus for now-
 selction options
 change text color when hilighted
@@ -34,6 +36,8 @@ change text color when hilighted
 -Demo Levels
 Plane and Sphere
 
+UI overlays
+Textures and font data
 */
 
 

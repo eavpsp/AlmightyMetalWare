@@ -10,8 +10,12 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 
-
-
+struct ParticleVertexData//Mesh Data
+{
+    glm::vec3 position;
+	glm::vec4 color;
+};
+//
 //set up vb layouts to the structs to store the layout data
 struct VertexLit//Add more layout structs tex coords
 {

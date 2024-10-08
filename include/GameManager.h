@@ -1,7 +1,7 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 #include <RenderSystem.h>
-
+#include <time.h>
 
 class GameManager
 {
@@ -10,6 +10,9 @@ class GameManager
         GameManager(bool running);
         ~GameManager();
     public:
+ 
+
+
     void renderLoop();
     void runGameLoop();
     void SceneInit();

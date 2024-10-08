@@ -14,6 +14,7 @@ GLuint ShaderLoader::compileShader(GLenum targetShader, const char *source)
         glGetShaderInfoLog(shaderHandle, sizeof(buf), nullptr, buf);
         debugLog("Shader compilation error: %s", buf);
         debugLog("Shader compilation failed");
+        debugLog("Shader type: %s", (targetShader == GL_VERTEX_SHADER) ? "vertex" : "fragment");
         glDeleteShader(shaderHandle);
         return 0;
     }

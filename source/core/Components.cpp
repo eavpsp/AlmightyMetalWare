@@ -51,3 +51,11 @@ void BPhysicsComponent::ComponentAddedCallback()
     return;
 
 }
+
+
+/*****Particle Component  */
+
+#include "ParticleComponent.h"
+
+
+

@@ -3,6 +3,8 @@
 
 char *ShaderInterface::loadTextFromFile(const char *file)
 {
+    debugLog("Loading: %s", file);
+    
     FILE *currentFile = fopen(file, "rt");
     fseek(currentFile, 0, SEEK_END);
     int count = (int)ftell(currentFile);

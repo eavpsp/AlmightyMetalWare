@@ -1,8 +1,9 @@
 #include "GameObject.h"
 #include "../debug/debug.h"
-
 #include <RenderSystem.h>
 #include <AnimationComponent.h>
+#include <ParticleComponent.h>
+
 extern std::vector<GameObject *> *GameObjects;//NEED THIS FOR CALLBACKS
 extern std::vector<EngineObject *> *GraphicsObjects;//NEED THIS FOR CALLBACKS
 extern RenderSystem *gameRenderSystem;
@@ -149,8 +150,7 @@ void GameObject::UpdateGLTF()
     
     }
    
-    //draw vbo
-    //with ibo
+    
 }
 
 void GameObject::DrawGLTF()
@@ -171,6 +171,13 @@ void GameObject::DrawOBJ()
 
 void GameObject::UpdateOBJ()
 {
+    //particles
+    if(hasParticleFX)
+    {
+        ParticleComponent *particleComp = GetComponent<ParticleComponent>();
+        particleComp->RenderParticles();
+    }
+    if(!renderMesh || objectModel == nullptr){return;}
     OBJ_MeshRenderer *meshRender = (OBJ_MeshRenderer*)objectModel;
     meshRender->UpdateMesh(material,this, gameRenderSystem->mainCamera);
     meshRender->EnableTextures();
@@ -184,7 +191,7 @@ void GameObject::UpdateOBJ()
         if(animComp->IsPlaying())
         {    
             animComp->RunAnimation();
-            debugLog("running animation");
+            
         }
         else
         {
@@ -194,6 +201,7 @@ void GameObject::UpdateOBJ()
    }
    else
    {
+       
             meshRender->mesh->vertexArray->Bind();       
             meshRender->Draw();
 

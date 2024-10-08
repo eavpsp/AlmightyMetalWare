@@ -7,6 +7,8 @@
 #include <BPhysics.h>
 #include <AnimationComponent.h>
 #include <mwmath.h>
+#include <ParticleComponent.h>  
+#include <EngineColors.h>
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
@@ -41,18 +43,8 @@ void ResourceManager::initResourceManager()
    //since this is how the camera references positions, the objects can use the same shader//
    //if not objects spawn in the most recent object shader program position because they are using the data first stored into the shader
 
-    gameObjects = new std::vector<GameObject *>;
-
-    glm::vec3 pos = glm::vec3(MW_Math::Random(0.0f,5.0f), 0.0f, 0.0f);
-    GameObject *obj1 = GameObject::CreateCapsule(_engineMaterials.getLightMaterial(), pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-    
-    btCollisionShape* colShape1 = new btSphereShape(btScalar(1.));//need
-   
-    BPhysicsComponent* rigidBody1 = new BPhysicsComponent(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, colShape1);
-
-   
-    obj1->AddComponent(rigidBody1);
-    AnimationFile *prayingAnim = new AnimationFile("praying", true, 60.0f);
+  //
+  /* AnimationFile *prayingAnim = new AnimationFile("praying", true, 60.0f);
     prayingAnim->frameCount = 207;
   
     for (int i = 0; i < prayingAnim->frameCount; i++)//works create a func for this later
@@ -62,26 +54,35 @@ void ResourceManager::initResourceManager()
         ss << "romfs:/models/animations/praying/praying_Anim" << std::setw(4) << std::setfill('0') << (i + 1) << ".obj";
         std::string filename = ss.str();
         prayingAnim->objFiles.push_back(filename);
-    }
-    AnimationArchive *prayingArchive = new AnimationArchive();
-    debugLog("archive made");
-    prayingArchive->animationFiles.push_back(prayingAnim);
-    debugLog("animation files added");
-    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/aman.obj"); //object model name or sha hash buffer for dupes
-    AnimationComponent *animComp = new AnimationComponent(*prayingArchive,modelTest2);
-    debugLog("animation component made");
-
-    GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(5.0f, 15.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
-    
-    btCollisionShape* colShape = new btSphereShape(btScalar(1.));//need
-   
-    BPhysicsComponent* rigidBody = new BPhysicsComponent(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, colShape);
-    obj2->AddComponent(animComp);
-     AnimationComponent *animCompGot = obj2->GetComponent<AnimationComponent>();
-    animCompGot->PlayAnimation("praying");
-   
-    obj2->AddComponent(rigidBody);
+    }*/
+   // AnimationArchive *prayingArchive = new AnimationArchive();
+   // debugLog("archive made");
+    //prayingArchive->animationFiles.push_back(prayingAnim);
+  //  debugLog("animation files added");
+     // AnimationComponent *animComp = new AnimationComponent(*prayingArchive,modelTest2);
+    //debugLog("animation component made");
+ // obj2->AddComponent(animComp);
+    // AnimationComponent *animCompGot = obj2->GetComponent<AnimationComponent>();
+    //animCompGot->PlayAnimation("praying");
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+   
+    gameObjects = new std::vector<GameObject *>;
+    glm::vec3 pos = glm::vec3(MW_Math::Random(0.0f,5.0f), 0.0f, 0.0f);
+    OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/aman.obj"); //object model name or sha hash buffer for dupes
+
+   // GameObject *obj1 = GameObject::CreateCapsule(_engineMaterials.getLightMaterial(), pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    GameObject *obj1 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
+    btCollisionShape* colShape1 = new btSphereShape(btScalar(1.));//need
+    BPhysicsComponent* rigidBody1 = new BPhysicsComponent(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, colShape1);
+    obj1->AddComponent(rigidBody1);
+    OBJ_MeshRenderer* modelTest2 = new OBJ_MeshRenderer("romfs:/models/aman.obj"); //object model name or sha hash buffer for dupes
+    GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(5.0f, 15.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
+    btCollisionShape* colShape = new btSphereShape(btScalar(1.));//need
+    BPhysicsComponent* rigidBody = new BPhysicsComponent(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, colShape);
+    ParticleComponent *particleComp = new ParticleComponent(6, ENGINE_COLOR_WHITE,6.0f, 3.0f);
+    obj1->AddComponent(particleComp);
+    obj2->AddComponent(rigidBody);
+
     gameObjects->push_back(obj1);
     gameObjects->push_back(obj2);
     

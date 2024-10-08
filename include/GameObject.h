@@ -49,6 +49,7 @@ class GameObject : public EngineObject
         void UpdateMesh();
         bool renderMesh = true;
         bool hasAnimator = false;
+        bool hasParticleFX = false;
 
         ///
         template <typename T>

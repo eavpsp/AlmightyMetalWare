@@ -120,7 +120,24 @@ struct ColorMaterial : public ShaderMaterialInterface
         ~GameFontMaterial(){};
     };
     //struct ColorMaterial : public Material; //Create color only mats
+    struct ParticleFX3DMaterial : public Material
+    {
+        glm::vec4 particleColor;
+        void UpdateProjectionShader(glm::mat4 projMtx)
+        {
+            shader->SetUniform4F("aColor", particleColor.x, particleColor.y, particleColor.z, particleColor.w);
+            shader->SetUniformMat4F("projection", projMtx);
+        };
 
+        ParticleFX3DMaterial() 
+        {
+            name = "Particle FX 3D";
+            ShaderInterface *particle_3dShader = new ShaderInterface("romfs:/shaders/particles/SimpleParticleFX.vs", "romfs:/shaders/particles/SimpleParticleFX.fs");
+            shader = new ShaderMaterialInterface();
+            shader->SetUpShader(name, particle_3dShader);
+        };
+        ~ParticleFX3DMaterial(){};
+    };
     struct LightObjectMaterials : public Material //TEMPORARY
     {
         public :
