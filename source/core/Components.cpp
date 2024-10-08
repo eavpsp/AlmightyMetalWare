@@ -59,3 +59,5 @@ void BPhysicsComponent::ComponentAddedCallback()
 
 
 
+/*****Audio Component  */
+#include <AudioComponent.h>

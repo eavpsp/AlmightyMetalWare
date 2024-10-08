@@ -7,7 +7,8 @@
 #include <json.hpp>  
 #include <ScriptCallbacks.h>
 #include <EnginePhysics.h>
-
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 /*
 /Things
@@ -54,24 +55,18 @@ Static Objects - Done
 Skybox - Done (Breaks Text rendering)
 Colors - Red, Green, Blue, White, Yellow, Black, Orange, Purple - Done
 Physics system - bullet engine integration - Done
-
+Animation system - Done 
 
 WIP
 UI - Icons - WIP
 Input system - Detailed
-Animation system - Done  Animation Controller
-    Loads Multiple OBJ files and stores them as keyframes
-    Dynamic VBO gets updated based on current frame and animation
+Animation Controller -
+Particle system (Dynamic Batched Software Particles)- Breaks RenderText, May need its own Camera(Text/UI)
+Audio system (MP3, OGG Playback)- SDL Audio
 
 
 NS
-Particle system (Dynamic Batched Software Particles)- 
-    each obj will hold vertex data
-    push vertex data to one buffer
-    update each individual particle data per frame
-Audio system (MP3, OGG Playback)- SDL Audio
 Video system (MP4 Playback)- MPV
-
 Batch Render Lights -
 Textures - Normals, Spec, Roughness, AA, View Culling -
 Framebuffers -
@@ -100,6 +95,11 @@ void initSystem()
     debugLogInit();
     debugLog("romFS Init");
     debugLog("System Starting...");
+    //init SDL
+    SDL_Init(SDL_INIT_AUDIO);
+    // Load support for the MP3 format
+    Mix_Init(MIX_INIT_MP3);
+    debugLog("SDL Mixer Init");
     enginePhysics = new EnginePhysics();
     debugLog("Engine Physics Init");
     //init callbacks 
@@ -148,6 +148,7 @@ void EngineMain()
     //alternate loop to pause game
     debugLog("Game Stopped....");
     romfsExit();
+    SDL_Quit();
     gameManager->destroyGameManager();
 }
 

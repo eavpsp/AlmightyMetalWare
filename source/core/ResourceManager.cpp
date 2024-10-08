@@ -9,6 +9,7 @@
 #include <mwmath.h>
 #include <ParticleComponent.h>  
 #include <EngineColors.h>
+#include <AudioComponent.h>
 ResourceManager::~ResourceManager()
 {
     for(std::vector<ShaderInterface *>::iterator it = shaderArray->begin(); it != shaderArray->end(); it++)
@@ -65,7 +66,8 @@ void ResourceManager::initResourceManager()
     // AnimationComponent *animCompGot = obj2->GetComponent<AnimationComponent>();
     //animCompGot->PlayAnimation("praying");
     //TestGameObject *obj1 = GameObject::InstantiateGameObject<TestGameObject>(mat, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest);
-   
+  // ParticleComponent *particleComp = new ParticleComponent(6, ENGINE_COLOR_WHITE,6.0f, 3.0f);
+    //obj1->AddComponent(particleComp);
     gameObjects = new std::vector<GameObject *>;
     glm::vec3 pos = glm::vec3(MW_Math::Random(0.0f,5.0f), 0.0f, 0.0f);
     OBJ_MeshRenderer* modelTest = new OBJ_MeshRenderer("romfs:/models/aman.obj"); //object model name or sha hash buffer for dupes
@@ -79,10 +81,11 @@ void ResourceManager::initResourceManager()
     GameObject *obj2 = GameObject::InstantiateGameObject<GameObject>(_engineMaterials.getLightMaterial(), glm::vec3(5.0f, 15.0f, 0.0f), glm::vec3(180.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), modelTest2);
     btCollisionShape* colShape = new btSphereShape(btScalar(1.));//need
     BPhysicsComponent* rigidBody = new BPhysicsComponent(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f, colShape);
-    ParticleComponent *particleComp = new ParticleComponent(6, ENGINE_COLOR_WHITE,6.0f, 3.0f);
-    obj1->AddComponent(particleComp);
+    AudioComponent *audioComp = new AudioComponent(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096, "romfs:/audio/bgm.mp3");
     obj2->AddComponent(rigidBody);
-
+    //obj2->AddComponent(audioComp);
+   // AudioComponent *audioCompGot = obj2->GetComponent<AudioComponent>();
+    //audioCompGot->PlayAudio();
     gameObjects->push_back(obj1);
     gameObjects->push_back(obj2);
     
